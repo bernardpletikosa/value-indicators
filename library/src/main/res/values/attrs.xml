@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="Indicators">
+        <attr name="mainColor" format="color"/>
+        <attr name="backgroundColor" format="color"/>
+        <attr name="minValue" format="float"/>
+        <attr name="maxValue" format="float"/>
+        <attr name="animationDuration" format="integer"/>
+    
+        <attr name="circleDirection" format="integer"/>
+        <attr name="startAngle" format="integer"/>
+        <attr name="innerRadius" format="integer"/>
+        <attr name="centerColor" format="color"/>
+
+        <attr name="lineDirection" format="integer"/>
+    </declare-styleable>
+
+</resources>
