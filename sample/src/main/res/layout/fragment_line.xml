@@ -61,6 +61,28 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
+            android:text="@string/corner_radius"/>
+
+        <SeekBar
+            android:id="@+id/seek_corner_radius"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:layout_margin="5dp"
+            android:progress="0"
+            android:max="25"
+            />
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
             android:text="@string/anim_duration"/>
 
         <SeekBar
@@ -100,7 +122,8 @@
         android:id="@+id/line_indicator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:mainColor="@color/green"
-        app:backgroundColor="@color/background"/>
+        app:main_color="@color/blue"
+        app:background_color="@color/background"
+        app:animation_duration="100"/>
 
 </LinearLayout>

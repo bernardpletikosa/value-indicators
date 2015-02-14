@@ -10,14 +10,16 @@ import android.util.DisplayMetrics;
 
 import com.pletikosa.indicators.IndicatorView;
 import com.pletikosa.indicators.R;
+import com.pletikosa.indicators.consts.Defaults;
 import com.pletikosa.indicators.consts.Direction;
 import com.pletikosa.indicators.consts.SizeUnit;
+
+import static com.pletikosa.indicators.consts.Defaults.NO_VALUE;
 
 public class LineIndicator extends IndicatorView {
 
     protected int mWidth;
     protected int mHeight;
-    protected int mCornerRadius;
     protected Direction mDirection;
 
     public LineIndicator(Context context) {
@@ -31,10 +33,7 @@ public class LineIndicator extends IndicatorView {
     public LineIndicator(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs);
 
-        final TypedArray array = context.getTheme().obtainStyledAttributes(attrs,
-                R.styleable.Indicators, 0, 0);
-
-        mDirection = Direction.values()[array.getInt(R.styleable.Indicators_lineDirection, 2)];
+        setXmlValues(context.getTheme().obtainStyledAttributes(attrs, R.styleable.LineIndicator, 0, 0));
     }
 
     @Override
@@ -42,40 +41,20 @@ public class LineIndicator extends IndicatorView {
         super.onSizeChanged(width, height, oldw, oldh);
 
         //if size is already set by user, don't change it
-        if (mWidth <= 0) mWidth = width;
-        if (mWidth <= 0) mHeight = height;
+        if (mWidth <= NO_VALUE) mWidth = width;
+        if (mWidth <= NO_VALUE) mHeight = height;
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         final float[] positions = calculatePositions();
-
-        if (mCornerRadius > 0) {
-            canvas.drawRoundRect(new RectF(0, 0, mWidth, mHeight), mCornerRadius, mCornerRadius, mBackgroundPaint);
-            canvas.drawRoundRect(new RectF(positions[0], positions[1], positions[2], positions[3]),
-                    mCornerRadius, mCornerRadius, mMainPaint);
-        } else {
-            canvas.drawRect(0, 0, mWidth, mHeight, mBackgroundPaint);
-            canvas.drawRect(positions[0], positions[1], positions[2], positions[3], mMainPaint);
-        }
-    }
-
-    private float[] calculatePositions() {
-        switch (mDirection) {
-            case LEFT_RIGHT:
-                return new float[]{0, 0, mCurrentValue, mHeight};
-            case RIGHT_LEFT:
-                return new float[]{mCurrentValue, 0, mWidth, mHeight};
-            case TOP_BOTTOM:
-                return new float[]{0, 0, mWidth, mCurrentValue};
-            case BOTTOM_TOP:
-            default:
-                return new float[]{0, mCurrentValue, mWidth, mHeight};
-        }
+        canvas.drawRect(0, 0, mWidth, mHeight, mBackgroundPaint);
+        canvas.drawRect(positions[0], positions[1], positions[2], positions[3], mMainPaint);
     }
 
     /**
      * <p>Sets direction for drawing indicator in clockwise or counter clockwise direction.</p>
+     * XML parameter {@link com.pletikosa.indicators.R.attr#line_direction}
      * Possible values are:
      * <ul>
      * <li>{@link Direction#LEFT_RIGHT}</li>
@@ -83,11 +62,11 @@ public class LineIndicator extends IndicatorView {
      * <li>{@link Direction#BOTTOM_TOP}</li>
      * <li>{@link Direction#TOP_BOTTOM}</li>
      * </ul>
+     * XML parameter {@link}
      * @param direction see possible values
      */
     public void setDirection(Direction direction) throws IllegalArgumentException {
-        if (direction == null)
-            throw new IllegalArgumentException("Direction can not be null.");
+        checkArgument(direction, "direction");
         if (direction == Direction.CLOCKWISE || direction == Direction.COUNTER_CLOCKWISE)
             throw new IllegalArgumentException("Direction " + direction.name() + " not supported.");
 
@@ -97,6 +76,8 @@ public class LineIndicator extends IndicatorView {
 
     /**
      * Sets indicator shape width and height in specified unit.
+     * XML parameters {@link com.pletikosa.indicators.R.attr#line_width} and
+     * {@link com.pletikosa.indicators.R.attr#line_height}
      * @param width  shape width
      * @param height shape height
      */
@@ -107,19 +88,6 @@ public class LineIndicator extends IndicatorView {
 
         mWidth = unit == SizeUnit.PX ? width : (int) dpToPixel(width);
         mHeight = unit == SizeUnit.PX ? height : (int) dpToPixel(height);
-
-        draw();
-    }
-
-    /**
-     * Sets corner radius for line indicator shape. Default value is 0, corners are not rounded
-     * @param cornerRadius corner radius
-     */
-    public void setCornerRadius(SizeUnit unit, int cornerRadius) throws IllegalArgumentException {
-        checkArgument(unit, "SizeUnit");
-        checkNegative(cornerRadius, "Corner radius");
-
-        mCornerRadius = unit == SizeUnit.PX ? cornerRadius : (int) dpToPixel(cornerRadius);
 
         draw();
     }
@@ -140,6 +108,13 @@ public class LineIndicator extends IndicatorView {
         };
     }
 
+    private void setXmlValues(TypedArray array) {
+        mWidth = array.getInt(R.styleable.LineIndicator_line_width, NO_VALUE);
+        mHeight = array.getInt(R.styleable.LineIndicator_line_height, NO_VALUE);
+        mDirection = Direction.values()[array.getInt(R.styleable.LineIndicator_line_direction, 2)];
+    }
+
+    //Calculates shift depending on direction
     private float calculateShift(float absoluteTarget, float absoluteRange) {
         switch (mDirection) {
             case LEFT_RIGHT:
@@ -152,5 +127,20 @@ public class LineIndicator extends IndicatorView {
                 return ((absoluteRange - absoluteTarget) / absoluteRange) * mHeight - mOldValue;
         }
         return 0;
+    }
+
+    //Calculates rectangle corners position
+    private float[] calculatePositions() {
+        switch (mDirection) {
+            case LEFT_RIGHT:
+                return new float[]{0, 0, mCurrentValue, mHeight};
+            case RIGHT_LEFT:
+                return new float[]{mCurrentValue, 0, mWidth, mHeight};
+            case TOP_BOTTOM:
+                return new float[]{0, 0, mWidth, mCurrentValue};
+            case BOTTOM_TOP:
+            default:
+                return new float[]{0, mCurrentValue, mWidth, mHeight};
+        }
     }
 }

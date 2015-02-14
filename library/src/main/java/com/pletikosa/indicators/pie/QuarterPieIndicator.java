@@ -2,15 +2,19 @@ package com.pletikosa.indicators.pie;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 
+import com.pletikosa.indicators.R;
+import com.pletikosa.indicators.consts.Defaults;
 import com.pletikosa.indicators.consts.Direction;
 import com.pletikosa.indicators.consts.Orientation;
 
-public class QuarterPieIndicator extends HalfPieIndicator {
+import static com.pletikosa.indicators.consts.Defaults.NO_VALUE;
+import static com.pletikosa.indicators.consts.Defaults.QUARTER_PIE_MAX_ANGLE;
 
-    private static final float MAX_ANGLE = 90f;
+public class QuarterPieIndicator extends HalfPieIndicator {
 
     protected int mWidth;
     protected int mHeight;
@@ -27,7 +31,9 @@ public class QuarterPieIndicator extends HalfPieIndicator {
     public QuarterPieIndicator(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
-        mOrientation = Orientation.SOUTH_EAST;
+        loadXmlValues(context.getTheme().obtainStyledAttributes(attrs, R.styleable.PieIndicator, 0, 0));
+        mOrientation = Orientation.values()[context.getTheme().obtainStyledAttributes(attrs, R.styleable.QuarterPieIndicator, 0, 0)
+                .getInt(R.styleable.QuarterPieIndicator_quarter_pie_orientation, 4)];
     }
 
     @Override
@@ -39,9 +45,9 @@ public class QuarterPieIndicator extends HalfPieIndicator {
 
         calculateCenter();
 
-        if (mRadius <= 0)
+        if (mRadius <= NO_VALUE)
             mRadius = mMiddleX < mMiddleY ? mMiddleX : mMiddleY;
-        if (mInnerRadius <= 0)
+        if (mInnerRadius <= NO_VALUE)
             mInnerRadius = mInnerRadiusPercent > -1 ? (int) (mInnerRadiusPercent / 100f * mRadius) : mRadius / 2;
     }
 
@@ -58,22 +64,6 @@ public class QuarterPieIndicator extends HalfPieIndicator {
         canvas.drawCircle(mMiddleX, mMiddleY, mInnerRadius, mCenterPaint);
     }
 
-    private int calculateStartAngle() {
-        int startAngle = 0;
-        switch (mOrientation) {
-            case NORTH_EAST:
-                startAngle = 270; break;
-            case SOUTH_EAST:
-                startAngle = 0; break;
-            case SOUTH_WEST:
-                startAngle = 90; break;
-            case NORTH_WEST:
-                startAngle = 180; break;
-        }
-
-        return mDirection == Direction.CLOCKWISE ? startAngle : (startAngle + 90) % 360;
-    }
-
     @Override
     protected ValueAnimator.AnimatorUpdateListener getUpdateListener() {
         final float absoluteTarget = mTargetValue + Math.abs(mMinValue);
@@ -82,7 +72,7 @@ public class QuarterPieIndicator extends HalfPieIndicator {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 float maxAnimatedFraction = Math.max(animation.getAnimatedFraction(), 0.01f);
-                float shift = (absoluteTarget / mValueRange) * MAX_ANGLE - mOldValue;
+                float shift = (absoluteTarget / mValueRange) * QUARTER_PIE_MAX_ANGLE - mOldValue;
 
                 mCurrentValue = mOldValue + (shift * maxAnimatedFraction);
 
@@ -93,6 +83,7 @@ public class QuarterPieIndicator extends HalfPieIndicator {
 
     /**
      * <p>Sets orientation of indicator as sides of the world (east west, north south) </p>
+     * XML parameter {@link com.pletikosa.indicators.R.attr#quarter_pie_orientation}
      * Possible values are:
      * <ul>
      * <li>{@link com.pletikosa.indicators.consts.Orientation#SOUTH_EAST}</li>
@@ -130,5 +121,21 @@ public class QuarterPieIndicator extends HalfPieIndicator {
                 mMiddleX = 0;
                 mMiddleY = mOrientation == Orientation.NORTH_EAST ? mHeight : 0;
         }
+    }
+
+    private int calculateStartAngle() {
+        int startAngle = 0;
+        switch (mOrientation) {
+            case NORTH_EAST:
+                startAngle = 270; break;
+            case SOUTH_EAST:
+                startAngle = 0; break;
+            case SOUTH_WEST:
+                startAngle = 90; break;
+            case NORTH_WEST:
+                startAngle = 180; break;
+        }
+
+        return mDirection == Direction.CLOCKWISE ? startAngle : (startAngle + 90) % 360;
     }
 }

@@ -2,18 +2,56 @@
 <resources>
 
     <declare-styleable name="Indicators">
-        <attr name="mainColor" format="color"/>
-        <attr name="backgroundColor" format="color"/>
-        <attr name="minValue" format="float"/>
-        <attr name="maxValue" format="float"/>
-        <attr name="animationDuration" format="integer"/>
-    
-        <attr name="circleDirection" format="integer"/>
-        <attr name="startAngle" format="integer"/>
-        <attr name="innerRadius" format="integer"/>
-        <attr name="centerColor" format="color"/>
-
-        <attr name="lineDirection" format="integer"/>
+        <attr name="main_color" format="color"/>
+        <attr name="background_color" format="color"/>
+        <attr name="min_value" format="float"/>
+        <attr name="max_value" format="float"/>
+        <attr name="target_value" format="float"/>
+        <attr name="animation_duration" format="integer"/>
     </declare-styleable>
 
+    <declare-styleable name="CircleIndicator" parent="Indicators">
+        <attr name="circle_radius" format="integer"/>
+    </declare-styleable>
+
+    <declare-styleable name="LineIndicator" parent="Indicators">
+        <attr name="line_width" format="integer"/>
+        <attr name="line_height" format="integer"/>
+        <attr name="line_direction" format="enum">
+            <enum name="left_right" value="2"/>
+            <enum name="right_left" value="3"/>
+            <enum name="top_bottom" value="4"/>
+            <enum name="bottom_top" value="5"/>
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="PieIndicator" parent="Indicators">
+        <attr name="pie_radius" format="integer"/>
+        <attr name="pie_inner_radius" format="integer"/>
+        <attr name="pie_center_paint" format="integer"/>
+        <attr name="pie_start_angle" format="integer"/>
+        <attr name="pie_direction" format="enum">
+            <enum name="clockwise" value="0"/>
+            <enum name="counter_clockwise" value="1"/>
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="HalfPieIndicator" parent="PieIndicator">
+        <attr name="half_pie_orientation" format="enum">
+            <enum name="east" value="0"/>
+            <enum name="west" value="1"/>
+            <enum name="north" value="2"/>
+            <enum name="south" value="3"/>
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="QuarterPieIndicator" parent="PieIndicator">
+        <attr name="quarter_pie_orientation" format="enum">
+            <enum name="north_east" value="4"/>
+            <enum name="south_east" value="5"/>
+            <enum name="north_west" value="6"/>
+            <enum name="south_west" value="7"/>
+        </attr>
+    </declare-styleable>
+    
 </resources>

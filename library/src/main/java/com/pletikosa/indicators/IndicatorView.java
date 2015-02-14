@@ -15,12 +15,12 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 
 import static android.animation.ValueAnimator.AnimatorUpdateListener;
+import static com.pletikosa.indicators.consts.Defaults.DEFAULT_ANIM_DURATION;
+import static com.pletikosa.indicators.consts.Defaults.DEFAULT_MAX_VALUE;
+import static com.pletikosa.indicators.consts.Defaults.DEFAULT_MIN_VALUE;
+import static com.pletikosa.indicators.consts.Defaults.NO_VALUE;
 
 public abstract class IndicatorView extends View {
-
-    private static final float DEFAULT_MIN_VALUE = 0;
-    private static final float DEFAULT_MAX_VALUE = 100;
-    private static final int DEFAULT_ANIMATION_DURATION = 500;
 
     private final Context mContext;
 
@@ -56,25 +56,35 @@ public abstract class IndicatorView extends View {
         setXmlValues(context.getTheme().obtainStyledAttributes(attrs, R.styleable.Indicators, 0, 0));
     }
 
-    private void setXmlValues(TypedArray array) {
-        mMinValue = array.getFloat(R.styleable.Indicators_minValue, DEFAULT_MIN_VALUE);
-        mMaxValue = array.getFloat(R.styleable.Indicators_maxValue, DEFAULT_MAX_VALUE);
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
 
+        if (mTargetValue != NO_VALUE) draw();
+    }
+
+    private void setXmlValues(TypedArray array) {
+        mMinValue = array.getFloat(R.styleable.Indicators_min_value, DEFAULT_MIN_VALUE);
+        mMaxValue = array.getFloat(R.styleable.Indicators_max_value, DEFAULT_MAX_VALUE);
+
+        checkRange(mMinValue, mMaxValue);
         mValueRange = Math.abs(mMaxValue - mMinValue);
 
-        mDuration = array.getInt(R.styleable.Indicators_animationDuration,
-                DEFAULT_ANIMATION_DURATION);
+        mTargetValue = array.getFloat(R.styleable.Indicators_max_value, NO_VALUE);
+        mDuration = array.getInt(R.styleable.Indicators_animation_duration, DEFAULT_ANIM_DURATION);
 
         setColors(array);
     }
 
-    private void setColors(TypedArray a) {
-        mMainPaint.setColor(a.getColor(R.styleable.Indicators_mainColor,
-                android.R.color.tab_indicator_text));
+    private void setColors(TypedArray array) {
+        int color = array.getColor(R.styleable.Indicators_main_color, android.R.color.secondary_text_light);
+
+        mMainPaint.setColor(color);
         mMainPaint.setAntiAlias(true);
 
-        mBackgroundPaint.setColor(a.getColor(R.styleable.Indicators_backgroundColor,
-                android.R.color.secondary_text_dark_nodisable));
+        color = array.getColor(R.styleable.Indicators_background_color, android.R.color.darker_gray);
+
+        mBackgroundPaint.setColor(color);
         mBackgroundPaint.setAntiAlias(true);
     }
 
@@ -99,12 +109,13 @@ public abstract class IndicatorView extends View {
     /**
      * Method sets values range i.e. minimum and maximum values to display.
      * Default values are [0, 100].
+     * XML parameters {@link com.pletikosa.indicators.R.attr#min_value} and
+     * {@link com.pletikosa.indicators.R.attr#max_value}
      * @param minValue minimum value to display
      * @param maxValue maximum value to display
      */
     public void setRange(int minValue, int maxValue) throws IllegalArgumentException {
-        if (minValue >= maxValue)
-            throw new IllegalArgumentException("Invalid range {minValue >= maxValue}");
+        checkRange(minValue, maxValue);
 
         mMinValue = mTargetValue = minValue;
         mMaxValue = maxValue;
@@ -112,8 +123,8 @@ public abstract class IndicatorView extends View {
     }
 
     /**
-     * Sets value to be indicated.
-     * Value is automatically indicated when this value is set.
+     * Sets value to be indicated. Value is automatically animated when this method is used.
+     * XML parameter {@link com.pletikosa.indicators.R.attr#target_value}
      * @param target target value
      */
     public void indicate(float target) {
@@ -128,6 +139,7 @@ public abstract class IndicatorView extends View {
     /**
      * Sets animation duration. If set to 0 there will be no animation. Default animation
      * duration is 500 milliseconds.
+     * XML parameter {@link com.pletikosa.indicators.R.attr#animation_duration}
      * @param duration in milliseconds
      */
     public void setAnimationDuration(int duration) throws IllegalArgumentException {
@@ -137,23 +149,19 @@ public abstract class IndicatorView extends View {
 
     /**
      * Sets main color for animating value.
+     * XML parameter {@link com.pletikosa.indicators.R.attr#main_color}
      * @param mainColor color resource id
      */
     public void setMainColor(int mainColor) throws IllegalArgumentException {
-        if (mainColor <= 0)
-            throw new IllegalArgumentException("Illegal color code.");
-
         mMainPaint = new Paint(getResources().getColor(mainColor));
     }
 
     /**
      * Sets background color for showing whole shape below the one that is animating value.
+     * XML parameter {@link com.pletikosa.indicators.R.attr#background_color}
      * @param backgroundColor color resource id
      */
     public void setBackGroundColor(int backgroundColor) throws IllegalArgumentException {
-        if (backgroundColor <= 0)
-            throw new IllegalArgumentException("Illegal color code.");
-
         mBackgroundPaint = new Paint(getResources().getColor(backgroundColor));
     }
 
@@ -234,5 +242,10 @@ public abstract class IndicatorView extends View {
     protected void checkNegativeOrZero(int argument, String name) {
         if (argument <= 0)
             throw new IllegalArgumentException("Argument " + name + " can't be less than 0.");
+    }
+
+    private void checkRange(float minValue, float maxValue) {
+        if (minValue >= maxValue)
+            throw new IllegalArgumentException("Invalid range {minValue >= maxValue}");
     }
 }

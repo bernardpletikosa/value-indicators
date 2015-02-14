@@ -121,8 +121,8 @@
         android:id="@+id/quarter_pie_indicator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:mainColor="@color/green"
-        app:backgroundColor="@color/background"
-        app:centerColor="@color/app_background"/>
+        app:main_color="@color/blue"
+        app:background_color="@color/background"
+        app:pie_center_paint="@color/app_background"/>
 
 </LinearLayout>

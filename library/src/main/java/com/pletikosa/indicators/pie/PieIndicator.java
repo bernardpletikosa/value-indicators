@@ -10,18 +10,20 @@ import android.util.AttributeSet;
 
 import com.pletikosa.indicators.IndicatorView;
 import com.pletikosa.indicators.R;
+import com.pletikosa.indicators.consts.Defaults;
 import com.pletikosa.indicators.consts.Direction;
 import com.pletikosa.indicators.consts.SizeUnit;
 
+import static com.pletikosa.indicators.consts.Defaults.NO_VALUE;
+
 public class PieIndicator extends IndicatorView {
 
-    private static final float MAX_SIZE = 360f;
 
     protected int mMiddleX;
     protected int mMiddleY;
     protected int mRadius;
     protected int mInnerRadius;
-    protected int mInnerRadiusPercent = -1;
+    protected int mInnerRadiusPercent = NO_VALUE;
     protected float mStartAngle;
 
     protected Direction mDirection;
@@ -39,20 +41,7 @@ public class PieIndicator extends IndicatorView {
     public PieIndicator(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs);
 
-        setXmlValues(context.getTheme().obtainStyledAttributes(attrs, R.styleable.Indicators, 0, 0));
-    }
-
-    private void setXmlValues(TypedArray array) {
-        mCenterPaint.setColor(array.getColor(R.styleable.Indicators_centerColor,
-                android.R.color.white));
-        mCenterPaint.setAntiAlias(true);
-
-        mStartAngle = array.getInt(R.styleable.Indicators_startAngle, 0);
-        mDirection = Direction.values()[array.getInt(R.styleable.Indicators_circleDirection, 0)];
-
-        mInnerRadiusPercent = array.getInt(R.styleable.Indicators_innerRadius, -1);
-        if (mInnerRadiusPercent > 100)
-            throw new IllegalArgumentException("InnerRadius value out of bounds");
+        loadXmlValues(context.getTheme().obtainStyledAttributes(attrs, R.styleable.PieIndicator, 0, 0));
     }
 
     @Override
@@ -62,9 +51,11 @@ public class PieIndicator extends IndicatorView {
         mMiddleX = width / 2;
         mMiddleY = height / 2;
 
-        mRadius = mMiddleX < mMiddleY ? mMiddleX : mMiddleY;
-        mInnerRadius = mInnerRadiusPercent > -1 ? (int) (mInnerRadiusPercent / 100f * mRadius) :
-                mRadius / 2;
+        if (mRadius <= NO_VALUE)
+            mRadius = mMiddleX < mMiddleY ? mMiddleX : mMiddleY;
+        if (mInnerRadiusPercent <= NO_VALUE)
+            mInnerRadius = mInnerRadiusPercent > NO_VALUE ? (int) (mInnerRadiusPercent / 100f * mRadius) :
+                    mRadius / 2;
     }
 
     @Override
@@ -81,17 +72,16 @@ public class PieIndicator extends IndicatorView {
 
     /**
      * Sets color for inner hole. For inner hole radius see #setInnerRadius
+     * XML parameter {@link com.pletikosa.indicators.R.attr#pie_center_paint}
      * @param centerColor color resource id
      */
     public void setCenterPaint(int centerColor) throws IllegalArgumentException {
-        if (centerColor <= 0)
-            throw new IllegalArgumentException("Illegal color code.");
-
         mCenterPaint = new Paint(getResources().getColor(centerColor)); ;
     }
 
     /**
      * <p>Sets direction for drawing indicator in clockwise or counter clockwise direction.</p>
+     * XML parameter {@link com.pletikosa.indicators.R.attr#pie_direction}
      * Possible values are:
      * <ul>
      * <li>{@link Direction#CLOCKWISE}</li>
@@ -111,6 +101,7 @@ public class PieIndicator extends IndicatorView {
     /**
      * Sets inner radius of PieIndicator. Inner radius is set as percentage of outer circle
      * radius. If radius is 0 then indicator will be without center hole..
+     * XML parameter {@link com.pletikosa.indicators.R.attr#pie_inner_radius}
      * @param innerRadius percentage [0, 100]
      */
     public void setInnerRadius(int innerRadius) throws IllegalArgumentException {
@@ -126,10 +117,11 @@ public class PieIndicator extends IndicatorView {
 
     /**
      * Sets angle where indicator drawing will start.
+     * XML parameter {@link com.pletikosa.indicators.R.attr#pie_start_angle}
      * @param startAngle [0, 360]
      */
     public void setStartingAngle(int startAngle) throws IllegalArgumentException {
-        if (startAngle < 0 || startAngle > MAX_SIZE)
+        if (startAngle < 0 || startAngle > Defaults.PIE_MAX_ANGLE)
             throw new IllegalArgumentException("Starting angle value out of bounds.");
 
         mStartAngle = startAngle;
@@ -138,6 +130,7 @@ public class PieIndicator extends IndicatorView {
 
     /**
      * Sets radius of the outer circle in specified unit.
+     * XML parameter {@link com.pletikosa.indicators.R.attr#pie_radius}
      * @param radius size in specified unit.
      */
     public void setRadius(SizeUnit unit, int radius) throws IllegalArgumentException {
@@ -158,12 +151,27 @@ public class PieIndicator extends IndicatorView {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 float maxAnimatedFraction = Math.max(animation.getAnimatedFraction(), 0.01f);
-                float shift = (absoluteTarget / mValueRange) * MAX_SIZE - mOldValue;
+                float shift = (absoluteTarget / mValueRange) * Defaults.PIE_MAX_ANGLE - mOldValue;
 
                 mCurrentValue = mOldValue + (shift * maxAnimatedFraction);
 
                 postInvalidate();
             }
         };
+    }
+
+    protected void loadXmlValues(TypedArray array) {
+        mCenterPaint.setColor(array.getColor(R.styleable.PieIndicator_pie_center_paint,
+                android.R.color.white));
+        mCenterPaint.setAntiAlias(true);
+
+        mStartAngle = array.getInt(R.styleable.PieIndicator_pie_start_angle, 0);
+        mDirection = Direction.values()[array.getInt(R.styleable.PieIndicator_pie_direction,
+                0)];
+
+        mRadius = array.getInt(R.styleable.PieIndicator_pie_start_angle, NO_VALUE);
+        mInnerRadiusPercent = array.getInt(R.styleable.PieIndicator_pie_inner_radius, NO_VALUE);
+        if (mInnerRadiusPercent > 100)
+            throw new IllegalArgumentException("InnerRadius value out of bounds");
     }
 }
