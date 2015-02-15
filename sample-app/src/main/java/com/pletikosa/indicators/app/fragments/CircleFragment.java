@@ -1,4 +1,4 @@
-package com.pletikosa.indicators.sample.fragments;
+package com.pletikosa.indicators.app.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -11,8 +11,8 @@ import android.widget.SeekBar;
 
 import com.pletikosa.indicators.circle.CircleIndicator;
 import com.pletikosa.indicators.consts.SizeUnit;
-import com.pletikosa.indicators.sample.MainActivity;
-import com.pletikosa.indicators.sample.R;
+import com.pletikosa.indicators.app.MainActivity;
+import com.pletikosa.indicators.app.R;
 
 import java.util.Random;
 import java.util.concurrent.Executors;

@@ -1,4 +1,4 @@
-package com.pletikosa.indicators.sample.fragments;
+package com.pletikosa.indicators.app.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -12,9 +12,9 @@ import android.widget.SeekBar;
 import com.pletikosa.indicators.consts.Direction;
 import com.pletikosa.indicators.consts.Orientation;
 import com.pletikosa.indicators.consts.SizeUnit;
-import com.pletikosa.indicators.pie.HalfPieIndicator;
-import com.pletikosa.indicators.sample.MainActivity;
-import com.pletikosa.indicators.sample.R;
+import com.pletikosa.indicators.pie.QuarterPieIndicator;
+import com.pletikosa.indicators.app.MainActivity;
+import com.pletikosa.indicators.app.R;
 
 import java.util.Random;
 import java.util.concurrent.Executors;
@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class HalfPieFragment extends Fragment {
+public class QuarterPieFragment extends Fragment {
 
     @InjectView(R.id.seek_radius)
     SeekBar mSeekRadius;
@@ -37,21 +37,21 @@ public class HalfPieFragment extends Fragment {
     @InjectView(R.id.seek_orientation)
     SeekBar mSeekOrientation;
 
-    @InjectView(R.id.half_pie_indicator)
-    HalfPieIndicator mPieIndicator;
+    @InjectView(R.id.quarter_pie_indicator)
+    QuarterPieIndicator mPieIndicator;
 
     private int mWidth;
 
-    public static HalfPieFragment newInstance() {
-        return new HalfPieFragment();
+    public static QuarterPieFragment newInstance() {
+        return new QuarterPieFragment();
     }
 
-    public HalfPieFragment() {
+    public QuarterPieFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle sis) {
-        View view = inflater.inflate(R.layout.fragment_half_pie, container, false);
+        View view = inflater.inflate(R.layout.fragment_quarter_pie, container, false);
         ButterKnife.inject(this, view);
 
         DisplayMetrics metrics = new DisplayMetrics();
@@ -69,7 +69,7 @@ public class HalfPieFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        ((MainActivity) activity).onSectionAttached(3);
+        ((MainActivity) activity).onSectionAttached(4);
     }
 
     private void startUpdate() {
@@ -100,8 +100,8 @@ public class HalfPieFragment extends Fragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                mPieIndicator.setRadius(SizeUnit.PX, (int) (mWidth / 2 * ((float) seekBar.getProgress() / mSeekRadius
-                        .getMax())));
+                mPieIndicator.setRadius(SizeUnit.PX, (int) (mWidth / 2 * ((float) seekBar
+                        .getProgress() / mSeekRadius.getMax())));
             }
         });
         mSeekInnerRadius.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -135,10 +135,10 @@ public class HalfPieFragment extends Fragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                mPieIndicator.setOrientation(Orientation.values()[seekBar.getProgress()]);
+                mPieIndicator.setOrientation(Orientation.values()[seekBar.getProgress() + 4]);
             }
         });
-        mPieIndicator.setOrientation(Orientation.SOUTH);
+        mPieIndicator.setOrientation(Orientation.SOUTH_WEST);
     }
 
     private void setAnimationSeek() {

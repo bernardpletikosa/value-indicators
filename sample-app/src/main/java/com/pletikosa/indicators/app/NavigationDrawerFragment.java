@@ -1,4 +1,4 @@
-package com.pletikosa.indicators.sample;
+package com.pletikosa.indicators.app;
 
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;

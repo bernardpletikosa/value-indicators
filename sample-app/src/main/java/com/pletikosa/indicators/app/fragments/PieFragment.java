@@ -1,4 +1,4 @@
-package com.pletikosa.indicators.sample.fragments;
+package com.pletikosa.indicators.app.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -10,11 +10,10 @@ import android.view.ViewGroup;
 import android.widget.SeekBar;
 
 import com.pletikosa.indicators.consts.Direction;
-import com.pletikosa.indicators.consts.Orientation;
 import com.pletikosa.indicators.consts.SizeUnit;
-import com.pletikosa.indicators.pie.QuarterPieIndicator;
-import com.pletikosa.indicators.sample.MainActivity;
-import com.pletikosa.indicators.sample.R;
+import com.pletikosa.indicators.pie.PieIndicator;
+import com.pletikosa.indicators.app.MainActivity;
+import com.pletikosa.indicators.app.R;
 
 import java.util.Random;
 import java.util.concurrent.Executors;
@@ -24,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class QuarterPieFragment extends Fragment {
+public class PieFragment extends Fragment {
 
     @InjectView(R.id.seek_radius)
     SeekBar mSeekRadius;
@@ -32,26 +31,26 @@ public class QuarterPieFragment extends Fragment {
     SeekBar mSeekInnerRadius;
     @InjectView(R.id.seek_animation)
     SeekBar mSeekAnimation;
+    @InjectView(R.id.seek_angle)
+    SeekBar mSeekAngle;
     @InjectView(R.id.seek_direction)
     SeekBar mSeekDirection;
-    @InjectView(R.id.seek_orientation)
-    SeekBar mSeekOrientation;
-
-    @InjectView(R.id.quarter_pie_indicator)
-    QuarterPieIndicator mPieIndicator;
+    
+    @InjectView(R.id.pie_indicator)
+    PieIndicator mPieIndicator;
 
     private int mWidth;
 
-    public static QuarterPieFragment newInstance() {
-        return new QuarterPieFragment();
+    public static PieFragment newInstance() {
+        return new PieFragment();
     }
 
-    public QuarterPieFragment() {
+    public PieFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle sis) {
-        View view = inflater.inflate(R.layout.fragment_quarter_pie, container, false);
+        View view = inflater.inflate(R.layout.fragment_pie, container, false);
         ButterKnife.inject(this, view);
 
         DisplayMetrics metrics = new DisplayMetrics();
@@ -59,17 +58,19 @@ public class QuarterPieFragment extends Fragment {
         mWidth = metrics.widthPixels;
 
         startUpdate();
+
         setSizeSeek();
-        startOrientationUpdate();
+        startAngleUpdate();
         setAnimationSeek();
         setDirectionSeek();
+        
         return view;
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        ((MainActivity) activity).onSectionAttached(4);
+        ((MainActivity) activity).onSectionAttached(2);
     }
 
     private void startUpdate() {
@@ -119,12 +120,12 @@ public class QuarterPieFragment extends Fragment {
             }
         });
 
-        mPieIndicator.setRadius(SizeUnit.PX, (int) (mWidth / 2 * ((float) mSeekRadius.getProgress() / mSeekRadius.getMax())));
+        mPieIndicator.setRadius(SizeUnit.PX,(int) (mWidth / 2 * ((float) mSeekRadius.getProgress() / mSeekRadius.getMax())));
         mPieIndicator.setInnerRadius(mSeekInnerRadius.getProgress());
     }
 
-    private void startOrientationUpdate() {
-        mSeekOrientation.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+    private void startAngleUpdate() {
+        mSeekAngle.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             }
@@ -135,10 +136,9 @@ public class QuarterPieFragment extends Fragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                mPieIndicator.setOrientation(Orientation.values()[seekBar.getProgress() + 4]);
+                mPieIndicator.setStartingAngle(seekBar.getProgress() * 90);
             }
         });
-        mPieIndicator.setOrientation(Orientation.SOUTH_WEST);
     }
 
     private void setAnimationSeek() {

@@ -1,6 +1,7 @@
-package com.pletikosa.indicators.sample.fragments;
+package com.pletikosa.indicators.app.fragments;
 
 import android.app.Activity;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
@@ -11,9 +12,9 @@ import android.widget.SeekBar;
 
 import com.pletikosa.indicators.consts.Direction;
 import com.pletikosa.indicators.consts.SizeUnit;
-import com.pletikosa.indicators.pie.PieIndicator;
-import com.pletikosa.indicators.sample.MainActivity;
-import com.pletikosa.indicators.sample.R;
+import com.pletikosa.indicators.line.LineIndicator;
+import com.pletikosa.indicators.app.MainActivity;
+import com.pletikosa.indicators.app.R;
 
 import java.util.Random;
 import java.util.concurrent.Executors;
@@ -23,54 +24,52 @@ import java.util.concurrent.TimeUnit;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class PieFragment extends Fragment {
+public class LineFragment extends Fragment {
 
-    @InjectView(R.id.seek_radius)
-    SeekBar mSeekRadius;
-    @InjectView(R.id.seek_inner_radius)
-    SeekBar mSeekInnerRadius;
+    @InjectView(R.id.seek_width)
+    SeekBar mSeekWidth;
+    @InjectView(R.id.seek_height)
+    SeekBar mSeekHeight;
     @InjectView(R.id.seek_animation)
-    SeekBar mSeekAnimation;
-    @InjectView(R.id.seek_angle)
-    SeekBar mSeekAngle;
+    SeekBar mAnimationSeek;
     @InjectView(R.id.seek_direction)
     SeekBar mSeekDirection;
-    
-    @InjectView(R.id.pie_indicator)
-    PieIndicator mPieIndicator;
+    @InjectView(R.id.seek_corner_radius)
+    SeekBar mSeekCorners;
 
-    private int mWidth;
+    @InjectView(R.id.line_indicator)
+    LineIndicator mIndicator;
 
-    public static PieFragment newInstance() {
-        return new PieFragment();
+    private int mSize;
+
+    public static LineFragment newInstance() {
+        return new LineFragment();
     }
 
-    public PieFragment() {
+    public LineFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle sis) {
-        View view = inflater.inflate(R.layout.fragment_pie, container, false);
+        View view = inflater.inflate(R.layout.fragment_line, container, false);
         ButterKnife.inject(this, view);
 
         DisplayMetrics metrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        mWidth = metrics.widthPixels;
+        mSize = (int) (metrics.widthPixels - (2 * marginToPx()));
 
         startUpdate();
-
         setSizeSeek();
-        startAngleUpdate();
         setAnimationSeek();
         setDirectionSeek();
-        
+
         return view;
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        ((MainActivity) activity).onSectionAttached(2);
+        ((MainActivity) activity).onSectionAttached(1);
     }
 
     private void startUpdate() {
@@ -82,7 +81,8 @@ public class PieFragment extends Fragment {
                     @Override
                     public void run() {
                         Random rand = new Random();
-                        mPieIndicator.indicate(rand.nextFloat() * 100);
+                        final float value = rand.nextFloat() * 100;
+                        mIndicator.indicate(value);
                     }
                 });
             }
@@ -90,7 +90,7 @@ public class PieFragment extends Fragment {
     }
 
     private void setSizeSeek() {
-        mSeekRadius.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        mSeekWidth.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             }
@@ -101,11 +101,11 @@ public class PieFragment extends Fragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                mPieIndicator.setRadius(SizeUnit.PX, (int) (mWidth / 2 * ((float) seekBar
-                        .getProgress() / mSeekRadius.getMax())));
+                mIndicator.setSize(SizeUnit.PX, getSize(seekBar), getSize(mSeekHeight));
             }
         });
-        mSeekInnerRadius.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+        mSeekHeight.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             }
@@ -116,34 +116,15 @@ public class PieFragment extends Fragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                mPieIndicator.setInnerRadius(seekBar.getProgress());
+                mIndicator.setSize(SizeUnit.PX, getSize(mSeekWidth), getSize(seekBar));
             }
         });
 
-        mPieIndicator.setRadius(SizeUnit.PX,(int) (mWidth / 2 * ((float) mSeekRadius.getProgress() / mSeekRadius.getMax())));
-        mPieIndicator.setInnerRadius(mSeekInnerRadius.getProgress());
-    }
-
-    private void startAngleUpdate() {
-        mSeekAngle.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                mPieIndicator.setStartingAngle(seekBar.getProgress() * 90);
-            }
-        });
+        mIndicator.setSize(SizeUnit.PX, getSize(mSeekWidth), getSize(mSeekHeight));
     }
 
     private void setAnimationSeek() {
-        mPieIndicator.setAnimationDuration(mSeekAnimation.getProgress());
-        mSeekAnimation.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        mAnimationSeek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             }
@@ -154,7 +135,7 @@ public class PieFragment extends Fragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                mPieIndicator.setAnimationDuration(seekBar.getProgress());
+                mIndicator.setAnimationDuration(seekBar.getProgress());
             }
         });
     }
@@ -172,8 +153,21 @@ public class PieFragment extends Fragment {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 final int progress = seekBar.getProgress();
-                mPieIndicator.setDirection(progress == 0 ? Direction.CLOCKWISE : Direction.COUNTER_CLOCKWISE);
+                mIndicator.setDirection(progress == 0 ? Direction.LEFT_RIGHT : progress == 1 ?
+                        Direction.RIGHT_LEFT : progress == 2 ? Direction.BOTTOM_TOP : Direction
+                        .TOP_BOTTOM);
             }
         });
+        mIndicator.setDirection(Direction.LEFT_RIGHT);
+    }
+
+    private int getSize(SeekBar seekBar) {
+        return (int) (mSize * ((float) seekBar.getProgress() / seekBar.getMax()));
+    }
+
+    private float marginToPx() {
+        Resources resources = getActivity().getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        return getActivity().getResources().getDimension(R.dimen.activity_margin) * (metrics.densityDpi / 160f);
     }
 }

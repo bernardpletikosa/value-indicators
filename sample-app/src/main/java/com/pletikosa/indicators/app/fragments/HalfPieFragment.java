@@ -1,7 +1,6 @@
-package com.pletikosa.indicators.sample.fragments;
+package com.pletikosa.indicators.app.fragments;
 
 import android.app.Activity;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
@@ -11,10 +10,11 @@ import android.view.ViewGroup;
 import android.widget.SeekBar;
 
 import com.pletikosa.indicators.consts.Direction;
+import com.pletikosa.indicators.consts.Orientation;
 import com.pletikosa.indicators.consts.SizeUnit;
-import com.pletikosa.indicators.line.LineIndicator;
-import com.pletikosa.indicators.sample.MainActivity;
-import com.pletikosa.indicators.sample.R;
+import com.pletikosa.indicators.pie.HalfPieIndicator;
+import com.pletikosa.indicators.app.MainActivity;
+import com.pletikosa.indicators.app.R;
 
 import java.util.Random;
 import java.util.concurrent.Executors;
@@ -24,52 +24,52 @@ import java.util.concurrent.TimeUnit;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class LineFragment extends Fragment {
+public class HalfPieFragment extends Fragment {
 
-    @InjectView(R.id.seek_width)
-    SeekBar mSeekWidth;
-    @InjectView(R.id.seek_height)
-    SeekBar mSeekHeight;
+    @InjectView(R.id.seek_radius)
+    SeekBar mSeekRadius;
+    @InjectView(R.id.seek_inner_radius)
+    SeekBar mSeekInnerRadius;
     @InjectView(R.id.seek_animation)
-    SeekBar mAnimationSeek;
+    SeekBar mSeekAnimation;
     @InjectView(R.id.seek_direction)
     SeekBar mSeekDirection;
-    @InjectView(R.id.seek_corner_radius)
-    SeekBar mSeekCorners;
+    @InjectView(R.id.seek_orientation)
+    SeekBar mSeekOrientation;
 
-    @InjectView(R.id.line_indicator)
-    LineIndicator mIndicator;
+    @InjectView(R.id.half_pie_indicator)
+    HalfPieIndicator mPieIndicator;
 
-    private int mSize;
+    private int mWidth;
 
-    public static LineFragment newInstance() {
-        return new LineFragment();
+    public static HalfPieFragment newInstance() {
+        return new HalfPieFragment();
     }
 
-    public LineFragment() {
+    public HalfPieFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle sis) {
-        View view = inflater.inflate(R.layout.fragment_line, container, false);
+        View view = inflater.inflate(R.layout.fragment_half_pie, container, false);
         ButterKnife.inject(this, view);
 
         DisplayMetrics metrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        mSize = (int) (metrics.widthPixels - (2 * marginToPx()));
+        mWidth = metrics.widthPixels;
 
         startUpdate();
         setSizeSeek();
+        startOrientationUpdate();
         setAnimationSeek();
         setDirectionSeek();
-
         return view;
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        ((MainActivity) activity).onSectionAttached(1);
+        ((MainActivity) activity).onSectionAttached(3);
     }
 
     private void startUpdate() {
@@ -81,8 +81,7 @@ public class LineFragment extends Fragment {
                     @Override
                     public void run() {
                         Random rand = new Random();
-                        final float value = rand.nextFloat() * 100;
-                        mIndicator.indicate(value);
+                        mPieIndicator.indicate(rand.nextFloat() * 100);
                     }
                 });
             }
@@ -90,7 +89,7 @@ public class LineFragment extends Fragment {
     }
 
     private void setSizeSeek() {
-        mSeekWidth.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        mSeekRadius.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             }
@@ -101,11 +100,11 @@ public class LineFragment extends Fragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                mIndicator.setSize(SizeUnit.PX, getSize(seekBar), getSize(mSeekHeight));
+                mPieIndicator.setRadius(SizeUnit.PX, (int) (mWidth / 2 * ((float) seekBar.getProgress() / mSeekRadius
+                        .getMax())));
             }
         });
-
-        mSeekHeight.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        mSeekInnerRadius.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             }
@@ -116,15 +115,35 @@ public class LineFragment extends Fragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                mIndicator.setSize(SizeUnit.PX, getSize(mSeekWidth), getSize(seekBar));
+                mPieIndicator.setInnerRadius(seekBar.getProgress());
             }
         });
 
-        mIndicator.setSize(SizeUnit.PX, getSize(mSeekWidth), getSize(mSeekHeight));
+        mPieIndicator.setRadius(SizeUnit.PX, (int) (mWidth / 2 * ((float) mSeekRadius.getProgress() / mSeekRadius.getMax())));
+        mPieIndicator.setInnerRadius(mSeekInnerRadius.getProgress());
+    }
+
+    private void startOrientationUpdate() {
+        mSeekOrientation.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                mPieIndicator.setOrientation(Orientation.values()[seekBar.getProgress()]);
+            }
+        });
+        mPieIndicator.setOrientation(Orientation.SOUTH);
     }
 
     private void setAnimationSeek() {
-        mAnimationSeek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        mPieIndicator.setAnimationDuration(mSeekAnimation.getProgress());
+        mSeekAnimation.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             }
@@ -135,7 +154,7 @@ public class LineFragment extends Fragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                mIndicator.setAnimationDuration(seekBar.getProgress());
+                mPieIndicator.setAnimationDuration(seekBar.getProgress());
             }
         });
     }
@@ -153,21 +172,8 @@ public class LineFragment extends Fragment {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 final int progress = seekBar.getProgress();
-                mIndicator.setDirection(progress == 0 ? Direction.LEFT_RIGHT : progress == 1 ?
-                        Direction.RIGHT_LEFT : progress == 2 ? Direction.BOTTOM_TOP : Direction
-                        .TOP_BOTTOM);
+                mPieIndicator.setDirection(progress == 0 ? Direction.CLOCKWISE : Direction.COUNTER_CLOCKWISE);
             }
         });
-        mIndicator.setDirection(Direction.LEFT_RIGHT);
-    }
-
-    private int getSize(SeekBar seekBar) {
-        return (int) (mSize * ((float) seekBar.getProgress() / seekBar.getMax()));
-    }
-
-    private float marginToPx() {
-        Resources resources = getActivity().getResources();
-        DisplayMetrics metrics = resources.getDisplayMetrics();
-        return getActivity().getResources().getDimension(R.dimen.activity_margin) * (metrics.densityDpi / 160f);
     }
 }
