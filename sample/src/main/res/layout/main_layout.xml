@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/app_background"
+            android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/activity_margin"
+        android:orientation="vertical">
+
+        <com.pletikosa.indicators.circle.CircleIndicator
+            android:id="@+id/circle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_margin"
+            app:main_color="@color/darkblue"
+            app:background_color="@color/background"
+            app:animation_duration="500"
+            app:min_value="0"
+            app:max_value="20"
+            app:circle_radius="100dp"/>
+
+        <com.pletikosa.indicators.line.LineIndicator
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_margin"
+            app:main_color="@color/darkblue"
+            app:background_color="@color/background"
+            app:animation_duration="500"
+            app:min_value="0"
+            app:max_value="20"
+            app:line_width="200dp"
+            app:line_height="50dp"
+            app:line_direction="left_right"/>
+
+        <com.pletikosa.indicators.pie.PieIndicator
+            android:id="@+id/pie"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_margin"
+            app:main_color="@color/darkblue"
+            app:background_color="@color/background"
+            app:animation_duration="500"
+            app:min_value="0"
+            app:max_value="20"
+            app:pie_center_paint="@color/app_background"
+            app:pie_radius="100dp"
+            app:pie_inner_radius="70"
+            app:pie_start_angle="0"
+            app:pie_direction="clockwise"/>
+
+        <com.pletikosa.indicators.pie.HalfPieIndicator
+            android:id="@+id/pie_half"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_margin"
+            app:main_color="@color/darkblue"
+            app:background_color="@color/background"
+            app:animation_duration="500"
+            app:min_value="0"
+            app:max_value="20"
+            app:pie_center_paint="@color/app_background"
+            app:pie_radius="100dp"
+            app:pie_inner_radius="70"
+            app:pie_direction="clockwise"
+            app:half_pie_orientation="north"/>
+
+        <com.pletikosa.indicators.pie.QuarterPieIndicator
+            android:id="@+id/pie_quarter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_margin"
+            app:main_color="@color/darkblue"
+            app:background_color="@color/background"
+            app:animation_duration="500"
+            app:min_value="0"
+            app:max_value="20"
+            app:pie_center_paint="@color/app_background"
+            app:pie_radius="100dp"
+            app:pie_inner_radius="70"
+            app:pie_direction="clockwise"
+            app:quarter_pie_orientation="north_west"
+            />
+    </LinearLayout>
+</ScrollView>

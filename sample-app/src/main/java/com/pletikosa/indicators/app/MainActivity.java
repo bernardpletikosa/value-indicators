@@ -16,9 +16,9 @@ import com.pletikosa.indicators.app.fragments.PieFragment;
 import com.pletikosa.indicators.app.fragments.QuarterPieFragment;
 
 public class MainActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+        implements DrawerFragment.NavigationDrawerCallbacks {
 
-    private NavigationDrawerFragment mNavigationDrawerFragment;
+    private DrawerFragment mNavigationDrawerFragment;
     private CharSequence mTitle;
 
     @Override
@@ -26,7 +26,7 @@ public class MainActivity extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mNavigationDrawerFragment = (NavigationDrawerFragment)
+        mNavigationDrawerFragment = (DrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
 

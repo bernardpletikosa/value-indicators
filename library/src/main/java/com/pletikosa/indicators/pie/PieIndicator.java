@@ -14,10 +14,11 @@ import com.pletikosa.indicators.consts.Defaults;
 import com.pletikosa.indicators.consts.Direction;
 import com.pletikosa.indicators.consts.SizeUnit;
 
+import static android.view.View.MeasureSpec.AT_MOST;
+import static android.view.View.MeasureSpec.EXACTLY;
 import static com.pletikosa.indicators.consts.Defaults.NO_VALUE;
 
 public class PieIndicator extends IndicatorView {
-
 
     protected int mMiddleX;
     protected int mMiddleY;
@@ -27,7 +28,7 @@ public class PieIndicator extends IndicatorView {
     protected float mStartAngle;
 
     protected Direction mDirection;
-    protected RectF mRectF = new RectF();
+    protected RectF mMainRect = new RectF();
     protected Paint mCenterPaint = new Paint();
 
     public PieIndicator(Context context) {
@@ -45,27 +46,42 @@ public class PieIndicator extends IndicatorView {
     }
 
     @Override
-    protected void onSizeChanged(int width, int height, int oldw, int oldh) {
-        super.onSizeChanged(width, height, oldw, oldh);
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int w, h;
+        int width = MeasureSpec.getSize(widthMeasureSpec);
+        int height = MeasureSpec.getSize(heightMeasureSpec);
+        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
 
-        mMiddleX = width / 2;
-        mMiddleY = height / 2;
+        if (widthMode == EXACTLY)
+            w = width;
+        else if (widthMode == AT_MOST)
+            w = mRadius > NO_VALUE ? Math.min(mRadius * 2, width) : width > 0 ? width : height;
+        else
+            w = mRadius > NO_VALUE ? mRadius * 2 : width > 0 ? width : height;
 
-        if (mRadius <= NO_VALUE)
-            mRadius = mMiddleX < mMiddleY ? mMiddleX : mMiddleY;
-        if (mInnerRadiusPercent <= NO_VALUE)
-            mInnerRadius = mInnerRadiusPercent > NO_VALUE ? (int) (mInnerRadiusPercent / 100f * mRadius) :
-                    mRadius / 2;
+        if (heightMode == EXACTLY)
+            h = height;
+        else if (heightMode == AT_MOST)
+            h = mRadius > NO_VALUE ? Math.min(mRadius * 2, height) : height > 0 ? height : width;
+        else
+            h = mRadius > NO_VALUE ? mRadius * 2 : height > 0 ? height : width;
+
+        mMiddleX = w / 2;
+        mMiddleY = h / 2;
+
+        calculateRadius();
+
+        setMeasuredDimension(w, h);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         canvas.drawCircle(mMiddleX, mMiddleY, mRadius, mBackgroundPaint);
 
-        mRectF.set(mMiddleX - mRadius, mMiddleY - mRadius, mMiddleX + mRadius, mMiddleY + mRadius);
-        canvas.drawArc(mRectF, mStartAngle, mDirection == Direction.CLOCKWISE ? mCurrentValue :
-                        -mCurrentValue, true,
-                mMainPaint);
+        mMainRect.set(mMiddleX - mRadius, mMiddleY - mRadius, mMiddleX + mRadius, mMiddleY + mRadius);
+        canvas.drawArc(mMainRect, mStartAngle, mDirection == Direction.CLOCKWISE ? mCurrentValue :
+                -mCurrentValue, true, mMainPaint);
 
         canvas.drawCircle(mMiddleX, mMiddleY, mInnerRadius, mCenterPaint);
     }
@@ -95,6 +111,8 @@ public class PieIndicator extends IndicatorView {
             throw new IllegalArgumentException("Direction " + direction.name() + " not supported.");
 
         mDirection = direction;
+        
+        requestLayout();
         draw();
     }
 
@@ -112,6 +130,7 @@ public class PieIndicator extends IndicatorView {
 
         if (mRadius >= 0) mInnerRadius = (int) (mInnerRadiusPercent / 100f * mRadius);
 
+        requestLayout();
         draw();
     }
 
@@ -125,6 +144,8 @@ public class PieIndicator extends IndicatorView {
             throw new IllegalArgumentException("Starting angle value out of bounds.");
 
         mStartAngle = startAngle;
+
+        requestLayout();
         draw();
     }
 
@@ -140,6 +161,7 @@ public class PieIndicator extends IndicatorView {
         mRadius = unit == SizeUnit.PX ? radius : (int) dpToPixel(radius);
         mInnerRadius = (int) (mInnerRadiusPercent / 100f * mRadius);
 
+        requestLayout();
         draw();
     }
 
@@ -161,17 +183,26 @@ public class PieIndicator extends IndicatorView {
     }
 
     protected void loadXmlValues(TypedArray array) {
-        mCenterPaint.setColor(array.getColor(R.styleable.PieIndicator_pie_center_paint,
-                android.R.color.white));
+        mCenterPaint.setColor(array.getColor(R.styleable.PieIndicator_pie_center_paint, android.R.color.white));
         mCenterPaint.setAntiAlias(true);
 
         mStartAngle = array.getInt(R.styleable.PieIndicator_pie_start_angle, 0);
         mDirection = Direction.values()[array.getInt(R.styleable.PieIndicator_pie_direction,
                 0)];
 
-        mRadius = array.getInt(R.styleable.PieIndicator_pie_start_angle, NO_VALUE);
+        mRadius = (int) array.getDimension(R.styleable.PieIndicator_pie_radius, NO_VALUE);
         mInnerRadiusPercent = array.getInt(R.styleable.PieIndicator_pie_inner_radius, NO_VALUE);
         if (mInnerRadiusPercent > 100)
             throw new IllegalArgumentException("InnerRadius value out of bounds");
+    }
+
+    protected void calculateRadius() {
+        if (mRadius <= NO_VALUE)
+            mRadius = mMiddleX < mMiddleY ? mMiddleX : mMiddleY;
+       
+        if (mInnerRadiusPercent <= NO_VALUE)
+            mInnerRadius = mRadius / 2;
+        else
+            mInnerRadius = (int) (mInnerRadiusPercent / 100f * mRadius);
     }
 }

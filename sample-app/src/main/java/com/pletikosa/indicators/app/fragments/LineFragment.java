@@ -34,8 +34,6 @@ public class LineFragment extends Fragment {
     SeekBar mAnimationSeek;
     @InjectView(R.id.seek_direction)
     SeekBar mSeekDirection;
-    @InjectView(R.id.seek_corner_radius)
-    SeekBar mSeekCorners;
 
     @InjectView(R.id.line_indicator)
     LineIndicator mIndicator;

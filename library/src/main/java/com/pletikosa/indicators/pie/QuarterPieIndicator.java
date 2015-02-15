@@ -2,15 +2,15 @@ package com.pletikosa.indicators.pie;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 
 import com.pletikosa.indicators.R;
-import com.pletikosa.indicators.consts.Defaults;
 import com.pletikosa.indicators.consts.Direction;
 import com.pletikosa.indicators.consts.Orientation;
 
+import static android.view.View.MeasureSpec.AT_MOST;
+import static android.view.View.MeasureSpec.EXACTLY;
 import static com.pletikosa.indicators.consts.Defaults.NO_VALUE;
 import static com.pletikosa.indicators.consts.Defaults.QUARTER_PIE_MAX_ANGLE;
 
@@ -37,29 +37,45 @@ public class QuarterPieIndicator extends HalfPieIndicator {
     }
 
     @Override
-    protected void onSizeChanged(int width, int height, int oldw, int oldh) {
-        super.onSizeChanged(width, height, oldw, oldh);
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int w, h;
+        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+        int width = MeasureSpec.getSize(widthMeasureSpec);
+        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+        int height = MeasureSpec.getSize(heightMeasureSpec);
 
-        mWidth = width;
-        mHeight = height;
+        if (widthMode == EXACTLY)
+            w = width;
+        else if (widthMode == AT_MOST)
+            w = mRadius > NO_VALUE ? Math.min(mRadius, width) : width > 0 ? width : height;
+        else
+            w = mRadius > NO_VALUE ? mRadius : width > 0 ? width : height;
+
+        if (heightMode == EXACTLY)
+            h = height;
+        else if (heightMode == AT_MOST)
+            h = mRadius > NO_VALUE ? Math.min(mRadius, height) : height > 0 ? height : width;
+        else
+            h = mRadius > NO_VALUE ? mRadius : height > 0 ? height : width;
+
+        mWidth = w;
+        mHeight = h;
 
         calculateCenter();
+        calculateRadius();
 
-        if (mRadius <= NO_VALUE)
-            mRadius = mMiddleX < mMiddleY ? mMiddleX : mMiddleY;
-        if (mInnerRadius <= NO_VALUE)
-            mInnerRadius = mInnerRadiusPercent > -1 ? (int) (mInnerRadiusPercent / 100f * mRadius) : mRadius / 2;
+        setMeasuredDimension(mWidth, mHeight);
     }
 
     @Override
     public void onDraw(Canvas canvas) {
         canvas.drawCircle(mMiddleX, mMiddleY, mRadius, mBackgroundPaint);
 
-        mRectF.set(mMiddleX - mRadius, mMiddleY - mRadius, mMiddleX + mRadius, mMiddleY + mRadius);
+        mMainRect.set(mMiddleX - mRadius, mMiddleY - mRadius, mMiddleX + mRadius, mMiddleY + mRadius);
 
         int startAngle = calculateStartAngle();
         float value = mDirection == Direction.CLOCKWISE ? mCurrentValue : -mCurrentValue;
-        canvas.drawArc(mRectF, startAngle, value, true, mMainPaint);
+        canvas.drawArc(mMainRect, startAngle, value, true, mMainPaint);
 
         canvas.drawCircle(mMiddleX, mMiddleY, mInnerRadius, mCenterPaint);
     }

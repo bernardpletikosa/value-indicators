@@ -10,6 +10,8 @@ import com.pletikosa.indicators.IndicatorView;
 import com.pletikosa.indicators.R;
 import com.pletikosa.indicators.consts.SizeUnit;
 
+import static android.view.View.MeasureSpec.AT_MOST;
+import static android.view.View.MeasureSpec.EXACTLY;
 import static com.pletikosa.indicators.consts.Defaults.NO_VALUE;
 
 public class CircleIndicator extends IndicatorView {
@@ -33,14 +35,34 @@ public class CircleIndicator extends IndicatorView {
     }
 
     @Override
-    protected void onSizeChanged(int width, int height, int oldw, int oldh) {
-        super.onSizeChanged(width, height, oldw, oldh);
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int w, h;
+        int width = MeasureSpec.getSize(widthMeasureSpec);
+        int height = MeasureSpec.getSize(heightMeasureSpec);
+        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
 
-        mMiddleX = width / 2;
-        mMiddleY = height / 2;
+        if (widthMode == EXACTLY)
+            w = width;
+        else if (widthMode == AT_MOST)
+            w = mRadius > NO_VALUE ? Math.min(mRadius * 2, width) : width > 0 ? width : height;
+        else
+            w = mRadius > NO_VALUE ? mRadius * 2 : width > 0 ? width : height;
+
+        if (heightMode == EXACTLY)
+            h = height;
+        else if (heightMode == AT_MOST)
+            h = mRadius > NO_VALUE ? Math.min(mRadius * 2, height) : height > 0 ? height : width;
+        else
+            h = mRadius > NO_VALUE ? mRadius * 2 : height > 0 ? height : width;
+
+        mMiddleX = w / 2;
+        mMiddleY = h / 2;
 
         if (mRadius <= NO_VALUE)
             mRadius = mMiddleX < mMiddleY ? mMiddleX : mMiddleY;
+
+        setMeasuredDimension(w, h);
     }
 
     @Override
@@ -59,6 +81,8 @@ public class CircleIndicator extends IndicatorView {
         checkNegativeOrZero(radius, "circle radius");
 
         mRadius = unit == SizeUnit.PX ? radius : (int) dpToPixel(radius);
+
+        requestLayout();
         draw();
     }
 
@@ -80,6 +104,6 @@ public class CircleIndicator extends IndicatorView {
     }
 
     private void setXmlValues(TypedArray array) {
-        mRadius = array.getInt(R.styleable.CircleIndicator_circle_radius, NO_VALUE);
+        mRadius = (int) array.getDimension(R.styleable.CircleIndicator_circle_radius, NO_VALUE);
     }
 }

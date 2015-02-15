@@ -3,9 +3,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              android:padding="@dimen/activity_margin"
-              android:layout_gravity="center_vertical"
-              android:gravity="center_vertical">
+              android:padding="@dimen/activity_margin">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -49,28 +47,6 @@
             android:layout_margin="5dp"
             android:progress="20"
             android:max="50"
-            />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="@string/corner_radius"/>
-
-        <SeekBar
-            android:id="@+id/seek_corner_radius"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="4"
-            android:layout_margin="5dp"
-            android:progress="0"
-            android:max="25"
             />
     </LinearLayout>
     

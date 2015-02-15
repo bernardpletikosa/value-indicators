@@ -70,7 +70,7 @@ public abstract class IndicatorView extends View {
         checkRange(mMinValue, mMaxValue);
         mValueRange = Math.abs(mMaxValue - mMinValue);
 
-        mTargetValue = array.getFloat(R.styleable.Indicators_max_value, NO_VALUE);
+        mTargetValue = array.getFloat(R.styleable.Indicators_target_value, NO_VALUE);
         mDuration = array.getInt(R.styleable.Indicators_animation_duration, DEFAULT_ANIM_DURATION);
 
         setColors(array);

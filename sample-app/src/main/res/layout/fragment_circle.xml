@@ -3,9 +3,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              android:padding="@dimen/activity_margin"
-              android:layout_gravity="center_vertical"
-              android:gravity="center_vertical">
+              android:padding="@dimen/activity_margin">
 
 
     <LinearLayout
@@ -55,7 +53,7 @@
     <com.pletikosa.indicators.circle.CircleIndicator
         android:id="@+id/circle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         app:main_color="@color/blue"
         app:background_color="@color/background"

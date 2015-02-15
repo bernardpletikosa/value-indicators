@@ -20,6 +20,8 @@ public class LineIndicator extends IndicatorView {
 
     protected int mWidth;
     protected int mHeight;
+    protected int mTotalWidth;
+    protected int mTotalHeight;
     protected Direction mDirection;
 
     public LineIndicator(Context context) {
@@ -37,18 +39,45 @@ public class LineIndicator extends IndicatorView {
     }
 
     @Override
-    protected void onSizeChanged(int width, int height, int oldw, int oldh) {
-        super.onSizeChanged(width, height, oldw, oldh);
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int width;
+        int height;
+        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+        mTotalWidth = MeasureSpec.getSize(widthMeasureSpec);
+        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+        mTotalHeight = MeasureSpec.getSize(heightMeasureSpec);
 
-        //if size is already set by user, don't change it
+        if (widthMode == MeasureSpec.EXACTLY) {
+            width = mTotalWidth;
+        } else if (widthMode == MeasureSpec.AT_MOST) {
+            width = mWidth > NO_VALUE ? Math.min(mWidth, mTotalWidth) : mTotalWidth > 0 ?
+                    mTotalWidth : mTotalHeight;
+        } else {
+            width = mWidth > NO_VALUE ? mWidth : mTotalWidth > 0 ?
+                    mTotalWidth : mTotalHeight;
+        }
+
+        if (heightMode == MeasureSpec.EXACTLY) {
+            height = mTotalHeight;
+        } else if (heightMode == MeasureSpec.AT_MOST) {
+            height = mHeight > NO_VALUE ? Math.min(mHeight, mTotalHeight) : mTotalHeight > 0 ?
+                    mTotalHeight : mTotalWidth / 2;
+        } else {
+            height = mHeight > NO_VALUE ? mHeight : mTotalHeight > 0 ?
+                    mTotalHeight : mTotalWidth / 2;
+        }
+
         if (mWidth <= NO_VALUE) mWidth = width;
-        if (mWidth <= NO_VALUE) mHeight = height;
+        if (mHeight <= NO_VALUE) mHeight = height;
+
+        setMeasuredDimension(width, height);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        final float[] positions = calculatePositions();
-        canvas.drawRect(0, 0, mWidth, mHeight, mBackgroundPaint);
+        final int emptyWidth = (mTotalWidth - mWidth) / 2;
+        final float[] positions = calculatePositions(emptyWidth);
+        canvas.drawRect(emptyWidth, 0, mWidth + emptyWidth, mHeight, mBackgroundPaint);
         canvas.drawRect(positions[0], positions[1], positions[2], positions[3], mMainPaint);
     }
 
@@ -71,6 +100,8 @@ public class LineIndicator extends IndicatorView {
             throw new IllegalArgumentException("Direction " + direction.name() + " not supported.");
 
         mDirection = direction;
+
+        requestLayout();
         draw();
     }
 
@@ -89,6 +120,7 @@ public class LineIndicator extends IndicatorView {
         mWidth = unit == SizeUnit.PX ? width : (int) dpToPixel(width);
         mHeight = unit == SizeUnit.PX ? height : (int) dpToPixel(height);
 
+        requestLayout();
         draw();
     }
 
@@ -109,8 +141,8 @@ public class LineIndicator extends IndicatorView {
     }
 
     private void setXmlValues(TypedArray array) {
-        mWidth = array.getInt(R.styleable.LineIndicator_line_width, NO_VALUE);
-        mHeight = array.getInt(R.styleable.LineIndicator_line_height, NO_VALUE);
+        mWidth = (int) array.getDimension(R.styleable.LineIndicator_line_width, NO_VALUE);
+        mHeight = (int) array.getDimension(R.styleable.LineIndicator_line_height, NO_VALUE);
         mDirection = Direction.values()[array.getInt(R.styleable.LineIndicator_line_direction, 2)];
     }
 
@@ -130,17 +162,17 @@ public class LineIndicator extends IndicatorView {
     }
 
     //Calculates rectangle corners position
-    private float[] calculatePositions() {
+    private float[] calculatePositions(int emptyWidth) {
         switch (mDirection) {
             case LEFT_RIGHT:
-                return new float[]{0, 0, mCurrentValue, mHeight};
+                return new float[]{emptyWidth, 0, mCurrentValue + emptyWidth, mHeight};
             case RIGHT_LEFT:
-                return new float[]{mCurrentValue, 0, mWidth, mHeight};
+                return new float[]{mCurrentValue + emptyWidth, 0, mWidth + emptyWidth, mHeight};
             case TOP_BOTTOM:
-                return new float[]{0, 0, mWidth, mCurrentValue};
+                return new float[]{emptyWidth, 0, mWidth+emptyWidth, mCurrentValue};
             case BOTTOM_TOP:
             default:
-                return new float[]{0, mCurrentValue, mWidth, mHeight};
+                return new float[]{emptyWidth, mCurrentValue, mWidth+emptyWidth, mHeight};
         }
     }
 }

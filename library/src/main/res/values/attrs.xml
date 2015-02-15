@@ -11,12 +11,12 @@
     </declare-styleable>
 
     <declare-styleable name="CircleIndicator" parent="Indicators">
-        <attr name="circle_radius" format="integer"/>
+        <attr name="circle_radius" format="dimension"/>
     </declare-styleable>
 
     <declare-styleable name="LineIndicator" parent="Indicators">
-        <attr name="line_width" format="integer"/>
-        <attr name="line_height" format="integer"/>
+        <attr name="line_width" format="dimension"/>
+        <attr name="line_height" format="dimension"/>
         <attr name="line_direction" format="enum">
             <enum name="left_right" value="2"/>
             <enum name="right_left" value="3"/>
@@ -26,9 +26,9 @@
     </declare-styleable>
 
     <declare-styleable name="PieIndicator" parent="Indicators">
-        <attr name="pie_radius" format="integer"/>
+        <attr name="pie_radius" format="dimension"/>
+        <attr name="pie_center_paint" format="color"/>
         <attr name="pie_inner_radius" format="integer"/>
-        <attr name="pie_center_paint" format="integer"/>
         <attr name="pie_start_angle" format="integer"/>
         <attr name="pie_direction" format="enum">
             <enum name="clockwise" value="0"/>
