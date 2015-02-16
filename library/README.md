@@ -132,3 +132,7 @@ Depending on orientation this indicator will have different appearance. On image
 ####QuarterPie indicator
 
 Coming soon
+
+
+##Special thanks
+Daniel Nadeau for [inspiration](https://bitbucket.org/danielnadeau/holographlibrary/overview)

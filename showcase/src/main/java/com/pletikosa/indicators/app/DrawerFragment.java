@@ -142,7 +142,6 @@ public class DrawerFragment extends Fragment {
                 mDrawerToggle.syncState();
             }
         });
-
         mDrawerLayout.setDrawerListener(mDrawerToggle);
     }
 
@@ -186,10 +185,9 @@ public class DrawerFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if (mDrawerLayout != null && isDrawerOpen()) {
-            inflater.inflate(R.menu.global, menu);
+        if (mDrawerLayout != null && isDrawerOpen())
             showGlobalContextActionBar();
-        }
+
         super.onCreateOptionsMenu(menu, inflater);
     }
 

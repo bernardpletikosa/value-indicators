@@ -145,4 +145,4 @@ Coming soon
 
 
 ##Special thanks
-Daniel Nadeau for [inspiration](https://bitbucket.org/danielnadeau/holographlibrary/issues?status=new&status=open&responsible=danielnadeau)
+Daniel Nadeau for [inspiration](https://bitbucket.org/danielnadeau/holographlibrary/overview)

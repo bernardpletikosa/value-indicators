@@ -15,6 +15,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
+            android:textColor="@android:color/white"
             android:text="@string/outer_radius"/>
 
         <SeekBar
@@ -22,8 +23,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="4"
-            android:layout_margin="5dp"
-            android:progress="20"
+            android:layout_marginLeft="@dimen/activity_margin"
+            android:layout_marginRight="@dimen/activity_margin"
+            android:progress="30"
             android:max="40"
             />
     </LinearLayout>
@@ -37,6 +39,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
+            android:textColor="@android:color/white"
             android:text="@string/anim_duration"/>
 
         <SeekBar
@@ -44,7 +47,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="4"
-            android:layout_margin="5dp"
+            android:layout_marginLeft="@dimen/activity_margin"
+            android:layout_marginRight="@dimen/activity_margin"
             android:progress="100"
             android:max="2000"
             />
@@ -53,7 +57,7 @@
     <com.pletikosa.indicators.circle.CircleIndicator
         android:id="@+id/circle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
         app:main_color="@color/blue"
         app:background_color="@color/background"

@@ -20,8 +20,6 @@ import java.util.concurrent.TimeUnit;
 
 public class IndicatorsActivity extends ActionBarActivity {
 
-    private int mStep = 0;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,12 +38,13 @@ public class IndicatorsActivity extends ActionBarActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mStep = (int) (20 * new Random().nextFloat());
-                        circle.indicate(mStep);
-                        line.indicate(mStep);
-                        pie.indicate(mStep);
-                        pieHalf.indicate(mStep);
-                        pieQuarter.indicate(mStep);
+                        int step = (int) (20 * new Random().nextFloat());
+
+                        circle.indicate(step);
+                        line.indicate(step);
+                        pie.indicate(step);
+                        pieHalf.indicate(step);
+                        pieQuarter.indicate(step);
                     }
                 });
             }

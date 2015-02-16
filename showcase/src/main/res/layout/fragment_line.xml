@@ -14,6 +14,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
+            android:textColor="@android:color/white"
             android:text="@string/width"/>
 
         <SeekBar
@@ -21,7 +22,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="4"
-            android:layout_margin="5dp"
+            android:layout_marginLeft="@dimen/activity_margin"
+            android:layout_marginRight="@dimen/activity_margin"
             android:progress="20"
             android:max="80"
             />
@@ -37,6 +39,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
+            android:textColor="@android:color/white"
             android:text="@string/height"/>
 
         <SeekBar
@@ -44,12 +47,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="4"
-            android:layout_margin="5dp"
+            android:layout_marginLeft="@dimen/activity_margin"
+            android:layout_marginRight="@dimen/activity_margin"
             android:progress="20"
             android:max="50"
             />
     </LinearLayout>
-    
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -59,6 +63,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
+            android:textColor="@android:color/white"
             android:text="@string/anim_duration"/>
 
         <SeekBar
@@ -66,7 +71,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="4"
-            android:layout_margin="5dp"
+            android:layout_marginLeft="@dimen/activity_margin"
+            android:layout_marginRight="@dimen/activity_margin"
             android:progress="100"
             android:max="2000"
             />
@@ -81,6 +87,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
+            android:textColor="@android:color/white"
             android:text="@string/draw_direction"/>
 
         <SeekBar
@@ -88,7 +95,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="4"
-            android:layout_margin="5dp"
+            android:layout_marginLeft="@dimen/activity_margin"
+            android:layout_marginRight="@dimen/activity_margin"
             android:progress="0"
             android:max="3"
             />
@@ -97,7 +105,7 @@
     <com.pletikosa.indicators.line.LineIndicator
         android:id="@+id/line_indicator"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         app:main_color="@color/blue"
         app:background_color="@color/background"
         app:animation_duration="100"/>

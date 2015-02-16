@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -18,8 +19,8 @@ import com.pletikosa.indicators.app.fragments.QuarterPieFragment;
 public class MainActivity extends ActionBarActivity
         implements DrawerFragment.NavigationDrawerCallbacks {
 
-    private DrawerFragment mNavigationDrawerFragment;
     private CharSequence mTitle;
+    private DrawerFragment mNavigationDrawerFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,27 +39,23 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.container, getFragment(position)).commit();
+    }
 
-        Fragment fragment = null;
+    private Fragment getFragment(int position) {
         switch (position) {
             case 0:
-                fragment = CircleFragment.newInstance();
-                break;
+                return CircleFragment.newInstance();
             case 1:
-                fragment = LineFragment.newInstance();
-                break;
+                return LineFragment.newInstance();
             case 2:
-                fragment = PieFragment.newInstance();
-                break;
+                return PieFragment.newInstance();
             case 3:
-                fragment = HalfPieFragment.newInstance();
-                break;
+                return HalfPieFragment.newInstance();
             case 4:
-                fragment = QuarterPieFragment.newInstance();
-                break;
+                return QuarterPieFragment.newInstance();
         }
-
-        fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+        return null;
     }
 
     public void onSectionAttached(int number) {
@@ -81,29 +78,20 @@ public class MainActivity extends ActionBarActivity
         }
     }
 
-    public void restoreActionBar() {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (!mNavigationDrawerFragment.isDrawerOpen()) {
+            restoreActionBar();
+            return true;
+        }
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    private void restoreActionBar() {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(mTitle);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        if (!mNavigationDrawerFragment.isDrawerOpen()) {
-            getMenuInflater().inflate(R.menu.global, menu);
-            restoreActionBar();
-            return true;
-        }
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.action_settings) return true;
-
-        return super.onOptionsItemSelected(item);
     }
 }
