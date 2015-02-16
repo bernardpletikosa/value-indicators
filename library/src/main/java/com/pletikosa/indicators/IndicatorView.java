@@ -125,13 +125,13 @@ public abstract class IndicatorView extends View {
     /**
      * Sets value to be indicated. Value is automatically animated when this method is used.
      * XML parameter {@link com.pletikosa.indicators.R.attr#target_value}
-     * @param target target value
+     * @param value target value
      */
-    public void indicate(float target) {
-        if (target > mMaxValue || target < mMinValue) {
-            Log.e("IndicatorView", "Target value " + target + " is out of range!");
-        } else if (mTargetValue != target) {
-            mTargetValue = target;
+    public void indicate(float value) {
+        if (value > mMaxValue || value < mMinValue) {
+            Log.e("IndicatorView", "Target value " + value + " is out of range!");
+        } else if (mTargetValue != value) {
+            mTargetValue = value;
             draw();
         }
     }
@@ -150,19 +150,21 @@ public abstract class IndicatorView extends View {
     /**
      * Sets main color for animating value.
      * XML parameter {@link com.pletikosa.indicators.R.attr#main_color}
-     * @param mainColor color resource id
+     * @param mainColor resolved color resource
      */
-    public void setMainColor(int mainColor) throws IllegalArgumentException {
-        mMainPaint = new Paint(getResources().getColor(mainColor));
+    public void setMainColor(int mainColor) {
+        if (mainColor == 0) return;
+        mMainPaint = new Paint(mainColor);
     }
 
     /**
      * Sets background color for showing whole shape below the one that is animating value.
      * XML parameter {@link com.pletikosa.indicators.R.attr#background_color}
-     * @param backgroundColor color resource id
+     * @param backgroundColor resolved color resource
      */
-    public void setBackGroundColor(int backgroundColor) throws IllegalArgumentException {
-        mBackgroundPaint = new Paint(getResources().getColor(backgroundColor));
+    public void setBackGroundColor(int backgroundColor) {
+        if (backgroundColor == 0) return;
+        mBackgroundPaint = new Paint(backgroundColor);
     }
 
     /**

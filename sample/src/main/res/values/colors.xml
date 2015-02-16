@@ -2,7 +2,9 @@
 <resources>
 
     <color name="app_background">#222222</color>
-    <color name="background">#AAAAAA</color>
-    <color name="darkblue">#FF0099CC</color>
     
+    <color name="main">#FF0099CC</color>
+    <color name="background">#AAAAAA</color>
+    <color name="center">#222222</color>
+
 </resources>

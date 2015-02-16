@@ -89,10 +89,11 @@ public class PieIndicator extends IndicatorView {
     /**
      * Sets color for inner hole. For inner hole radius see #setInnerRadius
      * XML parameter {@link com.pletikosa.indicators.R.attr#pie_center_paint}
-     * @param centerColor color resource id
+     * @param centerColor resolved color resource
      */
     public void setCenterPaint(int centerColor) throws IllegalArgumentException {
-        mCenterPaint = new Paint(getResources().getColor(centerColor)); ;
+        if (centerColor == 0) return;
+        mCenterPaint = new Paint(centerColor);
     }
 
     /**
@@ -111,7 +112,7 @@ public class PieIndicator extends IndicatorView {
             throw new IllegalArgumentException("Direction " + direction.name() + " not supported.");
 
         mDirection = direction;
-        
+
         requestLayout();
         draw();
     }
@@ -199,7 +200,7 @@ public class PieIndicator extends IndicatorView {
     protected void calculateRadius() {
         if (mRadius <= NO_VALUE)
             mRadius = mMiddleX < mMiddleY ? mMiddleX : mMiddleY;
-       
+
         if (mInnerRadiusPercent <= NO_VALUE)
             mInnerRadius = mRadius / 2;
         else
