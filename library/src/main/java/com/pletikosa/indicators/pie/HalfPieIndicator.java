@@ -22,12 +22,12 @@ public class HalfPieIndicator extends PieIndicator {
 
     protected int mWidth;
     protected int mHeight;
-    protected Orientation mOrientation;
+    protected int mStartPos;
+    protected int mEndPos;
 
     protected RectF mBackRect = new RectF();
     protected RectF mFrontRect = new RectF();
-    protected int mStartPos;
-    protected int mEndPos;
+    protected Orientation mOrientation;
 
     public HalfPieIndicator(Context context) {
         this(context, null);
@@ -50,25 +50,11 @@ public class HalfPieIndicator extends PieIndicator {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int w, h;
-        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
-        int width = MeasureSpec.getSize(widthMeasureSpec);
-        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
         int height = MeasureSpec.getSize(heightMeasureSpec);
+        int width = MeasureSpec.getSize(widthMeasureSpec);
 
-        if (widthMode == EXACTLY)
-            w = width;
-        else if (widthMode == AT_MOST)
-            w = mRadius > NO_VALUE ? Math.min(mRadius * 2, width) : width > 0 ? width : height;
-        else
-            w = mRadius > NO_VALUE ? mRadius * 2 : width > 0 ? width : height;
-
-        if (heightMode == EXACTLY)
-            h = height;
-        else if (heightMode == AT_MOST)
-            h = mRadius > NO_VALUE ? Math.min(mRadius * 2, height) : height > 0 ? height : width;
-        else
-            h = mRadius > NO_VALUE ? mRadius * 2 : height > 0 ? height : width;
+        int w = calculateSize(widthMeasureSpec, width, height);
+        int h = calculateSize(heightMeasureSpec, height, width);
 
         mWidth = w;
         mHeight = mOrientation == NORTH || mOrientation == SOUTH ? h / 2 : h;
@@ -77,7 +63,7 @@ public class HalfPieIndicator extends PieIndicator {
         calculateRadius();
         setHelperRects();
 
-        setMeasuredDimension(mWidth, mHeight);
+        setMeasuredDimension( mWidth, mHeight);
     }
 
     private void setHelperRects() {
@@ -85,7 +71,7 @@ public class HalfPieIndicator extends PieIndicator {
         mFrontRect.set(mMiddleX - mInnerRadius, mMiddleY - mInnerRadius, mMiddleX + mInnerRadius, mMiddleY + mInnerRadius);
 
         mStartPos = calculateStartAngle();
-        mEndPos = (int) (mDirection == CLOCKWISE ? HALF_PIE_MAX_ANGLE : -HALF_PIE_MAX_ANGLE);
+        mEndPos = mDirection == CLOCKWISE ? HALF_PIE_MAX_ANGLE : -HALF_PIE_MAX_ANGLE;
     }
 
     @Override
@@ -105,7 +91,7 @@ public class HalfPieIndicator extends PieIndicator {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 float maxAnimatedFraction = Math.max(animation.getAnimatedFraction(), 0.01f);
-                float shift = (absoluteTarget / mValueRange) * HALF_PIE_MAX_ANGLE - mOldValue;
+                int shift = (int) ((absoluteTarget / mValueRange) * HALF_PIE_MAX_ANGLE - mOldValue);
 
                 mCurrentValue = mOldValue + (shift * maxAnimatedFraction);
 
@@ -146,15 +132,17 @@ public class HalfPieIndicator extends PieIndicator {
     }
 
     private void calculateCenter() {
+        final int halfWidth = mWidth / 2;
         switch (mOrientation) {
             case SOUTH:
             case NORTH:
-                mMiddleX = mWidth / 2;
+                mMiddleX = halfWidth;
                 mMiddleY = mOrientation == SOUTH ? 0 : mHeight;
                 break;
             case EAST:
             case WEST:
-                mMiddleX = mOrientation == EAST ? mWidth / 2 - mRadius / 2 : mWidth / 2 + mRadius / 2;
+                final int halfRadius = mRadius / 2;
+                mMiddleX = mOrientation == EAST ? halfWidth - halfRadius : halfWidth + halfRadius;
                 mMiddleY = mHeight / 2;
         }
     }

@@ -8,14 +8,15 @@ Value Indicators library
 - **Half Pie**
 - **Quarter Pie**
 
-<img src="../gif/circle.gif" height = 300 width = 150>.<img src="../gif/line.gif"
-height = 300 width = 150>.<img src="../gif/pie.gif" height = 300 width = 150>.<img src="../gif/half_pie.gif" height = 300 width = 150>
+<img src="../gif/circle.gif" height = 250 width = 140>.<img src="../gif/line.gif"
+height = 250 width = 140>.<img src="../gif/pie.gif" height = 250 width = 140>.<img src="../gif/half_pie.gif" height = 250 width = 140>.<img src="../gif/quarter_pie.gif" height = 250 width = 140>
+
 
 ## Usage
 
 ###Usage overview
 Indicator can be set up in code or in xml.
-For all indicator types there are some common attributes: minimal and maximal value to indicate, 
+For all indicator types there are some common attributes: minimal and maximal value to indicate,
 animation duration and indicator colors.
 
     <attr name="main_color" format="color"/>
@@ -24,7 +25,7 @@ animation duration and indicator colors.
     <attr name="max_value" format="float"/>
     <attr name="target_value" format="float"/>
     <attr name="animation_duration" format="integer"/>
-   
+
 For every indicator type there are special values
 
 ####Circle indicator
@@ -65,7 +66,7 @@ For every indicator type there are special values
         <enum name="north_west" value="6"/>
         <enum name="south_west" value="7"/>
     </attr>
-        
+
 ###Usage Examples
 
 For example, Pie indicator can be set like this
@@ -103,36 +104,38 @@ For every indicator type there are special values that can change indicator look
 ####Circle indicator
 Circle indicator is pretty straight forward.
 
-<img src="../gif/circle.gif" height = 300 width = 150>
+<img src="../gif/circle.gif" height = 300 width = 170>
 ####Line indicator
-For line indicator line_direction attribute is very important. 
+For line indicator line_direction attribute is very important.
 Image below shows all directions **left_right, right_left, top_bottom, bottom_top** respectively.
-    
-<img src="../gif/line.gif" height = 300 width = 150>
+
+<img src="../gif/line.gif" height = 300 width = 170>
 
 ####Pie indicator
-Pie indicators can be full and empty. 
+Pie indicators can be full and empty.
 Radius of empty space *pie_inner_radius* is given as percentage of total radius *pie_radius*.
 Color of empty space can be set via *pie_center_paint* attribute.
-All pie indicators have *pie_direction* attribute that shown indication direction which can be 
+All pie indicators have *pie_direction* attribute that shown indication direction which can be
 CLOCKWISE or COUNTER_CLOCKWISE.
 Pie indicator specific attribute is *pie_start_angle* used to shift indication start to any angle.
 
-<img src="../gif/pie.gif" height = 300 width = 150>
+<img src="../gif/pie.gif" height = 300 width = 170>
 
 ####HalfPie indicator
 
-Only difference in attributes between Pie and HalfPie attributes is *half_pie_orientation*. 
+Only difference in attributes between Pie and HalfPie attributes is *half_pie_orientation*.
 Depending on orientation this indicator will have different appearance. On image bellow are shown
  orientations **north, south, east, west** respectively.
  Just for example second indicator's *pie_inner_radius* attribute is set to 0.
 
-<img src="../gif/half_pie.gif" height = 300 width = 150>
+<img src="../gif/half_pie.gif" height = 300 width = 170>
 
 ####QuarterPie indicator
 
-Coming soon
+QuarterPie also has a special *quarter_pie_orientation* attribute that can be *north_west,
+south_west, north_east, south_east* like on image below. HalfPie also can be full or empty.
 
+<img src="../gif/quarter_pie.gif" height = 300 width = 170>
 
 ##Special thanks
 Daniel Nadeau for [inspiration](https://bitbucket.org/danielnadeau/holographlibrary/overview)

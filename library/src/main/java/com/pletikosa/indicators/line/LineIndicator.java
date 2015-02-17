@@ -40,37 +40,31 @@ public class LineIndicator extends IndicatorView {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int width;
-        int height;
-        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+        int w, h;
         mTotalWidth = MeasureSpec.getSize(widthMeasureSpec);
-        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
         mTotalHeight = MeasureSpec.getSize(heightMeasureSpec);
+        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
 
-        if (widthMode == MeasureSpec.EXACTLY) {
-            width = mTotalWidth;
-        } else if (widthMode == MeasureSpec.AT_MOST) {
-            width = mWidth > NO_VALUE ? Math.min(mWidth, mTotalWidth) : mTotalWidth > 0 ?
-                    mTotalWidth : mTotalHeight;
-        } else {
-            width = mWidth > NO_VALUE ? mWidth : mTotalWidth > 0 ?
-                    mTotalWidth : mTotalHeight;
-        }
+        if (widthMode == MeasureSpec.EXACTLY)
+            w = mTotalWidth;
+        else if (widthMode == MeasureSpec.AT_MOST)
+            w = mWidth > NO_VALUE ? Math.min(mWidth, mTotalWidth) : mTotalWidth > 0 ? mTotalWidth : mTotalHeight;
+        else
+            w = mWidth > NO_VALUE ? mWidth : mTotalWidth > 0 ? mTotalWidth : mTotalHeight;
 
-        if (heightMode == MeasureSpec.EXACTLY) {
-            height = mTotalHeight;
-        } else if (heightMode == MeasureSpec.AT_MOST) {
-            height = mHeight > NO_VALUE ? Math.min(mHeight, mTotalHeight) : mTotalHeight > 0 ?
-                    mTotalHeight : mTotalWidth / 2;
-        } else {
-            height = mHeight > NO_VALUE ? mHeight : mTotalHeight > 0 ?
-                    mTotalHeight : mTotalWidth / 2;
-        }
+        if (heightMode == MeasureSpec.EXACTLY)
+            h = mTotalHeight;
+        else if (heightMode == MeasureSpec.AT_MOST)
+            h = mHeight > NO_VALUE ? Math.min(mHeight, mTotalHeight) : mTotalHeight > 0 ? mTotalHeight : mTotalWidth / 2;
+        else
+            h = mHeight > NO_VALUE ? mHeight : mTotalHeight > 0 ? mTotalHeight : mTotalWidth / 2;
 
-        if (mWidth <= NO_VALUE) mWidth = width;
-        if (mHeight <= NO_VALUE) mHeight = height;
+        
+        if (mWidth <= NO_VALUE) mWidth = w;
+        if (mHeight <= NO_VALUE) mHeight = h;
 
-        setMeasuredDimension(width, height);
+        setMeasuredDimension(w, h);
     }
 
     @Override
@@ -169,10 +163,10 @@ public class LineIndicator extends IndicatorView {
             case RIGHT_LEFT:
                 return new float[]{mCurrentValue + emptyWidth, 0, mWidth + emptyWidth, mHeight};
             case TOP_BOTTOM:
-                return new float[]{emptyWidth, 0, mWidth+emptyWidth, mCurrentValue};
+                return new float[]{emptyWidth, 0, mWidth + emptyWidth, mCurrentValue};
             case BOTTOM_TOP:
             default:
-                return new float[]{emptyWidth, mCurrentValue, mWidth+emptyWidth, mHeight};
+                return new float[]{emptyWidth, mCurrentValue, mWidth + emptyWidth, mHeight};
         }
     }
 }

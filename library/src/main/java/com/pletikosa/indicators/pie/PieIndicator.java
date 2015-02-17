@@ -25,7 +25,7 @@ public class PieIndicator extends IndicatorView {
     protected int mRadius;
     protected int mInnerRadius;
     protected int mInnerRadiusPercent = NO_VALUE;
-    protected float mStartAngle;
+    protected int mStartAngle;
 
     protected Direction mDirection;
     protected RectF mMainRect = new RectF();
@@ -47,25 +47,11 @@ public class PieIndicator extends IndicatorView {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int w, h;
         int width = MeasureSpec.getSize(widthMeasureSpec);
         int height = MeasureSpec.getSize(heightMeasureSpec);
-        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
-        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
 
-        if (widthMode == EXACTLY)
-            w = width;
-        else if (widthMode == AT_MOST)
-            w = mRadius > NO_VALUE ? Math.min(mRadius * 2, width) : width > 0 ? width : height;
-        else
-            w = mRadius > NO_VALUE ? mRadius * 2 : width > 0 ? width : height;
-
-        if (heightMode == EXACTLY)
-            h = height;
-        else if (heightMode == AT_MOST)
-            h = mRadius > NO_VALUE ? Math.min(mRadius * 2, height) : height > 0 ? height : width;
-        else
-            h = mRadius > NO_VALUE ? mRadius * 2 : height > 0 ? height : width;
+        int w = calculateSize(widthMeasureSpec, width, height);
+        int h = calculateSize(heightMeasureSpec, height, width);
 
         mMiddleX = w / 2;
         mMiddleY = h / 2;
@@ -74,6 +60,7 @@ public class PieIndicator extends IndicatorView {
 
         setMeasuredDimension(w, h);
     }
+
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -205,5 +192,20 @@ public class PieIndicator extends IndicatorView {
             mInnerRadius = mRadius / 2;
         else
             mInnerRadius = (int) (mInnerRadiusPercent / 100f * mRadius);
+    }
+
+    protected int calculateSize(int modeSpec, int... size) {
+        int mode = MeasureSpec.getMode(modeSpec);
+
+        final int diameter = mRadius * 2;
+        switch (mode) {
+            case EXACTLY:
+                return size[0];
+            case AT_MOST:
+                return mRadius > NO_VALUE ? Math.min(diameter,
+                        size[0]) : size[0] > 0 ? size[0] : size[1];
+            default:
+                return mRadius > NO_VALUE ? diameter : size[0] > 0 ? size[0] : size[1];
+        }
     }
 }

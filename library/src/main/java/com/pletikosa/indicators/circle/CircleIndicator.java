@@ -36,25 +36,11 @@ public class CircleIndicator extends IndicatorView {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int w, h;
         int width = MeasureSpec.getSize(widthMeasureSpec);
         int height = MeasureSpec.getSize(heightMeasureSpec);
-        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
-        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
 
-        if (widthMode == EXACTLY)
-            w = width;
-        else if (widthMode == AT_MOST)
-            w = mRadius > NO_VALUE ? Math.min(mRadius * 2, width) : width > 0 ? width : height;
-        else
-            w = mRadius > NO_VALUE ? mRadius * 2 : width > 0 ? width : height;
-
-        if (heightMode == EXACTLY)
-            h = height;
-        else if (heightMode == AT_MOST)
-            h = mRadius > NO_VALUE ? Math.min(mRadius * 2, height) : height > 0 ? height : width;
-        else
-            h = mRadius > NO_VALUE ? mRadius * 2 : height > 0 ? height : width;
+        int w = calculateSize(widthMeasureSpec, width, height);
+        int h = calculateSize(heightMeasureSpec, height, width);
 
         mMiddleX = w / 2;
         mMiddleY = h / 2;
@@ -105,5 +91,19 @@ public class CircleIndicator extends IndicatorView {
 
     private void setXmlValues(TypedArray array) {
         mRadius = (int) array.getDimension(R.styleable.CircleIndicator_circle_radius, NO_VALUE);
+    }
+
+    private int calculateSize(int modeSpec, int... size) {
+        int mode = MeasureSpec.getMode(modeSpec);
+
+        switch (mode) {
+            case EXACTLY:
+                return size[0];
+            case AT_MOST:
+                return mRadius > NO_VALUE ? Math.min(mRadius * 2,
+                        size[0]) : size[0] > 0 ? size[0] : size[1];
+            default:
+                return mRadius > NO_VALUE ? mRadius * 2 : size[0] > 0 ? size[0] : size[1];
+        }
     }
 }

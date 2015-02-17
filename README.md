@@ -17,8 +17,8 @@ Android Library for graphic value representation.
 - **Half Pie**
 - **Quarter Pie**
 
-<img src="gif/circle.gif" height = 300 width = 150>.<img src="gif/line.gif"
-height = 300 width = 150>.<img src="gif/pie.gif" height = 300 width = 150>.<img src="gif/half_pie.gif" height = 300 width = 150>
+<img src="gif/circle.gif" height = 250 width = 140>.<img src="gif/line.gif"
+height = 250 width = 140>.<img src="gif/pie.gif" height = 250 width = 140>.<img src="gif/half_pie.gif" height = 250 width = 140>.<img src="gif/quarter_pie.gif" height = 250 width = 140>
 
 
 ## Usage
@@ -113,12 +113,12 @@ For every indicator type there are special values that can change indicator look
 ####Circle indicator
 Circle indicator is pretty straightforward.
 
-<img src="gif/circle.gif" height = 300 width = 150>
+<img src="gif/circle.gif" height = 300 width = 170>
 ####Line indicator
 For line indicator *line_direction* attribute is very important. 
 Image below shows all directions *left_right, right_left, top_bottom, bottom_top*, respectively.
     
-<img src="gif/line.gif" height = 300 width = 150>
+<img src="gif/line.gif" height = 300 width = 170>
 
 ####Pie indicator
 Pie indicators can be full or empty. 
@@ -128,21 +128,23 @@ All pie indicators have *pie_direction* attribute that shows direction of animat
 CLOCKWISE or COUNTER_CLOCKWISE.
 Pie indicator specific attribute *pie_start_angle* is used to shift indication start to any angle.
 
-<img src="gif/pie.gif" height = 300 width = 150>
+<img src="gif/pie.gif" height = 300 width = 170>
 
 ####HalfPie indicator
 
 The only difference in attributes between Pie and HalfPie is *half_pie_orientation*. 
-Depending on orientation **north, south, east, west** this indicator will have different 
+Depending on orientation *north, south, east, west* this indicator will have different 
 appearances as shown below.
  Just for example second indicator's *pie_inner_radius* attribute is set to 0.
 
-<img src="gif/half_pie.gif" height = 300 width = 150>
+<img src="gif/half_pie.gif" height = 300 width = 170>
 
 ####QuarterPie indicator
 
-Coming soon
+QuarterPie also has a special *quarter_pie_orientation* attribute that can be *north_west,
+south_west, north_east, south_east* like on image below. HalfPie also can be full or empty.
 
+<img src="gif/quarter_pie.gif" height = 300 width = 170>
 
 ##Special thanks
 Daniel Nadeau for [inspiration](https://bitbucket.org/danielnadeau/holographlibrary/overview)

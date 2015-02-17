@@ -11,14 +11,13 @@ import com.pletikosa.indicators.consts.Orientation;
 
 import static android.view.View.MeasureSpec.AT_MOST;
 import static android.view.View.MeasureSpec.EXACTLY;
+import static com.pletikosa.indicators.consts.Defaults.HALF_PIE_MAX_ANGLE;
 import static com.pletikosa.indicators.consts.Defaults.NO_VALUE;
 import static com.pletikosa.indicators.consts.Defaults.QUARTER_PIE_MAX_ANGLE;
+import static com.pletikosa.indicators.consts.Direction.CLOCKWISE;
+import static com.pletikosa.indicators.consts.Orientation.EAST;
 
 public class QuarterPieIndicator extends HalfPieIndicator {
-
-    protected int mWidth;
-    protected int mHeight;
-    protected Orientation mOrientation;
 
     public QuarterPieIndicator(Context context) {
         this(context, null);
@@ -38,46 +37,26 @@ public class QuarterPieIndicator extends HalfPieIndicator {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int w, h;
-        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         int width = MeasureSpec.getSize(widthMeasureSpec);
-        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
         int height = MeasureSpec.getSize(heightMeasureSpec);
 
-        if (widthMode == EXACTLY)
-            w = width;
-        else if (widthMode == AT_MOST)
-            w = mRadius > NO_VALUE ? Math.min(mRadius, width) : width > 0 ? width : height;
-        else
-            w = mRadius > NO_VALUE ? mRadius : width > 0 ? width : height;
-
-        if (heightMode == EXACTLY)
-            h = height;
-        else if (heightMode == AT_MOST)
-            h = mRadius > NO_VALUE ? Math.min(mRadius, height) : height > 0 ? height : width;
-        else
-            h = mRadius > NO_VALUE ? mRadius : height > 0 ? height : width;
-
-        mWidth = w;
-        mHeight = h;
+        mWidth = calculateSize(widthMeasureSpec, width, height);
+        mHeight = calculateSize(heightMeasureSpec, height, width);
 
         calculateCenter();
         calculateRadius();
+        setHelperRects();
 
         setMeasuredDimension(mWidth, mHeight);
     }
 
     @Override
     public void onDraw(Canvas canvas) {
-        canvas.drawCircle(mMiddleX, mMiddleY, mRadius, mBackgroundPaint);
+        float value = mDirection == CLOCKWISE ? mCurrentValue : -mCurrentValue;
 
-        mMainRect.set(mMiddleX - mRadius, mMiddleY - mRadius, mMiddleX + mRadius, mMiddleY + mRadius);
-
-        int startAngle = calculateStartAngle();
-        float value = mDirection == Direction.CLOCKWISE ? mCurrentValue : -mCurrentValue;
-        canvas.drawArc(mMainRect, startAngle, value, true, mMainPaint);
-
-        canvas.drawCircle(mMiddleX, mMiddleY, mInnerRadius, mCenterPaint);
+        canvas.drawArc(mMainRect, mStartPos, mEndPos, true, mBackgroundPaint);
+        canvas.drawArc(mMainRect, mStartPos, value, true, mMainPaint);
+        canvas.drawArc(mFrontRect, mStartPos, mEndPos, true, mCenterPaint);
     }
 
     @Override
@@ -88,7 +67,7 @@ public class QuarterPieIndicator extends HalfPieIndicator {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 float maxAnimatedFraction = Math.max(animation.getAnimatedFraction(), 0.01f);
-                float shift = (absoluteTarget / mValueRange) * QUARTER_PIE_MAX_ANGLE - mOldValue;
+                int shift = (int) ((absoluteTarget / mValueRange) * QUARTER_PIE_MAX_ANGLE - mOldValue);
 
                 mCurrentValue = mOldValue + (shift * maxAnimatedFraction);
 
@@ -114,6 +93,8 @@ public class QuarterPieIndicator extends HalfPieIndicator {
 
         mOrientation = orientation;
         calculateCenter();
+
+        requestLayout();
         draw();
     }
 
@@ -125,16 +106,32 @@ public class QuarterPieIndicator extends HalfPieIndicator {
         // Parent method, not used.
     }
 
+    @Override
+    protected int calculateSize(int modeSpec, int... size) {
+        int mode = MeasureSpec.getMode(modeSpec);
+
+        switch (mode) {
+            case EXACTLY:
+                return size[0];
+            case AT_MOST:
+                return mRadius > NO_VALUE ? Math.min(mRadius, size[0]) : size[0] > 0 ? size[0] : size[1];
+            default:
+                return mRadius > NO_VALUE ? mRadius : size[0] > 0 ? size[0] : size[1];
+        }
+    }
+
     private void calculateCenter() {
+        final int halfWidth = mWidth / 2;
+        final int halfRadius = mRadius / 2;
         switch (mOrientation) {
             case NORTH_WEST:
             case SOUTH_WEST:
-                mMiddleX = mWidth;
+                mMiddleX = halfWidth + halfRadius;
                 mMiddleY = mOrientation == Orientation.NORTH_WEST ? mHeight : 0;
                 break;
             case NORTH_EAST:
             case SOUTH_EAST:
-                mMiddleX = 0;
+                mMiddleX = halfWidth - halfRadius;
                 mMiddleY = mOrientation == Orientation.NORTH_EAST ? mHeight : 0;
         }
     }
@@ -154,4 +151,13 @@ public class QuarterPieIndicator extends HalfPieIndicator {
 
         return mDirection == Direction.CLOCKWISE ? startAngle : (startAngle + 90) % 360;
     }
+
+    private void setHelperRects() {
+        mMainRect.set(mMiddleX - mRadius, mMiddleY - mRadius, mMiddleX + mRadius, mMiddleY + mRadius);
+        mFrontRect.set(mMiddleX - mInnerRadius, mMiddleY - mInnerRadius, mMiddleX + mInnerRadius, mMiddleY + mInnerRadius);
+
+        mStartPos = calculateStartAngle();
+        mEndPos = mDirection == CLOCKWISE ? QUARTER_PIE_MAX_ANGLE : -QUARTER_PIE_MAX_ANGLE;
+    }
+
 }
