@@ -5,7 +5,7 @@ android {
     buildToolsVersion "21.1.2"
 
     defaultConfig {
-        applicationId "com.pletikosa.indicators.app"
+        applicationId "com.github.bernardpletikosa.indicators.app"
         minSdkVersion 12
         targetSdkVersion 21
         versionCode 1

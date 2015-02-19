@@ -54,7 +54,7 @@
             />
     </LinearLayout>
 
-    <com.pletikosa.indicators.circle.CircleIndicator
+    <com.github.bernardpletikosa.indicators.circle.CircleIndicator
         android:id="@+id/circle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

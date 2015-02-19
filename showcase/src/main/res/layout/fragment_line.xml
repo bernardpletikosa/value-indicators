@@ -102,7 +102,7 @@
             />
     </LinearLayout>
 
-    <com.pletikosa.indicators.line.LineIndicator
+    <com.github.bernardpletikosa.indicators.line.LineIndicator
         android:id="@+id/line_indicator"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -125,7 +125,7 @@
             />
     </LinearLayout>
 
-    <com.pletikosa.indicators.pie.QuarterPieIndicator
+    <com.github.bernardpletikosa.indicators.pie.QuarterPieIndicator
         android:id="@+id/quarter_pie_indicator"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

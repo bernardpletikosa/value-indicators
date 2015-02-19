@@ -12,7 +12,7 @@
         android:padding="@dimen/activity_margin"
         android:orientation="vertical">
 
-        <com.pletikosa.indicators.circle.CircleIndicator
+        <com.github.bernardpletikosa.indicators.circle.CircleIndicator
             android:id="@+id/circle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -24,7 +24,7 @@
             indicators:max_value="20"
             indicators:circle_radius="100dp"/>
 
-        <com.pletikosa.indicators.line.LineIndicator
+        <com.github.bernardpletikosa.indicators.line.LineIndicator
             android:id="@+id/line"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -38,7 +38,7 @@
             indicators:line_height="50dp"
             indicators:line_direction="left_right"/>
 
-        <com.pletikosa.indicators.pie.PieIndicator
+        <com.github.bernardpletikosa.indicators.pie.PieIndicator
             android:id="@+id/pie"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -54,7 +54,7 @@
             indicators:pie_start_angle="0"
             indicators:pie_direction="clockwise"/>
 
-        <com.pletikosa.indicators.pie.HalfPieIndicator
+        <com.github.bernardpletikosa.indicators.pie.HalfPieIndicator
             android:id="@+id/pie_half"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -70,7 +70,7 @@
             indicators:pie_direction="clockwise"
             indicators:half_pie_orientation="north"/>
 
-        <com.pletikosa.indicators.pie.QuarterPieIndicator
+        <com.github.bernardpletikosa.indicators.pie.QuarterPieIndicator
             android:id="@+id/pie_quarter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

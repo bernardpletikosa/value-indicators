@@ -125,7 +125,7 @@
             />
     </LinearLayout>
 
-    <com.pletikosa.indicators.pie.PieIndicator
+    <com.github.bernardpletikosa.indicators.pie.PieIndicator
         android:id="@+id/pie_indicator"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

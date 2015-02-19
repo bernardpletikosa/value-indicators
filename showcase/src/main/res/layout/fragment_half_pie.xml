@@ -125,7 +125,7 @@
             />
     </LinearLayout>
 
-    <com.pletikosa.indicators.pie.HalfPieIndicator
+    <com.github.bernardpletikosa.indicators.pie.HalfPieIndicator
         android:id="@+id/half_pie_indicator"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

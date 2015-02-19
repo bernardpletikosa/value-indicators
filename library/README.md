@@ -71,7 +71,7 @@ For every indicator type there are special values
 
 For example, Pie indicator can be set like this
 
-    <com.pletikosa.indicators.pie.PieIndicator
+    <com.github.bernardpletikosa.indicators.pie.PieIndicator
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         indicators:main_color="@color/main"
