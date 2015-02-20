@@ -12,4 +12,6 @@ public class Defaults {
     public static final int HALF_PIE_MAX_ANGLE = 180;
     public static final int QUARTER_PIE_MAX_ANGLE = 90;
 
+    public static final float DEFAULT_CORRECTION = 0.5f;
+
 }

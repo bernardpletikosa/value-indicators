@@ -59,6 +59,8 @@ public class CircleFragment extends IndicatorFragment {
         mSizeRadius.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (seekBar.getProgress() != 0)
+                    mIndicator.setRadius(SizeUnit.PX, getRadius());
             }
 
             @Override
@@ -67,13 +69,12 @@ public class CircleFragment extends IndicatorFragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                mIndicator.setRadius(SizeUnit.PX, getRadius());
             }
         });
     }
 
     private int getRadius() {
         final float ratio = (float) mSizeRadius.getProgress() / mSizeRadius.getMax();
-        return (int) (mWidth / 2f * ratio);
+        return (int) (mSize / 2f * ratio);
     }
 }

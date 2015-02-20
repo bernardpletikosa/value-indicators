@@ -3,28 +3,36 @@ package com.github.bernardpletikosa.indicators.pie;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.PointF;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 
 import com.github.bernardpletikosa.indicators.R;
 import com.github.bernardpletikosa.indicators.consts.Orientation;
 
+import static android.view.View.MeasureSpec.AT_MOST;
+import static android.view.View.MeasureSpec.EXACTLY;
+import static com.github.bernardpletikosa.indicators.consts.Defaults.DEFAULT_CORRECTION;
 import static com.github.bernardpletikosa.indicators.consts.Defaults.HALF_PIE_MAX_ANGLE;
 import static com.github.bernardpletikosa.indicators.consts.Defaults.NO_VALUE;
 import static com.github.bernardpletikosa.indicators.consts.Direction.CLOCKWISE;
 import static com.github.bernardpletikosa.indicators.consts.Orientation.EAST;
 import static com.github.bernardpletikosa.indicators.consts.Orientation.NORTH;
 import static com.github.bernardpletikosa.indicators.consts.Orientation.SOUTH;
+import static com.github.bernardpletikosa.indicators.consts.Orientation.SOUTH_EAST;
+import static com.github.bernardpletikosa.indicators.consts.Orientation.WEST;
 
 public class HalfPieIndicator extends PieIndicator {
 
-    protected int mWidth;
-    protected int mHeight;
+    protected float mWidth;
+    protected float mHeight;
     protected int mStartPos;
     protected int mEndPos;
 
     protected RectF mBackRect = new RectF();
-    protected RectF mFrontRect = new RectF();
+    protected RectF mHelpRect = new RectF();
     protected Orientation mOrientation;
 
     public HalfPieIndicator(Context context) {
@@ -42,8 +50,7 @@ public class HalfPieIndicator extends PieIndicator {
         mOrientation = Orientation.values()[context.getTheme().obtainStyledAttributes(attrs, R.styleable.HalfPieIndicator, 0, 0)
                 .getInt(R.styleable.HalfPieIndicator_half_pie_orientation, 4)];
 
-        if (mRadius > NO_VALUE)
-            mBackRect.set(mMiddleX - mRadius, mMiddleY - mRadius, mMiddleX + mRadius, mMiddleY + mRadius);
+        setLayerType(LAYER_TYPE_SOFTWARE, null);
     }
 
     @Override
@@ -51,34 +58,23 @@ public class HalfPieIndicator extends PieIndicator {
         int height = MeasureSpec.getSize(heightMeasureSpec);
         int width = MeasureSpec.getSize(widthMeasureSpec);
 
-        int w = calculateSize(widthMeasureSpec, width, height);
-        int h = calculateSize(heightMeasureSpec, height, width);
-
-        mWidth = w;
-        mHeight = mOrientation == NORTH || mOrientation == SOUTH ? h / 2 : h;
+        mWidth = calculateSize(widthMeasureSpec, width, height);
+        mHeight = calculateSize(heightMeasureSpec, height, width);
 
         calculateCenter();
         calculateRadius();
         setHelperRects();
 
-        setMeasuredDimension( mWidth, mHeight);
-    }
-
-    private void setHelperRects() {
-        mMainRect.set(mMiddleX - mRadius, mMiddleY - mRadius, mMiddleX + mRadius, mMiddleY + mRadius);
-        mFrontRect.set(mMiddleX - mInnerRadius, mMiddleY - mInnerRadius, mMiddleX + mInnerRadius, mMiddleY + mInnerRadius);
-
-        mStartPos = calculateStartAngle();
-        mEndPos = mDirection == CLOCKWISE ? HALF_PIE_MAX_ANGLE : -HALF_PIE_MAX_ANGLE;
+        setMeasuredDimension((int) mWidth, (int) mHeight);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         float value = mDirection == CLOCKWISE ? mCurrentValue : -mCurrentValue;
 
-        canvas.drawArc(mMainRect, mStartPos, mEndPos, true, mBackgroundPaint);
+        canvas.drawArc(mBackRect, mStartPos, mEndPos, true, mBackgroundPaint);
         canvas.drawArc(mMainRect, mStartPos, value, true, mMainPaint);
-        canvas.drawArc(mFrontRect, mStartPos, mEndPos, true, mCenterPaint);
+        canvas.drawArc(mHelpRect, mStartPos, mEndPos, true, mCenterPaint);
     }
 
     @Override
@@ -100,7 +96,7 @@ public class HalfPieIndicator extends PieIndicator {
 
     /**
      * <p>Sets orientation of indicator as sides of the world (east west, north south) </p>
-     * XML parameter {@link com.pletikosa.indicators.R.attr#half_pie_orientation}
+     * XML parameter {@link com.github.bernardpletikosa.indicators.R.attr#half_pie_orientation}
      * Possible values are:
      * <ul>
      * <li>{@link Orientation#EAST}</li>
@@ -129,34 +125,56 @@ public class HalfPieIndicator extends PieIndicator {
         // Parent method, not used.
     }
 
-    private void calculateCenter() {
-        final int halfWidth = mWidth / 2;
-        switch (mOrientation) {
-            case SOUTH:
-            case NORTH:
-                mMiddleX = halfWidth;
-                mMiddleY = mOrientation == SOUTH ? 0 : mHeight;
-                break;
-            case EAST:
-            case WEST:
-                final int halfRadius = mRadius / 2;
-                mMiddleX = mOrientation == EAST ? halfWidth - halfRadius : halfWidth + halfRadius;
-                mMiddleY = mHeight / 2;
+    @Override
+    float calculateSize(int modeSpec, int... size) {
+        int mode = MeasureSpec.getMode(modeSpec);
+
+        float diameter = mOrientation == EAST || mOrientation == WEST ? mRadius * 2 : mRadius;
+        if (getScreenOrientation() != 0)
+            diameter = mOrientation == EAST || mOrientation == WEST ? mRadius : mRadius * 2;
+
+        switch (mode) {
+            case EXACTLY:
+                return size[0];
+            case AT_MOST:
+                return mRadius > NO_VALUE ? Math.min(diameter,
+                        size[0]) : size[0] > 0 ? size[0] : size[1];
+            default:
+                return mRadius > NO_VALUE ? diameter : size[0] > 0 ? size[0] : size[1];
         }
     }
 
-    private int calculateStartAngle() {
-        switch (mOrientation) {
-            case SOUTH:
-                return mDirection == CLOCKWISE ? 0 : 180;
-            case NORTH:
-                return mDirection == CLOCKWISE ? 180 : 0;
-            case EAST:
-                return mDirection == CLOCKWISE ? 270 : 90;
-            case WEST:
-                return mDirection == CLOCKWISE ? 90 : 270;
-            default:
-                return mDirection == CLOCKWISE ? 0 : 180;
+    private void calculateCenter() {
+        final float halfW = mWidth / 2;
+        final float halfR = mRadius / 2;
+        final float halfH = mHeight / 2;
+
+        if (mOrientation == NORTH || mOrientation == SOUTH) {
+            mCenter.x = halfW;
+            mCenter.y = mOrientation == SOUTH ? halfH - halfR : halfH + halfR;
+        } else {
+            mCenter.x = mOrientation == EAST ? halfW - halfR : halfW + halfR;
+            mCenter.y = halfH;
         }
+    }
+
+    private void setHelperRects() {
+        mBackRect.set(mCenter.x - mRadius, mCenter.y - mRadius, mCenter.x + mRadius, mCenter.y + mRadius);
+        mMainRect.set(mCenter.x - mRadius, mCenter.y - mRadius, mCenter.x + mRadius, mCenter.y + mRadius);
+
+        PointF corr = calculateCorrectedCenter();
+        mHelpRect.set(corr.x - mInnerRadius, corr.y - mInnerRadius, corr.x + mInnerRadius, corr.y + mInnerRadius);
+
+        mStartPos = StartAngleUtil.halfPieAngle(mOrientation, mDirection);
+        mEndPos = mDirection == CLOCKWISE ? HALF_PIE_MAX_ANGLE : -HALF_PIE_MAX_ANGLE;
+    }
+
+    private PointF calculateCorrectedCenter() {
+        float x = mOrientation == EAST ? mCenter.x - DEFAULT_CORRECTION : mOrientation == WEST ?
+                mCenter.x + DEFAULT_CORRECTION : mCenter.x;
+        float y = mOrientation == NORTH ? mCenter.y + DEFAULT_CORRECTION : mOrientation == SOUTH ?
+                mCenter.y - DEFAULT_CORRECTION : mCenter.y;
+
+        return new PointF(x, y);
     }
 }

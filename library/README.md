@@ -14,8 +14,11 @@ height = 250 width = 140>.<img src="../gif/pie.gif" height = 250 width = 140>.<i
 
 ## Usage
 
+/com/github/bernardpletikosa/value-indicators/1.0/value-indicators-1.0-sources.jar
+
 ###Usage overview
-Indicator can be set up in code or in xml.
+Indicator can be set up in code [code](https://github.com/bernardpletikosa/value-indicators/blob/master/sample/src/main/java/com/github/bernardpletikosa/indicators/sample/IndicatorsActivity.java) or in [xml](https://github.com/bernardpletikosa/value-indicators/blob/master/sample/src/main/res/layout/main_layout.xml)
+
 For all indicator types there are some common attributes: minimal and maximal value to indicate,
 animation duration and indicator colors.
 

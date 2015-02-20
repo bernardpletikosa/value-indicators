@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.PointF;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 
@@ -20,16 +21,15 @@ import static com.github.bernardpletikosa.indicators.consts.Defaults.NO_VALUE;
 
 public class PieIndicator extends IndicatorView {
 
-    protected int mMiddleX;
-    protected int mMiddleY;
-    protected int mRadius;
-    protected int mInnerRadius;
+    protected float mRadius;
+    protected float mInnerRadius;
     protected int mInnerRadiusPercent = NO_VALUE;
     protected int mStartAngle;
 
     protected Direction mDirection;
     protected RectF mMainRect = new RectF();
     protected Paint mCenterPaint = new Paint();
+    protected PointF mCenter = new PointF();
 
     public PieIndicator(Context context) {
         this(context, null);
@@ -50,32 +50,32 @@ public class PieIndicator extends IndicatorView {
         int width = MeasureSpec.getSize(widthMeasureSpec);
         int height = MeasureSpec.getSize(heightMeasureSpec);
 
-        int w = calculateSize(widthMeasureSpec, width, height);
-        int h = calculateSize(heightMeasureSpec, height, width);
+        float w = calculateSize(widthMeasureSpec, width, height);
+        float h = calculateSize(heightMeasureSpec, height, width);
 
-        mMiddleX = w / 2;
-        mMiddleY = h / 2;
+        mCenter.x = w / 2;
+        mCenter.y = h / 2;
 
         calculateRadius();
 
-        setMeasuredDimension(w, h);
+        setMeasuredDimension((int) w, (int) h);
     }
 
 
     @Override
     protected void onDraw(Canvas canvas) {
-        canvas.drawCircle(mMiddleX, mMiddleY, mRadius, mBackgroundPaint);
+        canvas.drawCircle(mCenter.x, mCenter.y, mRadius, mBackgroundPaint);
 
-        mMainRect.set(mMiddleX - mRadius, mMiddleY - mRadius, mMiddleX + mRadius, mMiddleY + mRadius);
+        mMainRect.set(mCenter.x - mRadius, mCenter.y - mRadius, mCenter.x + mRadius, mCenter.y + mRadius);
         canvas.drawArc(mMainRect, mStartAngle, mDirection == Direction.CLOCKWISE ? mCurrentValue :
                 -mCurrentValue, true, mMainPaint);
 
-        canvas.drawCircle(mMiddleX, mMiddleY, mInnerRadius, mCenterPaint);
+        canvas.drawCircle(mCenter.x, mCenter.y, mInnerRadius, mCenterPaint);
     }
 
     /**
      * Sets color for inner hole. For inner hole radius see #setInnerRadius
-     * XML parameter {@link com.pletikosa.indicators.R.attr#pie_center_paint}
+     * XML parameter {@link com.github.bernardpletikosa.indicators.R.attr#pie_center_paint}
      * @param centerColor resolved color resource
      */
     public void setCenterPaint(int centerColor) throws IllegalArgumentException {
@@ -85,7 +85,7 @@ public class PieIndicator extends IndicatorView {
 
     /**
      * <p>Sets direction for drawing indicator in clockwise or counter clockwise direction.</p>
-     * XML parameter {@link com.pletikosa.indicators.R.attr#pie_direction}
+     * XML parameter {@link com.github.bernardpletikosa.indicators.R.attr#pie_direction}
      * Possible values are:
      * <ul>
      * <li>{@link Direction#CLOCKWISE}</li>
@@ -107,7 +107,7 @@ public class PieIndicator extends IndicatorView {
     /**
      * Sets inner radius of PieIndicator. Inner radius is set as percentage of outer circle
      * radius. If radius is 0 then indicator will be without center hole..
-     * XML parameter {@link com.pletikosa.indicators.R.attr#pie_inner_radius}
+     * XML parameter {@link com.github.bernardpletikosa.indicators.R.attr#pie_inner_radius}
      * @param innerRadius percentage [0, 100]
      */
     public void setInnerRadius(int innerRadius) throws IllegalArgumentException {
@@ -124,7 +124,7 @@ public class PieIndicator extends IndicatorView {
 
     /**
      * Sets angle where indicator drawing will start.
-     * XML parameter {@link com.pletikosa.indicators.R.attr#pie_start_angle}
+     * XML parameter {@link com.github.bernardpletikosa.indicators.R.attr#pie_start_angle}
      * @param startAngle [0, 360]
      */
     public void setStartingAngle(int startAngle) throws IllegalArgumentException {
@@ -139,7 +139,7 @@ public class PieIndicator extends IndicatorView {
 
     /**
      * Sets radius of the outer circle in specified unit.
-     * XML parameter {@link com.pletikosa.indicators.R.attr#pie_radius}
+     * XML parameter {@link com.github.bernardpletikosa.indicators.R.attr#pie_radius}
      * @param radius size in specified unit.
      */
     public void setRadius(SizeUnit unit, int radius) throws IllegalArgumentException {
@@ -184,9 +184,9 @@ public class PieIndicator extends IndicatorView {
             throw new IllegalArgumentException("InnerRadius value out of bounds");
     }
 
-    protected void calculateRadius() {
+    void calculateRadius() {
         if (mRadius <= NO_VALUE)
-            mRadius = mMiddleX < mMiddleY ? mMiddleX : mMiddleY;
+            mRadius = mCenter.x < mCenter.y ? mCenter.x : mCenter.y;
 
         if (mInnerRadiusPercent <= NO_VALUE)
             mInnerRadius = mRadius / 2;
@@ -194,10 +194,10 @@ public class PieIndicator extends IndicatorView {
             mInnerRadius = (int) (mInnerRadiusPercent / 100f * mRadius);
     }
 
-    protected int calculateSize(int modeSpec, int... size) {
+    float calculateSize(int modeSpec, int... size) {
         int mode = MeasureSpec.getMode(modeSpec);
 
-        final int diameter = mRadius * 2;
+        final float diameter = mRadius * 2;
         switch (mode) {
             case EXACTLY:
                 return size[0];

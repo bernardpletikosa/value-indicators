@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
+import android.view.Display;
+import android.view.WindowManager;
 
 import com.github.bernardpletikosa.indicators.IndicatorView;
 import com.github.bernardpletikosa.indicators.R;
@@ -57,7 +59,6 @@ public class LineIndicator extends IndicatorView {
         else
             h = mHeight > NO_VALUE ? mHeight : mTotalHeight > 0 ? mTotalHeight : mTotalWidth / 2;
 
-        
         if (mWidth <= NO_VALUE) mWidth = w;
         if (mHeight <= NO_VALUE) mHeight = h;
 
@@ -66,15 +67,16 @@ public class LineIndicator extends IndicatorView {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        final int emptyWidth = (mTotalWidth - mWidth) / 2;
-        final float[] positions = calculatePositions(emptyWidth);
-        canvas.drawRect(emptyWidth, 0, mWidth + emptyWidth, mHeight, mBackgroundPaint);
+        final int emptyWidth = mTotalWidth > 0 ? (mTotalWidth - mWidth) / 2 : 0;
+        final int emptyHeight = mTotalHeight > 0 ? (mTotalHeight - mHeight) / 2 : 0;
+        final float[] positions = calculatePositions(emptyWidth, emptyHeight);
+        canvas.drawRect(emptyWidth, emptyHeight, mWidth + emptyWidth, mHeight + emptyHeight, mBackgroundPaint);
         canvas.drawRect(positions[0], positions[1], positions[2], positions[3], mMainPaint);
     }
 
     /**
      * <p>Sets direction for drawing indicator in clockwise or counter clockwise direction.</p>
-     * XML parameter {@link com.pletikosa.indicators.R.attr#line_direction}
+     * XML parameter {@link com.github.bernardpletikosa.indicators.R.attr#line_direction}
      * Possible values are:
      * <ul>
      * <li>{@link Direction#LEFT_RIGHT}</li>
@@ -98,8 +100,8 @@ public class LineIndicator extends IndicatorView {
 
     /**
      * Sets indicator shape width and height in specified unit.
-     * XML parameters {@link com.pletikosa.indicators.R.attr#line_width} and
-     * {@link com.pletikosa.indicators.R.attr#line_height}
+     * XML parameters {@link com.github.bernardpletikosa.indicators.R.attr#line_width} and
+     * {@link com.github.bernardpletikosa.indicators.R.attr#line_height}
      * @param width  shape width
      * @param height shape height
      */
@@ -153,17 +155,19 @@ public class LineIndicator extends IndicatorView {
     }
 
     //Calculates rectangle corners position
-    private float[] calculatePositions(int emptyWidth) {
+    private float[] calculatePositions(int emptyWidth, int emptyHeight) {
         switch (mDirection) {
             case LEFT_RIGHT:
-                return new float[]{emptyWidth, 0, mCurrentValue + emptyWidth, mHeight};
+                return new float[]{emptyWidth, emptyHeight, mCurrentValue + emptyWidth, mHeight + emptyHeight};
             case RIGHT_LEFT:
-                return new float[]{mCurrentValue + emptyWidth, 0, mWidth + emptyWidth, mHeight};
+                return new float[]{mCurrentValue + emptyWidth, emptyHeight, mWidth + emptyWidth,
+                        mHeight + emptyHeight};
             case TOP_BOTTOM:
-                return new float[]{emptyWidth, 0, mWidth + emptyWidth, mCurrentValue};
+                return new float[]{emptyWidth, emptyHeight, mWidth + emptyWidth, mCurrentValue + emptyHeight};
             case BOTTOM_TOP:
             default:
-                return new float[]{emptyWidth, mCurrentValue, mWidth + emptyWidth, mHeight};
+                return new float[]{emptyWidth, mCurrentValue + emptyHeight, mWidth + emptyWidth,
+                        mHeight + emptyHeight};
         }
     }
 }

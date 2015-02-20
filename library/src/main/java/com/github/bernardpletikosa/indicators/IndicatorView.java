@@ -10,7 +10,9 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 
@@ -22,7 +24,7 @@ import static com.github.bernardpletikosa.indicators.consts.Defaults.NO_VALUE;
 
 public abstract class IndicatorView extends View {
 
-    private final Context mContext;
+    protected final Context mContext;
 
     protected float mMinValue;
     protected float mMaxValue;
@@ -109,8 +111,8 @@ public abstract class IndicatorView extends View {
     /**
      * Method sets values range i.e. minimum and maximum values to display.
      * Default values are [0, 100].
-     * XML parameters {@link com.pletikosa.indicators.R.attr#min_value} and
-     * {@link com.pletikosa.indicators.R.attr#max_value}
+     * XML parameters {@link com.github.bernardpletikosa.indicators.R.attr#min_value} and
+     * {@link com.github.bernardpletikosa.indicators.R.attr#max_value}
      * @param minValue minimum value to display
      * @param maxValue maximum value to display
      */
@@ -124,7 +126,7 @@ public abstract class IndicatorView extends View {
 
     /**
      * Sets value to be indicated. Value is automatically animated when this method is used.
-     * XML parameter {@link com.pletikosa.indicators.R.attr#target_value}
+     * XML parameter {@link com.github.bernardpletikosa.indicators.R.attr#target_value}
      * @param value target value
      */
     public void indicate(float value) {
@@ -139,7 +141,7 @@ public abstract class IndicatorView extends View {
     /**
      * Sets animation duration. If set to 0 there will be no animation. Default animation
      * duration is 500 milliseconds.
-     * XML parameter {@link com.pletikosa.indicators.R.attr#animation_duration}
+     * XML parameter {@link com.github.bernardpletikosa.indicators.R.attr#animation_duration}
      * @param duration in milliseconds
      */
     public void setAnimationDuration(int duration) throws IllegalArgumentException {
@@ -149,7 +151,7 @@ public abstract class IndicatorView extends View {
 
     /**
      * Sets main color for animating value.
-     * XML parameter {@link com.pletikosa.indicators.R.attr#main_color}
+     * XML parameter {@link com.github.bernardpletikosa.indicators.R.attr#main_color}
      * @param mainColor resolved color resource
      */
     public void setMainColor(int mainColor) {
@@ -159,7 +161,7 @@ public abstract class IndicatorView extends View {
 
     /**
      * Sets background color for showing whole shape below the one that is animating value.
-     * XML parameter {@link com.pletikosa.indicators.R.attr#background_color}
+     * XML parameter {@link com.github.bernardpletikosa.indicators.R.attr#background_color}
      * @param backgroundColor resolved color resource
      */
     public void setBackGroundColor(int backgroundColor) {
@@ -244,6 +246,12 @@ public abstract class IndicatorView extends View {
     protected void checkNegativeOrZero(int argument, String name) {
         if (argument <= 0)
             throw new IllegalArgumentException("Argument " + name + " can't be less than 0.");
+    }
+
+    protected int getScreenOrientation() {
+        WindowManager mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+        Display display = mWindowManager.getDefaultDisplay();
+        return display.getOrientation();
     }
 
     private void checkRange(float minValue, float maxValue) {

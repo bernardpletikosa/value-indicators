@@ -4,6 +4,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.PointF;
 import android.util.AttributeSet;
 
 import com.github.bernardpletikosa.indicators.IndicatorView;
@@ -16,9 +17,8 @@ import static com.github.bernardpletikosa.indicators.consts.Defaults.NO_VALUE;
 
 public class CircleIndicator extends IndicatorView {
 
-    protected int mRadius = 0;
-    protected int mMiddleX;
-    protected int mMiddleY;
+    protected float mRadius = 0;
+    protected PointF mCenter = new PointF();
 
     public CircleIndicator(Context context) {
         this(context, null);
@@ -39,27 +39,27 @@ public class CircleIndicator extends IndicatorView {
         int width = MeasureSpec.getSize(widthMeasureSpec);
         int height = MeasureSpec.getSize(heightMeasureSpec);
 
-        int w = calculateSize(widthMeasureSpec, width, height);
-        int h = calculateSize(heightMeasureSpec, height, width);
+        float w = calculateSize(widthMeasureSpec, width, height);
+        float h = calculateSize(heightMeasureSpec, height, width);
 
-        mMiddleX = w / 2;
-        mMiddleY = h / 2;
+        mCenter.x = w / 2;
+        mCenter.y = h / 2;
 
         if (mRadius <= NO_VALUE)
-            mRadius = mMiddleX < mMiddleY ? mMiddleX : mMiddleY;
+            mRadius = mCenter.x < mCenter.y ? mCenter.x : mCenter.y;
 
-        setMeasuredDimension(w, h);
+        setMeasuredDimension((int) w, (int) h);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        canvas.drawCircle(mMiddleX, mMiddleY, mRadius, mBackgroundPaint);
-        canvas.drawCircle(mMiddleX, mMiddleY, mCurrentValue, mMainPaint);
+        canvas.drawCircle(mCenter.x, mCenter.y, mRadius, mBackgroundPaint);
+        canvas.drawCircle(mCenter.x, mCenter.y, mCurrentValue, mMainPaint);
     }
 
     /**
      * Sets outer radius of the circle.
-     * XML parameter {@link com.pletikosa.indicators.R.attr#circle_radius} (only in dp)
+     * XML parameter {@link com.github.bernardpletikosa.indicators.R.attr#circle_radius} (only in dp)
      * @param radius size in specified unit.
      */
     public void setRadius(SizeUnit unit, int radius) throws IllegalArgumentException {
@@ -93,7 +93,7 @@ public class CircleIndicator extends IndicatorView {
         mRadius = (int) array.getDimension(R.styleable.CircleIndicator_circle_radius, NO_VALUE);
     }
 
-    private int calculateSize(int modeSpec, int... size) {
+    private float calculateSize(int modeSpec, int... size) {
         int mode = MeasureSpec.getMode(modeSpec);
 
         switch (mode) {

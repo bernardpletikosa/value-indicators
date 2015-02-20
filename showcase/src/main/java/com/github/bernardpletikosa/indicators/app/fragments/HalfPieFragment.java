@@ -65,6 +65,9 @@ public class HalfPieFragment extends IndicatorFragment {
         mSeekRadius.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (seekBar.getProgress() != 0)
+                    mIndicator.setRadius(SizeUnit.PX, (int) (mSize / 2 * ((float) seekBar.getProgress() / mSeekRadius
+                            .getMax())));
             }
 
             @Override
@@ -73,14 +76,14 @@ public class HalfPieFragment extends IndicatorFragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                mIndicator.setRadius(SizeUnit.PX, (int) (mWidth / 2 * ((float) seekBar.getProgress() / mSeekRadius
-                        .getMax())));
+
             }
         });
 
         mSeekInnerRadius.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                mIndicator.setInnerRadius(seekBar.getProgress());
             }
 
             @Override
@@ -89,11 +92,10 @@ public class HalfPieFragment extends IndicatorFragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                mIndicator.setInnerRadius(seekBar.getProgress());
             }
         });
 
-        mIndicator.setRadius(SizeUnit.PX, (int) (mWidth / 2 * ((float) mSeekRadius.getProgress() / mSeekRadius.getMax())));
+        mIndicator.setRadius(SizeUnit.PX, (int) (mSize / 2 * ((float) mSeekRadius.getProgress() / mSeekRadius.getMax())));
         mIndicator.setInnerRadius(mSeekInnerRadius.getProgress());
     }
 
@@ -101,6 +103,7 @@ public class HalfPieFragment extends IndicatorFragment {
         mSeekOrientation.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                mIndicator.setOrientation(Orientation.values()[seekBar.getProgress()]);
             }
 
             @Override
@@ -109,7 +112,6 @@ public class HalfPieFragment extends IndicatorFragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                mIndicator.setOrientation(Orientation.values()[seekBar.getProgress()]);
                 showToast("Orientation: " + Orientation.values()[seekBar.getProgress()].name());
             }
         });
@@ -120,6 +122,7 @@ public class HalfPieFragment extends IndicatorFragment {
         mSeekDirection.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                mIndicator.setDirection(Direction.values()[seekBar.getProgress()]);
             }
 
             @Override
@@ -128,7 +131,6 @@ public class HalfPieFragment extends IndicatorFragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                mIndicator.setDirection(Direction.values()[seekBar.getProgress()]);
                 showToast("Direction: " + (Direction.values()[seekBar.getProgress()].name()));
             }
         });

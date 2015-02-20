@@ -62,6 +62,8 @@ public class LineFragment extends IndicatorFragment {
         mSeekWidth.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (seekBar.getProgress() != 0)
+                    mIndicator.setSize(SizeUnit.PX, getSize(seekBar), getSize(mSeekHeight));
             }
 
             @Override
@@ -70,13 +72,14 @@ public class LineFragment extends IndicatorFragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                mIndicator.setSize(SizeUnit.PX, getSize(seekBar), getSize(mSeekHeight));
             }
         });
 
         mSeekHeight.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (seekBar.getProgress() != 0)
+                    mIndicator.setSize(SizeUnit.PX, getSize(mSeekWidth), getSize(seekBar));
             }
 
             @Override
@@ -85,7 +88,6 @@ public class LineFragment extends IndicatorFragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                mIndicator.setSize(SizeUnit.PX, getSize(mSeekWidth), getSize(seekBar));
             }
         });
 
@@ -96,6 +98,7 @@ public class LineFragment extends IndicatorFragment {
         mSeekDirection.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                mIndicator.setDirection(Direction.values()[seekBar.getProgress() + 2]);
             }
 
             @Override
@@ -104,7 +107,6 @@ public class LineFragment extends IndicatorFragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                mIndicator.setDirection(Direction.values()[seekBar.getProgress() + 2]);
                 showToast("Direction: " + (Direction.values()[seekBar.getProgress() + 2].name()));
             }
         });
@@ -112,6 +114,6 @@ public class LineFragment extends IndicatorFragment {
     }
 
     private int getSize(SeekBar seekBar) {
-        return (int) (mWidth * ((float) seekBar.getProgress() / seekBar.getMax()));
+        return (int) (mSize * ((float) seekBar.getProgress() / seekBar.getMax()));
     }
 }

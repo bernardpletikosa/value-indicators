@@ -1,9 +1,12 @@
 package com.github.bernardpletikosa.indicators.app.fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
+import android.view.Display;
+import android.view.WindowManager;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
@@ -18,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 
 abstract class IndicatorFragment extends Fragment {
 
-    protected int mWidth;
+    protected int mSize;
     private Toast mToast;
 
     @Override
@@ -27,7 +30,9 @@ abstract class IndicatorFragment extends Fragment {
 
         DisplayMetrics metrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        mWidth = metrics.widthPixels - dpToPx((int) (2 * getResources().getDimension(R.dimen.activity_margin)));
+        int width = getScreenOrientation() == 0 ? metrics.widthPixels : metrics.heightPixels;
+        mSize = width - dpToPx(getScreenOrientation() == 0 ? (int) (2 * getResources()
+                .getDimension(R.dimen.activity_margin)) : 70);
     }
 
     @Override
@@ -41,6 +46,7 @@ abstract class IndicatorFragment extends Fragment {
         getAnimationSeek().setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                getIndicator().setAnimationDuration(seekBar.getProgress());
             }
 
             @Override
@@ -49,7 +55,6 @@ abstract class IndicatorFragment extends Fragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                getIndicator().setAnimationDuration(seekBar.getProgress());
                 showToast("Animation: " + seekBar.getProgress() + " [ms]");
             }
         });
@@ -80,6 +85,13 @@ abstract class IndicatorFragment extends Fragment {
                 });
             }
         }, 0, 2, TimeUnit.SECONDS);
+    }
+
+    protected int getScreenOrientation() {
+        WindowManager mWindowManager = (WindowManager) getActivity().getSystemService(Context
+                .WINDOW_SERVICE);
+        Display display = mWindowManager.getDefaultDisplay();
+        return display.getOrientation();
     }
 
     protected abstract SeekBar getAnimationSeek();

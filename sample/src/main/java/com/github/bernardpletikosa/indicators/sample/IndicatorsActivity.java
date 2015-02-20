@@ -1,7 +1,7 @@
 package com.github.bernardpletikosa.indicators.sample;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
 import com.github.bernardpletikosa.indicators.circle.CircleIndicator;
@@ -18,7 +18,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class IndicatorsActivity extends ActionBarActivity {
+public class IndicatorsActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
