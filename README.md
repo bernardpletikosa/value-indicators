@@ -23,7 +23,19 @@ height = 250 width = 140>.<img src="gif/pie.gif" height = 250 width = 140>.<img 
 
 ## Usage
 
+Add the following to your build.gradle file:
+
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        compile 'com.github.bernardpletikosa:value-indicators:1.0.1'
+    }
+
+Or user [jar file](https://oss.sonatype.org/content/repositories/releases/com/github/bernardpletikosa/value-indicators/1.0.1/value-indicators-1.0.1-sources.jar)
+
 ###Usage overview
+
 Indicator can be set up in code or in xml.
 For all indicator types there are some common attributes: minimal and maximal value to indicate, 
 animation duration and indicator colors.
@@ -147,4 +159,8 @@ south_west, north_east, south_east* like on image below. HalfPie also can be ful
 <img src="gif/quarter_pie.gif" height = 300 width = 170>
 
 ##Special thanks
-Daniel Nadeau for [inspiration](https://bitbucket.org/danielnadeau/holographlibrary/overview)
+[Daniel Nadeau](https://bitbucket.org/danielnadeau/holographlibrary/overview) for inspiration
+
+[Chris Banes] (https://github.com/chrisbanes/gradle-mvn-push) for gradle-mvn-push
+
+[Hugo Doménech Juárez] (https://github.com/hudomju) for word of advice
