@@ -20,5 +20,6 @@ android {
 }
 
 dependencies {
-    compile 'com.github.bernardpletikosa:value-indicators:1.0.1'
+//    compile 'com.github.bernardpletikosa:value-indicators:1.0.1'
+    compile project(':library')
 }

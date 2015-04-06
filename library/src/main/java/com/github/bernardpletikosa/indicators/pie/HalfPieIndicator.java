@@ -125,6 +125,19 @@ public class HalfPieIndicator extends PieIndicator {
         // Parent method, not used.
     }
 
+    /**
+     * @return indicator's orientation
+     * <ul>
+     * <li>{@link Orientation#EAST}</li>
+     * <li>{@link Orientation#WEST}</li>
+     * <li>{@link Orientation#NORTH}</li>
+     * <li>{@link Orientation#SOUTH}</li>
+     * </ul>
+     */
+    public Orientation getOrientation() {
+        return mOrientation;
+    }
+
     @Override
     float calculateSize(int modeSpec, int... size) {
         int mode = MeasureSpec.getMode(modeSpec);

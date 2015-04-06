@@ -61,7 +61,6 @@ public class PieIndicator extends IndicatorView {
         setMeasuredDimension((int) w, (int) h);
     }
 
-
     @Override
     protected void onDraw(Canvas canvas) {
         canvas.drawCircle(mCenter.x, mCenter.y, mRadius, mBackgroundPaint);
@@ -153,6 +152,41 @@ public class PieIndicator extends IndicatorView {
         draw();
     }
 
+    /**
+     * @return indicator's radius in pixels
+     */
+    public float getRadius() {
+        return mRadius;
+    }
+
+    /**
+     * @return indicator's inner radius in pixels
+     */
+    public float getInnerRadius() {
+        return mInnerRadius;
+    }
+
+    /**
+     * @return indicator's inner radius in percentage of total radius
+     */
+    public int getInnerRadiusPercent() {
+        return mInnerRadiusPercent;
+    }
+
+    /**
+     * @return starting angle of indication
+     */
+    public int getStartAngle() {
+        return mStartAngle;
+    }
+
+    /**
+     * @return indicator's direction
+     */
+    public Direction getDirection() {
+        return mDirection;
+    }
+
     @Override
     protected ValueAnimator.AnimatorUpdateListener getUpdateListener() {
         final float absoluteTarget = mTargetValue + Math.abs(mMinValue);
@@ -170,7 +204,7 @@ public class PieIndicator extends IndicatorView {
         };
     }
 
-    protected void loadXmlValues(TypedArray array) {
+    void loadXmlValues(TypedArray array) {
         mCenterPaint.setColor(array.getColor(R.styleable.PieIndicator_pie_center_paint, android.R.color.white));
         mCenterPaint.setAntiAlias(true);
 

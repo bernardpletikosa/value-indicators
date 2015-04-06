@@ -25,6 +25,15 @@
         </attr>
     </declare-styleable>
 
+    <declare-styleable name="Triangle" parent="Indicators">
+        <attr name="triangle_width" format="dimension"/>
+        <attr name="triangle_height" format="dimension"/>
+        <attr name="triangle_direction" format="enum">
+            <enum name="left_right" value="2"/>
+            <enum name="right_left" value="3"/>
+        </attr>
+    </declare-styleable>
+
     <declare-styleable name="PieIndicator" parent="Indicators">
         <attr name="pie_radius" format="dimension"/>
         <attr name="pie_center_paint" format="color"/>

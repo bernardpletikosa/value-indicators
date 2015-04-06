@@ -15,13 +15,9 @@ import static com.github.bernardpletikosa.indicators.consts.Defaults.DEFAULT_COR
 import static com.github.bernardpletikosa.indicators.consts.Defaults.NO_VALUE;
 import static com.github.bernardpletikosa.indicators.consts.Defaults.QUARTER_PIE_MAX_ANGLE;
 import static com.github.bernardpletikosa.indicators.consts.Direction.CLOCKWISE;
-import static com.github.bernardpletikosa.indicators.consts.Orientation.EAST;
-import static com.github.bernardpletikosa.indicators.consts.Orientation.NORTH;
 import static com.github.bernardpletikosa.indicators.consts.Orientation.NORTH_EAST;
 import static com.github.bernardpletikosa.indicators.consts.Orientation.NORTH_WEST;
-import static com.github.bernardpletikosa.indicators.consts.Orientation.SOUTH;
 import static com.github.bernardpletikosa.indicators.consts.Orientation.SOUTH_EAST;
-import static com.github.bernardpletikosa.indicators.consts.Orientation.WEST;
 
 public class QuarterPieIndicator extends HalfPieIndicator {
 
@@ -87,12 +83,12 @@ public class QuarterPieIndicator extends HalfPieIndicator {
      * XML parameter {@link com.github.bernardpletikosa.indicators.R.attr#quarter_pie_orientation}
      * Possible values are:
      * <ul>
-     * <li>{@link com.github.bernardpletikosa.indicators.consts.Orientation#SOUTH_EAST}</li>
-     * <li>{@link com.github.bernardpletikosa.indicators.consts.Orientation#SOUTH_WEST}</li>
-     * <li>{@link com.github.bernardpletikosa.indicators.consts.Orientation#NORTH_EAST}</li>
-     * <li>{@link com.github.bernardpletikosa.indicators.consts.Orientation#NORTH_WEST}</li>
+     * <li>{@link Orientation#SOUTH_EAST}</li>
+     * <li>{@link Orientation#SOUTH_WEST}</li>
+     * <li>{@link Orientation#NORTH_EAST}</li>
+     * <li>{@link Orientation#NORTH_WEST}</li>
      * </ul>
-     * @param orientation {@link com.github.bernardpletikosa.indicators.consts.Orientation}
+     * @param orientation {@link Orientation}
      */
     public void setOrientation(Orientation orientation) throws IllegalArgumentException {
         checkArgument(orientation, "orientation");

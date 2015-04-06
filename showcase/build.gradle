@@ -22,5 +22,5 @@ android {
 dependencies {
     compile 'com.jakewharton:butterknife:6.1.0'
     compile 'com.android.support:appcompat-v7:21.0.3'
-    compile 'com.github.bernardpletikosa:value-indicators:1.0.1'
-}
+//    compile 'com.github.bernardpletikosa:value-indicators:1.0.1'
+    compile project(':library')}

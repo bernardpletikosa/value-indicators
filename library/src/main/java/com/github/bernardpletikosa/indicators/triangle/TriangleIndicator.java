@@ -1,9 +1,12 @@
-package com.github.bernardpletikosa.indicators.line;
+package com.github.bernardpletikosa.indicators.triangle;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.PointF;
 import android.util.AttributeSet;
 
 import com.github.bernardpletikosa.indicators.IndicatorView;
@@ -13,28 +16,31 @@ import com.github.bernardpletikosa.indicators.consts.SizeUnit;
 
 import static com.github.bernardpletikosa.indicators.consts.Defaults.NO_VALUE;
 
-public class LineIndicator extends IndicatorView {
+public class TriangleIndicator extends IndicatorView {
 
     protected int mWidth;
     protected int mHeight;
     protected int mTotalWidth;
     protected int mTotalHeight;
     protected Direction mDirection;
+
     private int mEmptyWidth;
     private int mEmptyHeight;
+    private Path mBackgroundPath = new Path();
+    private Path mMainPath = new Path();
 
-    public LineIndicator(Context context) {
+    public TriangleIndicator(Context context) {
         this(context, null);
     }
 
-    public LineIndicator(Context context, AttributeSet attrs) {
+    public TriangleIndicator(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public LineIndicator(Context context, AttributeSet attrs, int defStyle) {
+    public TriangleIndicator(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs);
 
-        setXmlValues(context.getTheme().obtainStyledAttributes(attrs, R.styleable.LineIndicator, 0, 0));
+        setXmlValues(context.getTheme().obtainStyledAttributes(attrs, R.styleable.Triangle, 0, 0));
     }
 
     @Override
@@ -69,20 +75,29 @@ public class LineIndicator extends IndicatorView {
         if (mHeight <= NO_VALUE) mHeight = h;
 
         setMeasuredDimension(w, h);
-        setEmptyMeasures();
-
+        setHelperPath();
     }
 
-    private void setEmptyMeasures() {
+    private void setHelperPath() {
         mEmptyWidth = mTotalWidth > 0 ? (mTotalWidth - mWidth) / 2 : 0;
         mEmptyHeight = mTotalHeight > 0 ? (mTotalHeight - mHeight) / 2 : 0;
+
+        mBackgroundPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        mMainPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        setBackgroundPath();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        final float[] positions = calculatePositions(mEmptyWidth, mEmptyHeight);
-        canvas.drawRect(mEmptyWidth, mEmptyHeight, mWidth + mEmptyWidth, mHeight + mEmptyHeight, mBackgroundPaint);
-        canvas.drawRect(positions[0], positions[1], positions[2], positions[3], mMainPaint);
+        final PointF[] positions = calculatePositions();
+        mMainPath.reset();
+        mMainPath.moveTo(positions[0].x, positions[0].y);
+        mMainPath.lineTo(positions[1].x, positions[1].y);
+        mMainPath.lineTo(positions[2].x, positions[2].y);
+        mMainPath.close();
+
+        canvas.drawPath(mBackgroundPath, mBackgroundPaint);
+        canvas.drawPath(mMainPath, mMainPaint);
     }
 
     /**
@@ -92,15 +107,13 @@ public class LineIndicator extends IndicatorView {
      * <ul>
      * <li>{@link Direction#LEFT_RIGHT}</li>
      * <li>{@link Direction#RIGHT_LEFT}</li>
-     * <li>{@link Direction#BOTTOM_TOP}</li>
-     * <li>{@link Direction#TOP_BOTTOM}</li>
      * </ul>
      * XML parameter {@link}
      * @param direction see possible values
      */
     public void setDirection(Direction direction) throws IllegalArgumentException {
         checkArgument(direction, "direction");
-        if (direction == Direction.CLOCKWISE || direction == Direction.COUNTER_CLOCKWISE)
+        if (direction != Direction.LEFT_RIGHT && direction != Direction.RIGHT_LEFT)
             throw new IllegalArgumentException("Direction " + direction.name() + " not supported.");
 
         mDirection = direction;
@@ -147,8 +160,6 @@ public class LineIndicator extends IndicatorView {
      * <ul>
      * <li>{@link Direction#LEFT_RIGHT}</li>
      * <li>{@link Direction#RIGHT_LEFT}</li>
-     * <li>{@link Direction#BOTTOM_TOP}</li>
-     * <li>{@link Direction#TOP_BOTTOM}</li>
      * </ul>
      */
     public Direction getDirection() {
@@ -172,9 +183,10 @@ public class LineIndicator extends IndicatorView {
     }
 
     private void setXmlValues(TypedArray array) {
-        mWidth = (int) array.getDimension(R.styleable.LineIndicator_line_width, NO_VALUE);
-        mHeight = (int) array.getDimension(R.styleable.LineIndicator_line_height, NO_VALUE);
-        mDirection = Direction.values()[array.getInt(R.styleable.LineIndicator_line_direction, 2)];
+        mWidth = (int) array.getDimension(R.styleable.Triangle_triangle_width, NO_VALUE);
+        mHeight = (int) array.getDimension(R.styleable.Triangle_triangle_height, NO_VALUE);
+        mDirection = Direction.values()[array.getInt(R.styleable
+                .Triangle_triangle_direction, 2)];
     }
 
     //Calculates shift depending on direction
@@ -184,28 +196,42 @@ public class LineIndicator extends IndicatorView {
                 return (absoluteTarget / absoluteRange) * mWidth - mOldValue;
             case RIGHT_LEFT:
                 return ((absoluteRange - absoluteTarget) / absoluteRange) * mWidth - mOldValue;
-            case TOP_BOTTOM:
-                return (absoluteTarget / absoluteRange) * mHeight - mOldValue;
-            case BOTTOM_TOP:
-                return ((absoluteRange - absoluteTarget) / absoluteRange) * mHeight - mOldValue;
         }
         return 0;
     }
 
     //Calculates rectangle corners position
-    private float[] calculatePositions(int emptyWidth, int emptyHeight) {
+    private void setBackgroundPath() {
         switch (mDirection) {
             case LEFT_RIGHT:
-                return new float[]{emptyWidth, emptyHeight, mCurrentValue + emptyWidth, mHeight + emptyHeight};
+                mBackgroundPath = new Path();
+                mBackgroundPath.moveTo(mEmptyWidth, mEmptyHeight + mHeight);
+                mBackgroundPath.lineTo(mWidth + mEmptyWidth, mEmptyHeight);
+                mBackgroundPath.lineTo(mWidth + mEmptyWidth, mEmptyHeight + mHeight);
+                mBackgroundPath.close();
+                return;
             case RIGHT_LEFT:
-                return new float[]{mCurrentValue + emptyWidth, emptyHeight, mWidth + emptyWidth,
-                        mHeight + emptyHeight};
-            case TOP_BOTTOM:
-                return new float[]{emptyWidth, emptyHeight, mWidth + emptyWidth, mCurrentValue + emptyHeight};
-            case BOTTOM_TOP:
-            default:
-                return new float[]{emptyWidth, mCurrentValue + emptyHeight, mWidth + emptyWidth,
-                        mHeight + emptyHeight};
+                mBackgroundPath = new Path();
+                mBackgroundPath.moveTo(mEmptyWidth, mEmptyHeight + mHeight);
+                mBackgroundPath.lineTo(mEmptyWidth, mEmptyHeight);
+                mBackgroundPath.lineTo(mWidth + mEmptyWidth, mEmptyHeight + mHeight);
+                mBackgroundPath.close();
         }
+    }
+
+    //Calculates rectangle corners position
+    private PointF[] calculatePositions() {
+        switch (mDirection) {
+            case RIGHT_LEFT:
+                return new PointF[]{new PointF(mEmptyWidth + mWidth, mEmptyHeight + mHeight),
+                        new PointF(mEmptyWidth + mWidth - mCurrentValue,
+                                mEmptyHeight + mHeight * (1 - mCurrentValue / mWidth)),
+                        new PointF(mEmptyWidth + mWidth - mCurrentValue, mEmptyHeight + mHeight)};
+            case LEFT_RIGHT:
+                return new PointF[]{new PointF(mEmptyWidth, mEmptyHeight + mHeight),
+                        new PointF(mEmptyWidth + mCurrentValue, mEmptyHeight + mHeight * (1 - mCurrentValue / mWidth)),
+                        new PointF(mEmptyWidth + mCurrentValue, mEmptyHeight + mHeight)};
+        }
+        return new PointF[]{};
     }
 }

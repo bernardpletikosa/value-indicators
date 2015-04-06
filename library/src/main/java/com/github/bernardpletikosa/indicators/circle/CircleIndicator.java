@@ -72,6 +72,14 @@ public class CircleIndicator extends IndicatorView {
         draw();
     }
 
+    /**
+     * Returns outer radius of the circle.
+     * @return radius of the circle
+     */
+    public float getRadius() {
+        return mRadius;
+    }
+
     @Override
     protected ValueAnimator.AnimatorUpdateListener getUpdateListener() {
         final float absoluteTarget = mTargetValue + Math.abs(mMinValue);

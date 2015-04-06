@@ -37,7 +37,7 @@ public abstract class IndicatorView extends View {
     protected Paint mMainPaint = new Paint();
     protected Paint mBackgroundPaint = new Paint();
 
-    protected int mDuration;
+    protected int mAnimationDuration;
     protected Interpolator mInterpolator;
     protected ValueAnimator mValueAnimator;
     protected Animator.AnimatorListener mAnimationListener;
@@ -73,7 +73,7 @@ public abstract class IndicatorView extends View {
         mValueRange = Math.abs(mMaxValue - mMinValue);
 
         mTargetValue = array.getFloat(R.styleable.Indicators_target_value, NO_VALUE);
-        mDuration = array.getInt(R.styleable.Indicators_animation_duration, DEFAULT_ANIM_DURATION);
+        mAnimationDuration = array.getInt(R.styleable.Indicators_animation_duration, DEFAULT_ANIM_DURATION);
 
         setColors(array);
     }
@@ -146,7 +146,7 @@ public abstract class IndicatorView extends View {
      */
     public void setAnimationDuration(int duration) throws IllegalArgumentException {
         checkNegative(duration, "animation duration");
-        mDuration = duration;
+        mAnimationDuration = duration;
     }
 
     /**
@@ -204,7 +204,7 @@ public abstract class IndicatorView extends View {
         mOldValue = mCurrentValue;
 
         mValueAnimator = ValueAnimator.ofFloat(0, 1);
-        mValueAnimator.setDuration(mDuration);
+        mValueAnimator.setDuration(mAnimationDuration);
 
         if (mAnimationListener != null) mValueAnimator.addListener(mAnimationListener);
 
@@ -212,6 +212,53 @@ public abstract class IndicatorView extends View {
         mValueAnimator.setInterpolator(mInterpolator);
         mValueAnimator.addUpdateListener(getUpdateListener());
         mValueAnimator.start();
+    }
+
+    /**
+     * @return minimum value
+     */
+    public float getMinValue() {
+        return mMinValue;
+    }
+
+    /**
+     * @return maximum value
+     */
+    public float getMaxValue() {
+        return mMaxValue;
+    }
+
+    /**
+     * Returns range, difference between minimum and maximum
+     * @return value range
+     */
+    public float getValueRange() {
+        return mValueRange;
+    }
+
+    public float getTargetValue() {
+        return mTargetValue;
+    }
+
+    /**
+     * @return animation duration in milliseconds. Default value is 500 ms
+     */
+    public int getAnimationDuration() {
+        return mAnimationDuration;
+    }
+
+    /**
+     * @return interpolator
+     */
+    public Interpolator getInterpolator() {
+        return mInterpolator;
+    }
+
+    /**
+     * @return animation listener
+     */
+    public Animator.AnimatorListener getAnimationListener() {
+        return mAnimationListener;
     }
 
     /**

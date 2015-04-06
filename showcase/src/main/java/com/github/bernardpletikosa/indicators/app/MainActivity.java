@@ -13,6 +13,7 @@ import com.github.bernardpletikosa.indicators.app.fragments.HalfPieFragment;
 import com.github.bernardpletikosa.indicators.app.fragments.LineFragment;
 import com.github.bernardpletikosa.indicators.app.fragments.PieFragment;
 import com.github.bernardpletikosa.indicators.app.fragments.QuarterPieFragment;
+import com.github.bernardpletikosa.indicators.app.fragments.TriangleFragment;
 
 public class MainActivity extends ActionBarActivity
         implements DrawerFragment.NavigationDrawerCallbacks {
@@ -52,6 +53,8 @@ public class MainActivity extends ActionBarActivity
                 return HalfPieFragment.newInstance();
             case 4:
                 return QuarterPieFragment.newInstance();
+            case 5:
+                return TriangleFragment.newInstance();
         }
         return null;
     }
@@ -72,6 +75,9 @@ public class MainActivity extends ActionBarActivity
                 break;
             case 4:
                 mTitle = getString(R.string.title_section5);
+                break;
+            case 5:
+                mTitle = getString(R.string.title_section6);
                 break;
         }
     }

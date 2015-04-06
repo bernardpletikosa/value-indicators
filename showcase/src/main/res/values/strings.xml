@@ -6,6 +6,7 @@
     <string name="title_section3">Pie</string>
     <string name="title_section4">Half Pie</string>
     <string name="title_section5">Quarter pie</string>
+    <string name="title_section6">Triangle</string>
 
     <string name="navigation_drawer_open">Opened</string>
     <string name="navigation_drawer_close">Closeed</string>

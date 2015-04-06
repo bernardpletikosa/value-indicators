@@ -12,6 +12,20 @@
         android:padding="@dimen/activity_margin"
         android:orientation="horizontal">
 
+        <com.github.bernardpletikosa.indicators.triangle.TriangleIndicator
+            android:id="@+id/triangle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/activity_margin"
+            indicators:main_color="@color/main"
+            indicators:background_color="@color/background"
+            indicators:animation_duration="500"
+            indicators:triangle_width="200dp"
+            indicators:triangle_height="100dp"
+            indicators:min_value="-10"
+            indicators:max_value="20"
+            indicators:triangle_direction="left_right"/>
+
         <com.github.bernardpletikosa.indicators.circle.CircleIndicator
             android:id="@+id/circle"
             android:layout_width="wrap_content"
@@ -20,7 +34,7 @@
             indicators:main_color="@color/main"
             indicators:background_color="@color/background"
             indicators:animation_duration="500"
-            indicators:min_value="0"
+            indicators:min_value="-10"
             indicators:max_value="20"
             indicators:circle_radius="100dp"/>
 
@@ -32,11 +46,11 @@
             indicators:main_color="@color/main"
             indicators:background_color="@color/background"
             indicators:animation_duration="500"
-            indicators:min_value="0"
+            indicators:min_value="-10"
             indicators:max_value="20"
             indicators:line_width="200dp"
             indicators:line_height="50dp"
-            indicators:line_direction="right_left"/>
+            indicators:line_direction="left_right"/>
 
         <com.github.bernardpletikosa.indicators.pie.PieIndicator
             android:id="@+id/pie"
@@ -46,12 +60,12 @@
             indicators:main_color="@color/main"
             indicators:background_color="@color/background"
             indicators:animation_duration="500"
-            indicators:min_value="0"
+            indicators:min_value="-10"
             indicators:max_value="20"
             indicators:pie_center_paint="@color/app_background"
             indicators:pie_radius="100dp"
             indicators:pie_inner_radius="70"
-            indicators:pie_start_angle="0"
+            indicators:pie_start_angle="-10"
             indicators:pie_direction="clockwise"/>
 
         <com.github.bernardpletikosa.indicators.pie.HalfPieIndicator
@@ -62,7 +76,7 @@
             indicators:main_color="@color/main"
             indicators:background_color="@color/background"
             indicators:animation_duration="500"
-            indicators:min_value="0"
+            indicators:min_value="-10"
             indicators:max_value="20"
             indicators:pie_center_paint="@color/app_background"
             indicators:pie_radius="100dp"
@@ -78,7 +92,7 @@
             indicators:main_color="@color/main"
             indicators:background_color="@color/background"
             indicators:animation_duration="500"
-            indicators:min_value="0"
+            indicators:min_value="-10"
             indicators:max_value="20"
             indicators:pie_center_paint="@color/app_background"
             indicators:pie_radius="100dp"

@@ -12,6 +12,7 @@ import com.github.bernardpletikosa.indicators.line.LineIndicator;
 import com.github.bernardpletikosa.indicators.pie.HalfPieIndicator;
 import com.github.bernardpletikosa.indicators.pie.PieIndicator;
 import com.github.bernardpletikosa.indicators.pie.QuarterPieIndicator;
+import com.github.bernardpletikosa.indicators.triangle.TriangleIndicator;
 
 import java.util.Random;
 import java.util.concurrent.Executors;
@@ -25,6 +26,7 @@ public class IndicatorsActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout);
 
+        final TriangleIndicator triangle = (TriangleIndicator) findViewById(R.id.triangle);
         final CircleIndicator circle = (CircleIndicator) findViewById(R.id.circle);
         final LineIndicator line = (LineIndicator) findViewById(R.id.line);
         final PieIndicator pie = (PieIndicator) findViewById(R.id.pie);
@@ -38,8 +40,9 @@ public class IndicatorsActivity extends Activity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        int step = (int) (20 * new Random().nextFloat());
+                        int step = (int) (30 * new Random().nextFloat()) - 10;
 
+                        triangle.indicate(step);
                         circle.indicate(step);
                         line.indicate(step);
                         pie.indicate(step);
@@ -48,13 +51,13 @@ public class IndicatorsActivity extends Activity {
                     }
                 });
             }
-        }, 0, 2, TimeUnit.SECONDS);
+        }, 0, 1, TimeUnit.SECONDS);
     }
 
     //How to create an indicator
     private void setIndicators() {
         final CircleIndicator circle = (CircleIndicator) findViewById(R.id.circle);
-        circle.setRange(0, 20);
+        circle.setRange(0, 40);
         circle.setAnimationDuration(500);
         circle.setMainColor(getResources().getColor(R.color.main));
         circle.setBackGroundColor(getResources().getColor(R.color.background));

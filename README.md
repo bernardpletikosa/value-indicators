@@ -16,10 +16,11 @@ Android Library for graphic value representation.
 - **Pie**
 - **Half Pie**
 - **Quarter Pie**
+- **Triangle**
 
 <img src="gif/circle.gif" height = 250 width = 140>.<img src="gif/line.gif"
-height = 250 width = 140>.<img src="gif/pie.gif" height = 250 width = 140>.<img src="gif/half_pie.gif" height = 250 width = 140>.<img src="gif/quarter_pie.gif" height = 250 width = 140>
-
+height = 250 width = 140>.<img src="gif/pie.gif" height = 250 width = 140>.<img src="gif/half_pie.gif" height = 250 width = 140>.<img src="gif/quarter_pie.gif" height = 250
+width = 140>.<img src="gif/triangle.gif" height = 250 width = 140>
 
 ## Usage
 
@@ -29,7 +30,7 @@ Add the following to your build.gradle file:
         mavenCentral()
     }
     dependencies {
-        compile 'com.github.bernardpletikosa:value-indicators:1.0.1'
+        compile 'com.github.bernardpletikosa:value-indicators:1.0.2'
     }
 
 Or user [jar file](https://oss.sonatype.org/content/repositories/releases/com/github/bernardpletikosa/value-indicators/1.0.1/value-indicators-1.0.1-sources.jar)
@@ -157,6 +158,12 @@ QuarterPie also has a special *quarter_pie_orientation* attribute that can be *n
 south_west, north_east, south_east* like on image below. HalfPie also can be full or empty.
 
 <img src="gif/quarter_pie.gif" height = 300 width = 170>
+
+####Triangle indicator
+
+Triangle orientation can be *left_right, right_left* like on image below. 
+
+<img src="gif/triangle.gif" height = 300 width = 170>
 
 ##Special thanks
 [Daniel Nadeau](https://bitbucket.org/danielnadeau/holographlibrary/overview) for inspiration
