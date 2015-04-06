@@ -9,9 +9,8 @@ Value Indicators library
 - **Quarter Pie**
 - **Triangle**
 
-<img src="../gif/circle.gif" height = 250 width = 140>.<img src="../gif/line.gif"
-height = 250 width = 140>.<img src="../gif/pie.gif" height = 250 width = 140>.<img src="../gif/half_pie.gif" height = 250 width = 140>.<img src="../gif/quarter_pie.gif" height = 250 
-width = 140>.<img src="../gif/triangle.gif" height = 250 width = 140>
+<img src="../gif/circle.gif" height = 250 width = 140>.<img src="../gif/line.gif"height = 250 width = 140>.<img src="../gif/triangle.gif" height = 250 width = 140>
+<img src="../gif/pie.gif" height = 250 width = 140>.<img src="../gif/half_pie.gif" height = 250 width = 140>.<img src="../gif/quarter_pie.gif" height = 250 width = 140>
 
 
 ## Usage
