@@ -59,6 +59,9 @@ public class PieIndicator extends IndicatorView {
         calculateRadius();
 
         setMeasuredDimension((int) w, (int) h);
+
+        mTextPositionX = (int) mCenter.x;
+        mTextPositionY = (int) (mCenter.y - ((mTextPaint.descent() + mTextPaint.ascent()) / 2));
     }
 
     @Override
@@ -70,6 +73,15 @@ public class PieIndicator extends IndicatorView {
                 -mCurrentValue, true, mMainPaint);
 
         canvas.drawCircle(mCenter.x, mCenter.y, mInnerRadius, mCenterPaint);
+
+        if (mShowText) {
+            float val = mTargetValue;
+            if (mAnimateText)
+                val = (mCurrentValue / Defaults.PIE_MAX_ANGLE) * mValueRange - mMinValue;
+
+            canvas.drawText(mTextPrefix + String.format("%.1f", val) + mTextSuffix,
+                    mTextPositionX, mTextPositionY, mTextPaint);
+        }
     }
 
     /**
@@ -79,7 +91,8 @@ public class PieIndicator extends IndicatorView {
      */
     public void setCenterPaint(int centerColor) throws IllegalArgumentException {
         if (centerColor == 0) return;
-        mCenterPaint = new Paint(centerColor);
+        mCenterPaint.setColor(centerColor);
+        mCenterPaint.setAntiAlias(true);
     }
 
     /**
@@ -209,8 +222,7 @@ public class PieIndicator extends IndicatorView {
         mCenterPaint.setAntiAlias(true);
 
         mStartAngle = array.getInt(R.styleable.PieIndicator_pie_start_angle, 0);
-        mDirection = Direction.values()[array.getInt(R.styleable.PieIndicator_pie_direction,
-                0)];
+        mDirection = Direction.values()[array.getInt(R.styleable.PieIndicator_pie_direction, 0)];
 
         mRadius = (int) array.getDimension(R.styleable.PieIndicator_pie_radius, NO_VALUE);
         mInnerRadiusPercent = array.getInt(R.styleable.PieIndicator_pie_inner_radius, NO_VALUE);

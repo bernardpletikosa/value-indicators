@@ -4,6 +4,12 @@
     <declare-styleable name="Indicators">
         <attr name="main_color" format="color"/>
         <attr name="background_color" format="color"/>
+        <attr name="show_text" format="boolean"/>
+        <attr name="animate_text" format="boolean"/>
+        <attr name="text_color" format="color"/>
+        <attr name="text_size" format="dimension"/>
+        <attr name="text_prefix" format="string"/>
+        <attr name="text_suffix" format="string"/>
         <attr name="min_value" format="float"/>
         <attr name="max_value" format="float"/>
         <attr name="target_value" format="float"/>

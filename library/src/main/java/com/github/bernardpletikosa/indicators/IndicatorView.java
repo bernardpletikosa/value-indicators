@@ -16,6 +16,8 @@ import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 
+import com.github.bernardpletikosa.indicators.consts.SizeUnit;
+
 import static android.animation.ValueAnimator.AnimatorUpdateListener;
 import static com.github.bernardpletikosa.indicators.consts.Defaults.DEFAULT_ANIM_DURATION;
 import static com.github.bernardpletikosa.indicators.consts.Defaults.DEFAULT_MAX_VALUE;
@@ -36,6 +38,16 @@ public abstract class IndicatorView extends View {
 
     protected Paint mMainPaint = new Paint();
     protected Paint mBackgroundPaint = new Paint();
+
+    //Indicator text
+    protected Paint mTextPaint = new Paint();
+    protected int mTextPositionX;
+    protected int mTextPositionY;
+    protected boolean mShowText = true;
+    protected boolean mAnimateText = true;
+    protected int mTextSize = 100;
+    protected String mTextPrefix = "";
+    protected String mTextSuffix = "";
 
     protected int mAnimationDuration;
     protected Interpolator mInterpolator;
@@ -75,19 +87,25 @@ public abstract class IndicatorView extends View {
         mTargetValue = array.getFloat(R.styleable.Indicators_target_value, NO_VALUE);
         mAnimationDuration = array.getInt(R.styleable.Indicators_animation_duration, DEFAULT_ANIM_DURATION);
 
+        mShowText = array.getBoolean(R.styleable.Indicators_show_text, true);
+        mAnimateText = array.getBoolean(R.styleable.Indicators_animate_text, true);
+        mTextSize = (int) array.getDimension(R.styleable.Indicators_text_size, DEFAULT_MAX_VALUE);
+
+        mTextPrefix = array.getString(R.styleable.Indicators_text_prefix);
+        if (mTextPrefix == null) mTextPrefix = "";
+        mTextSuffix = array.getString(R.styleable.Indicators_text_suffix);
+        if (mTextSuffix == null) mTextSuffix = "";
+
         setColors(array);
     }
 
     private void setColors(TypedArray array) {
-        int color = array.getColor(R.styleable.Indicators_main_color, android.R.color.secondary_text_light);
-
-        mMainPaint.setColor(color);
-        mMainPaint.setAntiAlias(true);
-
-        color = array.getColor(R.styleable.Indicators_background_color, android.R.color.darker_gray);
-
-        mBackgroundPaint.setColor(color);
-        mBackgroundPaint.setAntiAlias(true);
+        int color = array.getColor(R.styleable.Indicators_main_color, R.color.main);
+        setMainColor(color);
+        color = array.getColor(R.styleable.Indicators_background_color, R.color.background);
+        setBackGroundColor(color);
+        color = array.getColor(R.styleable.Indicators_text_color, R.color.text);
+        setTextColor(color);
     }
 
     /**
@@ -156,7 +174,8 @@ public abstract class IndicatorView extends View {
      */
     public void setMainColor(int mainColor) {
         if (mainColor == 0) return;
-        mMainPaint = new Paint(mainColor);
+        mMainPaint.setColor(mainColor);
+        mMainPaint.setAntiAlias(true);
     }
 
     /**
@@ -166,7 +185,8 @@ public abstract class IndicatorView extends View {
      */
     public void setBackGroundColor(int backgroundColor) {
         if (backgroundColor == 0) return;
-        mBackgroundPaint = new Paint(backgroundColor);
+        mBackgroundPaint.setColor(backgroundColor);
+        mBackgroundPaint.setAntiAlias(true);
     }
 
     /**
@@ -212,6 +232,109 @@ public abstract class IndicatorView extends View {
         mValueAnimator.setInterpolator(mInterpolator);
         mValueAnimator.addUpdateListener(getUpdateListener());
         mValueAnimator.start();
+    }
+
+    /**
+     * Sets text color used if text is shown.
+     * XML parameter {@link com.github.bernardpletikosa.indicators.R.attr#text_color}
+     * @param textColor resolved color resource
+     */
+    public void setTextColor(int textColor) {
+        if (textColor == 0) return;
+
+        mTextPaint.setColor(getResources().getColor(textColor));
+        mTextPaint.setAntiAlias(true);
+        mTextPaint.setTextAlign(Paint.Align.CENTER);
+        mTextPaint.setTextSize(mTextSize);
+    }
+
+    /**
+     * Sets indicator textual presentation. Set to true to show text on top of indicator
+     * XML parameter {@link com.github.bernardpletikosa.indicators.R.attr#show_text}
+     * @param showText true to show text, false otherwise
+     */
+    public void setShowText(boolean showText) {
+        mShowText = showText;
+    }
+
+    /**
+     * Sets indicator textual presentation style. Set to true to animate text change until target
+     * value, false otherwise.
+     * XML parameter {@link com.github.bernardpletikosa.indicators.R.attr#animate_text}
+     * @param animateText true to animate text change, false otherwise
+     */
+    public void setAnimateText(boolean animateText) {
+        mShowText = true;
+        mAnimateText = animateText;
+    }
+
+    /**
+     * Sets indicator textual presentation style. Set to true to animate text change until target
+     * value, false otherwise.
+     * XML parameter {@link com.github.bernardpletikosa.indicators.R.attr#text_size}
+     * @param unit {@link com.github.bernardpletikosa.indicators.consts.SizeUnit}
+     * @param size size in specified unit.
+     */
+    public void setTextSize(SizeUnit unit, int size) throws IllegalArgumentException {
+        checkArgument(unit, "SizeUnit");
+        checkNegativeOrZero(size, "text size");
+
+        mTextSize = unit == SizeUnit.DP ? (int) dpToPixel(size) : size;
+    }
+
+    /**
+     * Sets text to show before indicator value. Default is empty string.
+     * XML parameter {@link com.github.bernardpletikosa.indicators.R.attr#text_prefix}
+     * @param textPrefix
+     */
+    public void setTextPrefix(String textPrefix) {
+        checkArgument(textPrefix, "Text prefix");
+        mTextPrefix = textPrefix;
+    }
+
+    /**
+     * Sets text to show after indicator value. Default is empty string.
+     * XML parameter {@link com.github.bernardpletikosa.indicators.R.attr#text_suffix}
+     * @param textSuffix
+     */
+    public void setTextSuffix(String textSuffix) {
+        checkArgument(mTextSuffix, "Text sufffix");
+        mTextSuffix = textSuffix;
+    }
+
+    /**
+     * @return text suffix
+     */
+    public String getTextSuffix() {
+        return mTextSuffix;
+    }
+
+    /**
+     * @return text preffix
+     */
+    public String getTextPrefix() {
+        return mTextPrefix;
+    }
+
+    /**
+     * @return text size in pixels
+     */
+    public int getTextSize() {
+        return mTextSize;
+    }
+
+    /**
+     * @return true if text is animated, false otherwise
+     */
+    public boolean isAnimatingText() {
+        return mAnimateText;
+    }
+
+    /**
+     * @return true if text is shown, false otherwise
+     */
+    public boolean isShowingText() {
+        return mShowText;
     }
 
     /**
