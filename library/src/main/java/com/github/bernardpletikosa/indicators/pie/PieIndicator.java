@@ -74,15 +74,17 @@ public class PieIndicator extends IndicatorView {
 
         canvas.drawCircle(mCenter.x, mCenter.y, mInnerRadius, mCenterPaint);
 
-        if (mShowText) {
-            float val = mTargetValue;
-            if (mAnimateText)
-                val = (mCurrentValue / Defaults.PIE_MAX_ANGLE) * mValueRange - mMinValue;
-
-            canvas.drawText(mTextPrefix + String.format("%.1f", val) + mTextSuffix,
-                    mTextPositionX, mTextPositionY, mTextPaint);
-        }
+        if (mShowText)
+            canvas.drawText(createText(mAnimateText), mTextPositionX, mTextPositionY, mTextPaint);
     }
+
+    private String createText(boolean animated) {
+        float val = mTargetValue;
+        if (animated)
+            val = (mCurrentValue / Defaults.PIE_MAX_ANGLE) * mValueRange - Math.abs(mMinValue);
+        return mTextPrefix + String.format("%.1f", val) + mTextSuffix;
+    }
+
 
     /**
      * Sets color for inner hole. For inner hole radius see #setInnerRadius

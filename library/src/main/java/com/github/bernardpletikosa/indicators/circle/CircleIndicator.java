@@ -49,12 +49,25 @@ public class CircleIndicator extends IndicatorView {
             mRadius = mCenter.x < mCenter.y ? mCenter.x : mCenter.y;
 
         setMeasuredDimension((int) w, (int) h);
+
+        mTextPositionX = (int) mCenter.x;
+        mTextPositionY = (int) (mCenter.y - ((mTextPaint.descent() + mTextPaint.ascent()) / 2));
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         canvas.drawCircle(mCenter.x, mCenter.y, mRadius, mBackgroundPaint);
         canvas.drawCircle(mCenter.x, mCenter.y, mCurrentValue, mMainPaint);
+
+        if (mShowText)
+            canvas.drawText(createText(mAnimateText), mTextPositionX, mTextPositionY, mTextPaint);
+    }
+
+    private String createText(boolean animated) {
+        float val = mTargetValue;
+        if (animated)
+            val = (mCurrentValue / mRadius) * mValueRange - Math.abs(mMinValue);
+        return mTextPrefix + String.format("%.1f", val) + mTextSuffix;
     }
 
     /**
@@ -83,6 +96,7 @@ public class CircleIndicator extends IndicatorView {
     @Override
     protected ValueAnimator.AnimatorUpdateListener getUpdateListener() {
         final float absoluteTarget = mTargetValue + Math.abs(mMinValue);
+        mUpdateText = true;
 
         return new ValueAnimator.AnimatorUpdateListener() {
             @Override

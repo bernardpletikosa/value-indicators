@@ -71,6 +71,8 @@ public class LineIndicator extends IndicatorView {
         setMeasuredDimension(w, h);
         setEmptyMeasures();
 
+        mTextPositionX = (mWidth + 2 * mEmptyWidth) / 2;
+        mTextPositionY = (int) ((mHeight + 2 * mEmptyHeight) / 2 - ((mTextPaint.descent() + mTextPaint.ascent()) / 2));
     }
 
     private void setEmptyMeasures() {
@@ -83,6 +85,17 @@ public class LineIndicator extends IndicatorView {
         final float[] positions = calculatePositions(mEmptyWidth, mEmptyHeight);
         canvas.drawRect(mEmptyWidth, mEmptyHeight, mWidth + mEmptyWidth, mHeight + mEmptyHeight, mBackgroundPaint);
         canvas.drawRect(positions[0], positions[1], positions[2], positions[3], mMainPaint);
+
+        if (mShowText)
+            canvas.drawText(createText(mAnimateText), mTextPositionX, mTextPositionY, mTextPaint);
+    }
+
+    private String createText(boolean animated) {
+        float val = mTargetValue;
+        if (animated)
+            val = (mCurrentValue / (mDirection == Direction.LEFT_RIGHT | mDirection == Direction
+                    .RIGHT_LEFT ? mWidth : mHeight)) * mValueRange - Math.abs(mMinValue);
+        return mTextPrefix + String.format("%.1f", val) + mTextSuffix;
     }
 
     /**

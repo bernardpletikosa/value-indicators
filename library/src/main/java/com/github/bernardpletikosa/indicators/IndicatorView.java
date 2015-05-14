@@ -48,6 +48,7 @@ public abstract class IndicatorView extends View {
     protected int mTextSize = 100;
     protected String mTextPrefix = "";
     protected String mTextSuffix = "";
+    protected boolean mUpdateText = false;
 
     protected int mAnimationDuration;
     protected Interpolator mInterpolator;
@@ -87,8 +88,8 @@ public abstract class IndicatorView extends View {
         mTargetValue = array.getFloat(R.styleable.Indicators_target_value, NO_VALUE);
         mAnimationDuration = array.getInt(R.styleable.Indicators_animation_duration, DEFAULT_ANIM_DURATION);
 
-        mShowText = array.getBoolean(R.styleable.Indicators_show_text, true);
-        mAnimateText = array.getBoolean(R.styleable.Indicators_animate_text, true);
+        mShowText = array.getBoolean(R.styleable.Indicators_text_show, true);
+        mAnimateText = array.getBoolean(R.styleable.Indicators_text_animate, true);
         mTextSize = (int) array.getDimension(R.styleable.Indicators_text_size, DEFAULT_MAX_VALUE);
 
         mTextPrefix = array.getString(R.styleable.Indicators_text_prefix);
@@ -250,7 +251,7 @@ public abstract class IndicatorView extends View {
 
     /**
      * Sets indicator textual presentation. Set to true to show text on top of indicator
-     * XML parameter {@link com.github.bernardpletikosa.indicators.R.attr#show_text}
+     * XML parameter {@link com.github.bernardpletikosa.indicators.R.attr#text_show}
      * @param showText true to show text, false otherwise
      */
     public void setShowText(boolean showText) {
@@ -260,7 +261,7 @@ public abstract class IndicatorView extends View {
     /**
      * Sets indicator textual presentation style. Set to true to animate text change until target
      * value, false otherwise.
-     * XML parameter {@link com.github.bernardpletikosa.indicators.R.attr#animate_text}
+     * XML parameter {@link com.github.bernardpletikosa.indicators.R.attr#text_animate}
      * @param animateText true to animate text change, false otherwise
      */
     public void setAnimateText(boolean animateText) {
