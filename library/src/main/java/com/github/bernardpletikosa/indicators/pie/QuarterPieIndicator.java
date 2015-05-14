@@ -3,10 +3,12 @@ package com.github.bernardpletikosa.indicators.pie;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.PointF;
 import android.util.AttributeSet;
 
 import com.github.bernardpletikosa.indicators.R;
+import com.github.bernardpletikosa.indicators.consts.Defaults;
 import com.github.bernardpletikosa.indicators.consts.Orientation;
 
 import static android.view.View.MeasureSpec.AT_MOST;
@@ -50,6 +52,9 @@ public class QuarterPieIndicator extends HalfPieIndicator {
         setHelperRects();
 
         setMeasuredDimension((int) mWidth, (int) mHeight);
+
+        mTextPositionX = calculateTextX();
+        mTextPositionY = calculateTextY();
     }
 
     @Override
@@ -59,6 +64,9 @@ public class QuarterPieIndicator extends HalfPieIndicator {
         canvas.drawArc(mBackRect, mStartPos, mEndPos, true, mBackgroundPaint);
         canvas.drawArc(mMainRect, mStartPos, value, true, mMainPaint);
         canvas.drawArc(mHelpRect, mStartPos, mEndPos, true, mCenterPaint);
+
+        if (mShowText)
+            canvas.drawText(createText(mAnimateText), mTextPositionX, mTextPositionY, mTextPaint);
     }
 
     @Override
@@ -156,6 +164,39 @@ public class QuarterPieIndicator extends HalfPieIndicator {
             float x = mOrientation == SOUTH_EAST ? mCenter.x - DEFAULT_CORRECTION : mCenter.x + DEFAULT_CORRECTION;
             float y = mCenter.y - DEFAULT_CORRECTION;
             return new PointF(x, y);
+        }
+    }
+
+    private String createText(boolean animated) {
+        float val = mTargetValue;
+        if (animated)
+            val = (mCurrentValue / Defaults.QUARTER_PIE_MAX_ANGLE) * mValueRange - Math.abs(mMinValue);
+        return mTextPrefix + String.format("%.1f", val) + mTextSuffix;
+    }
+
+    private int calculateTextX() {
+        switch (mOrientation) {
+            case NORTH_EAST:
+            case SOUTH_EAST:
+                mTextPaint.setTextAlign(Paint.Align.LEFT);
+                return (int) mCenter.x;
+            case NORTH_WEST:
+            case SOUTH_WEST:
+                mTextPaint.setTextAlign(Paint.Align.RIGHT);
+                return (int) mCenter.x;
+            default: return (int) mCenter.x;
+        }
+    }
+
+    private int calculateTextY() {
+        switch (mOrientation) {
+            case NORTH_EAST:
+            case NORTH_WEST:
+                return (int) mCenter.y;
+            case SOUTH_EAST:
+            case SOUTH_WEST:
+                return (int) ((int) mCenter.y + mTextPaint.getTextSize());
+            default: return (int) mCenter.y;
         }
     }
 }

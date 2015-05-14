@@ -4,12 +4,12 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 
 import com.github.bernardpletikosa.indicators.R;
+import com.github.bernardpletikosa.indicators.consts.Defaults;
 import com.github.bernardpletikosa.indicators.consts.Orientation;
 
 import static android.view.View.MeasureSpec.AT_MOST;
@@ -21,7 +21,6 @@ import static com.github.bernardpletikosa.indicators.consts.Direction.CLOCKWISE;
 import static com.github.bernardpletikosa.indicators.consts.Orientation.EAST;
 import static com.github.bernardpletikosa.indicators.consts.Orientation.NORTH;
 import static com.github.bernardpletikosa.indicators.consts.Orientation.SOUTH;
-import static com.github.bernardpletikosa.indicators.consts.Orientation.SOUTH_EAST;
 import static com.github.bernardpletikosa.indicators.consts.Orientation.WEST;
 
 public class HalfPieIndicator extends PieIndicator {
@@ -66,6 +65,9 @@ public class HalfPieIndicator extends PieIndicator {
         setHelperRects();
 
         setMeasuredDimension((int) mWidth, (int) mHeight);
+
+        mTextPositionX = calculateTextX();
+        mTextPositionY = calculateTextY();
     }
 
     @Override
@@ -75,6 +77,9 @@ public class HalfPieIndicator extends PieIndicator {
         canvas.drawArc(mBackRect, mStartPos, mEndPos, true, mBackgroundPaint);
         canvas.drawArc(mMainRect, mStartPos, value, true, mMainPaint);
         canvas.drawArc(mHelpRect, mStartPos, mEndPos, true, mCenterPaint);
+
+        if (mShowText)
+            canvas.drawText(createText(mAnimateText), mTextPositionX, mTextPositionY, mTextPaint);
     }
 
     @Override
@@ -138,8 +143,7 @@ public class HalfPieIndicator extends PieIndicator {
         return mOrientation;
     }
 
-    @Override
-    float calculateSize(int modeSpec, int... size) {
+    @Override float calculateSize(int modeSpec, int... size) {
         int mode = MeasureSpec.getMode(modeSpec);
 
         float diameter = mOrientation == EAST || mOrientation == WEST ? mRadius * 2 : mRadius;
@@ -189,5 +193,35 @@ public class HalfPieIndicator extends PieIndicator {
                 mCenter.y - DEFAULT_CORRECTION : mCenter.y;
 
         return new PointF(x, y);
+    }
+
+    private String createText(boolean animated) {
+        float val = mTargetValue;
+        if (animated)
+            val = (mCurrentValue / Defaults.HALF_PIE_MAX_ANGLE) * mValueRange - Math.abs(mMinValue);
+        return mTextPrefix + String.format("%.1f", val) + mTextSuffix;
+    }
+
+    private int calculateTextX() {
+        switch (mOrientation) {
+            case EAST:
+                mTextPaint.setTextAlign(Paint.Align.LEFT);
+                return (int) mCenter.x;
+            case WEST:
+                mTextPaint.setTextAlign(Paint.Align.RIGHT);
+                return (int) mCenter.x;
+            case NORTH:
+            case SOUTH:
+                mTextPaint.setTextAlign(Paint.Align.CENTER);
+            default: return (int) mCenter.x;
+        }
+    }
+
+    private int calculateTextY() {
+        switch (mOrientation) {
+            case NORTH: return (int) mCenter.y;
+            case SOUTH: return (int) (mCenter.y + mTextPaint.getTextSize());
+            default: return (int) mCenter.y;
+        }
     }
 }

@@ -76,6 +76,10 @@ public class TriangleIndicator extends IndicatorView {
 
         setMeasuredDimension(w, h);
         setHelperPath();
+
+        mTextPositionX = (int) (mEmptyWidth + (2f / 3f * mWidth));
+        mTextPositionY = (int) ((2f / 3f * mHeight) + mEmptyHeight -
+                ((mTextPaint.descent() + mTextPaint.ascent()) / 2));
     }
 
     private void setHelperPath() {
@@ -98,6 +102,16 @@ public class TriangleIndicator extends IndicatorView {
 
         canvas.drawPath(mBackgroundPath, mBackgroundPaint);
         canvas.drawPath(mMainPath, mMainPaint);
+
+        if (mShowText)
+            canvas.drawText(createText(mAnimateText), mTextPositionX, mTextPositionY, mTextPaint);
+    }
+
+    private String createText(boolean animated) {
+        float val = mTargetValue;
+        if (animated)
+            val = (mCurrentValue / mWidth) * mValueRange - Math.abs(mMinValue);
+        return mTextPrefix + String.format("%.1f", val) + mTextSuffix;
     }
 
     /**

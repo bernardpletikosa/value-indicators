@@ -72,7 +72,8 @@ public class LineIndicator extends IndicatorView {
         setEmptyMeasures();
 
         mTextPositionX = (mWidth + 2 * mEmptyWidth) / 2;
-        mTextPositionY = (int) ((mHeight + 2 * mEmptyHeight) / 2 - ((mTextPaint.descent() + mTextPaint.ascent()) / 2));
+        mTextPositionY = (int) ((mHeight + 2 * mEmptyHeight) / 2 -
+                ((mTextPaint.descent() + mTextPaint.ascent()) / 2));
     }
 
     private void setEmptyMeasures() {

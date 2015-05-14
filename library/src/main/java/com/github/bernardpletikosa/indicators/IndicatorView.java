@@ -243,7 +243,7 @@ public abstract class IndicatorView extends View {
     public void setTextColor(int textColor) {
         if (textColor == 0) return;
 
-        mTextPaint.setColor(getResources().getColor(textColor));
+        mTextPaint.setColor(textColor);
         mTextPaint.setAntiAlias(true);
         mTextPaint.setTextAlign(Paint.Align.CENTER);
         mTextPaint.setTextSize(mTextSize);

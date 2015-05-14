@@ -9,96 +9,110 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/activity_margin"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="@dimen/activity_margin">
 
         <com.github.bernardpletikosa.indicators.triangle.TriangleIndicator
             android:id="@+id/triangle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/activity_margin"
-            indicators:main_color="@color/main"
-            indicators:background_color="@color/background"
             indicators:animation_duration="500"
-            indicators:triangle_width="200dp"
-            indicators:triangle_height="100dp"
-            indicators:min_value="-10"
+            indicators:background_color="@color/background"
+            indicators:main_color="@color/main"
             indicators:max_value="20"
-            indicators:triangle_direction="left_right"/>
+            indicators:min_value="-10"
+            indicators:text_color="@color/text_color"
+            indicators:text_prefix=""
+            indicators:text_size="25sp"
+            indicators:text_suffix=""
+            indicators:triangle_direction="left_right"
+            indicators:triangle_height="100dp"
+            indicators:triangle_width="200dp"/>
 
         <com.github.bernardpletikosa.indicators.circle.CircleIndicator
             android:id="@+id/circle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/activity_margin"
-            indicators:main_color="@color/main"
-            indicators:background_color="@color/background"
             indicators:animation_duration="500"
-            indicators:min_value="-10"
+            indicators:background_color="@color/background"
+            indicators:circle_radius="100dp"
+            indicators:main_color="@color/main"
             indicators:max_value="20"
-            indicators:circle_radius="100dp"/>
+            indicators:min_value="-10"
+            indicators:text_animate="false"
+            indicators:text_color="@color/text_color"
+            indicators:text_size="25sp"/>
 
         <com.github.bernardpletikosa.indicators.line.LineIndicator
             android:id="@+id/line"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/activity_margin"
-            indicators:main_color="@color/main"
-            indicators:background_color="@color/background"
             indicators:animation_duration="500"
-            indicators:min_value="-10"
-            indicators:max_value="20"
-            indicators:line_width="200dp"
+            indicators:background_color="@color/background"
+            indicators:line_direction="left_right"
             indicators:line_height="50dp"
-            indicators:line_direction="left_right"/>
+            indicators:line_width="200dp"
+            indicators:main_color="@color/main"
+            indicators:max_value="20"
+            indicators:min_value="-10"
+            indicators:text_color="@color/text_color"
+            indicators:text_size="30sp"/>
 
         <com.github.bernardpletikosa.indicators.pie.PieIndicator
             android:id="@+id/pie"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/activity_margin"
-            indicators:main_color="@color/main"
-            indicators:background_color="@color/background"
             indicators:animation_duration="500"
-            indicators:min_value="-10"
+            indicators:background_color="@color/background"
+            indicators:main_color="@color/main"
             indicators:max_value="20"
+            indicators:min_value="-10"
             indicators:pie_center_paint="@color/app_background"
-            indicators:pie_radius="100dp"
+            indicators:pie_direction="clockwise"
             indicators:pie_inner_radius="70"
+            indicators:pie_radius="100dp"
             indicators:pie_start_angle="-10"
-            indicators:pie_direction="clockwise"/>
+            indicators:text_color="@color/background"
+            indicators:text_size="35sp"/>
 
         <com.github.bernardpletikosa.indicators.pie.HalfPieIndicator
             android:id="@+id/pie_half"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/activity_margin"
-            indicators:main_color="@color/main"
-            indicators:background_color="@color/background"
             indicators:animation_duration="500"
-            indicators:min_value="-10"
+            indicators:background_color="@color/background"
+            indicators:half_pie_orientation="north"
+            indicators:main_color="@color/main"
             indicators:max_value="20"
+            indicators:min_value="-10"
             indicators:pie_center_paint="@color/app_background"
-            indicators:pie_radius="100dp"
-            indicators:pie_inner_radius="70"
             indicators:pie_direction="clockwise"
-            indicators:half_pie_orientation="north"/>
+            indicators:pie_inner_radius="70"
+            indicators:pie_radius="100dp"
+            indicators:text_color="@color/background"
+            indicators:text_size="35sp"/>
 
         <com.github.bernardpletikosa.indicators.pie.QuarterPieIndicator
             android:id="@+id/pie_quarter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/activity_margin"
-            indicators:main_color="@color/main"
-            indicators:background_color="@color/background"
             indicators:animation_duration="500"
-            indicators:min_value="-10"
+            indicators:background_color="@color/background"
+            indicators:main_color="@color/main"
             indicators:max_value="20"
+            indicators:min_value="-10"
             indicators:pie_center_paint="@color/app_background"
-            indicators:pie_radius="100dp"
-            indicators:pie_inner_radius="70"
             indicators:pie_direction="clockwise"
+            indicators:pie_inner_radius="70"
+            indicators:pie_radius="100dp"
             indicators:quarter_pie_orientation="north_west"
-            />
+            indicators:text_color="@color/background"
+            indicators:text_size="35sp"/>
     </LinearLayout>
 </ScrollView>
