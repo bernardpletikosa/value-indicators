@@ -31,7 +31,7 @@ Add the following to your build.gradle file:
         mavenCentral()
     }
     dependencies {
-        compile 'com.github.bernardpletikosa:value-indicators:1.0.2'
+        compile 'com.github.bernardpletikosa:value-indicators:1.0.3'
     }
 
 Or user [jar file](https://oss.sonatype.org/content/repositories/releases/com/github/bernardpletikosa/value-indicators/1.0.1/value-indicators-1.0.1-sources.jar)
