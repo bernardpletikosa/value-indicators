@@ -24,6 +24,8 @@
             indicators:triangle_height="100dp"
             indicators:min_value="-10"
             indicators:max_value="20"
+            indicators:text_color="@color/text_color"
+            indicators:text_size="25sp"
             indicators:triangle_direction="left_right"/>
 
         <com.github.bernardpletikosa.indicators.circle.CircleIndicator
@@ -36,6 +38,8 @@
             indicators:animation_duration="500"
             indicators:min_value="-10"
             indicators:max_value="20"
+            indicators:text_color="@color/text_color"
+            indicators:text_size="25sp"
             indicators:circle_radius="100dp"/>
 
         <com.github.bernardpletikosa.indicators.line.LineIndicator
@@ -48,6 +52,8 @@
             indicators:animation_duration="500"
             indicators:min_value="-10"
             indicators:max_value="20"
+            indicators:text_color="@color/text_color"
+            indicators:text_size="25sp"
             indicators:line_width="200dp"
             indicators:line_height="50dp"
             indicators:line_direction="left_right"/>
@@ -62,6 +68,8 @@
             indicators:animation_duration="500"
             indicators:min_value="-10"
             indicators:max_value="20"
+            indicators:text_color="@color/background"
+            indicators:text_size="25sp"
             indicators:pie_center_paint="@color/app_background"
             indicators:pie_radius="100dp"
             indicators:pie_inner_radius="70"
@@ -78,6 +86,8 @@
             indicators:animation_duration="500"
             indicators:min_value="-10"
             indicators:max_value="20"
+            indicators:text_color="@color/background"
+            indicators:text_size="25sp"
             indicators:pie_center_paint="@color/app_background"
             indicators:pie_radius="100dp"
             indicators:pie_inner_radius="70"
@@ -94,6 +104,8 @@
             indicators:animation_duration="500"
             indicators:min_value="-10"
             indicators:max_value="20"
+            indicators:text_color="@color/background"
+            indicators:text_size="25sp"
             indicators:pie_center_paint="@color/app_background"
             indicators:pie_radius="100dp"
             indicators:pie_inner_radius="70"

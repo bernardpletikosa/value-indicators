@@ -3,6 +3,8 @@ Value Indicators
 
 Android Library for graphic value representation.
 
+<img src="gif/all.gif">
+
 ##Modules
 
 * **library** - library code.

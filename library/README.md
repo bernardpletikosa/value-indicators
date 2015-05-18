@@ -1,5 +1,10 @@
 Value Indicators library
 =============================
+
+##Example
+
+<img src="../gif/all.gif">
+
 ## Types
 
 - **Circle**

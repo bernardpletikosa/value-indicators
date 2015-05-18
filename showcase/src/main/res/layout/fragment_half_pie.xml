@@ -96,7 +96,7 @@
             android:layout_weight="4"
             android:layout_marginLeft="@dimen/activity_margin"
             android:layout_marginRight="@dimen/activity_margin"
-            android:progress="100"
+            android:progress="300"
             android:max="2000"
             />
     </LinearLayout>
@@ -131,6 +131,8 @@
         android:layout_height="match_parent"
         app:main_color="@color/blue"
         app:background_color="@color/background"
-        app:pie_center_paint="@color/app_background"/>
+        app:pie_center_paint="@color/app_background"
+        app:animation_duration="300"/>
+
 
 </LinearLayout>
