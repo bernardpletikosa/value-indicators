@@ -5,6 +5,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Build;
 import android.util.AttributeSet;
@@ -43,8 +44,9 @@ public abstract class IndicatorView extends View {
     protected Paint mTextPaint = new Paint();
     protected int mTextPositionX;
     protected int mTextPositionY;
-    protected boolean mShowText = true;
-    protected boolean mAnimateText = true;
+    protected boolean mTextShow = true;
+    protected boolean mTextAnimate = true;
+    protected boolean mTextValueDecimal = false;
     protected int mTextSize = 100;
     protected String mTextPrefix = "";
     protected String mTextSuffix = "";
@@ -85,9 +87,10 @@ public abstract class IndicatorView extends View {
         mTargetValue = array.getFloat(R.styleable.Indicators_target_value, NO_VALUE);
         mAnimationDuration = array.getInt(R.styleable.Indicators_animation_duration, DEFAULT_ANIM_DURATION);
 
-        mShowText = array.getBoolean(R.styleable.Indicators_text_show, true);
-        mAnimateText = array.getBoolean(R.styleable.Indicators_text_animate, true);
+        mTextShow = array.getBoolean(R.styleable.Indicators_text_show, true);
+        mTextAnimate = array.getBoolean(R.styleable.Indicators_text_animate, true);
         mTextSize = (int) array.getDimension(R.styleable.Indicators_text_size, DEFAULT_MAX_VALUE);
+        setTextIndicationDecimal(array.getBoolean(R.styleable.Indicators_text_value_decimal, false));
 
         mTextPrefix = array.getString(R.styleable.Indicators_text_prefix);
         if (mTextPrefix == null) mTextPrefix = "";
@@ -232,6 +235,18 @@ public abstract class IndicatorView extends View {
         mValueAnimator.start();
     }
 
+    protected void drawText(Canvas canvas, float currentValue) {
+        if (!mTextShow) return;
+
+        float val = mTextAnimate ? currentValue + mMinValue : mTargetValue;
+        if (mTextValueDecimal) {
+            canvas.drawText(mTextPrefix + String.format("%.1f", val) + mTextSuffix,
+                    mTextPositionX, mTextPositionY, mTextPaint);
+        } else
+            canvas.drawText(mTextPrefix + (int) val + mTextSuffix,
+                    mTextPositionX, mTextPositionY, mTextPaint);
+    }
+
     /**
      * Sets text color used if text is shown.
      * XML parameter {@link com.github.bernardpletikosa.indicators.R.attr#text_color}
@@ -251,8 +266,17 @@ public abstract class IndicatorView extends View {
      * XML parameter {@link com.github.bernardpletikosa.indicators.R.attr#text_show}
      * @param showText true to show text, false otherwise
      */
-    public void setShowText(boolean showText) {
-        mShowText = showText;
+    public void setTextIndication(boolean showText) {
+        mTextShow = showText;
+    }
+
+    /**
+     * Sets indicator textual presentation with or without decimal point.
+     * XML parameter {@link com.github.bernardpletikosa.indicators.R.attr#text_value_decimal}
+     * @param floatIndication true to show decimal values, false otherwise
+     */
+    public void setTextIndicationDecimal(boolean floatIndication) {
+        mTextValueDecimal = floatIndication;
     }
 
     /**
@@ -261,9 +285,9 @@ public abstract class IndicatorView extends View {
      * XML parameter {@link com.github.bernardpletikosa.indicators.R.attr#text_animate}
      * @param animateText true to animate text change, false otherwise
      */
-    public void setAnimateText(boolean animateText) {
-        mShowText = true;
-        mAnimateText = animateText;
+    public void textIndicationAnimate(boolean animateText) {
+        setTextIndication(true);
+        mTextAnimate = animateText;
     }
 
     /**
@@ -325,14 +349,14 @@ public abstract class IndicatorView extends View {
      * @return true if text is animated, false otherwise
      */
     public boolean isAnimatingText() {
-        return mAnimateText;
+        return mTextAnimate;
     }
 
     /**
      * @return true if text is shown, false otherwise
      */
     public boolean isShowingText() {
-        return mShowText;
+        return mTextShow;
     }
 
     /**

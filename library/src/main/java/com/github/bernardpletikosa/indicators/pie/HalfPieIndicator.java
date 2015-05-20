@@ -78,8 +78,7 @@ public class HalfPieIndicator extends PieIndicator {
         canvas.drawArc(mMainRect, mStartPos, value, true, mMainPaint);
         canvas.drawArc(mHelpRect, mStartPos, mEndPos, true, mCenterPaint);
 
-        if (mShowText)
-            canvas.drawText(createText(mAnimateText), mTextPositionX, mTextPositionY, mTextPaint);
+        drawText(canvas, Math.round(mCurrentValue / Defaults.HALF_PIE_MAX_ANGLE * mValueRange));
     }
 
     @Override
@@ -193,13 +192,6 @@ public class HalfPieIndicator extends PieIndicator {
                 mCenter.y - DEFAULT_CORRECTION : mCenter.y;
 
         return new PointF(x, y);
-    }
-
-    private String createText(boolean animated) {
-        float val = mTargetValue;
-        if (animated)
-            val = (mCurrentValue / Defaults.HALF_PIE_MAX_ANGLE) * mValueRange + mMinValue;
-        return mTextPrefix + String.format("%.1f", val) + mTextSuffix;
     }
 
     private int calculateTextX() {

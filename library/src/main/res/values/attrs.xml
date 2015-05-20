@@ -10,6 +10,7 @@
         <attr name="text_size" format="dimension"/>
         <attr name="text_prefix" format="string"/>
         <attr name="text_suffix" format="string"/>
+        <attr name="text_value_decimal" format="boolean"/>
         <attr name="min_value" format="float"/>
         <attr name="max_value" format="float"/>
         <attr name="target_value" format="float"/>

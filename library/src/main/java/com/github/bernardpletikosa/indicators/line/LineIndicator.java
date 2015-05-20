@@ -87,16 +87,8 @@ public class LineIndicator extends IndicatorView {
         canvas.drawRect(mEmptyWidth, mEmptyHeight, mWidth + mEmptyWidth, mHeight + mEmptyHeight, mBackgroundPaint);
         canvas.drawRect(positions[0], positions[1], positions[2], positions[3], mMainPaint);
 
-        if (mShowText)
-            canvas.drawText(createText(mAnimateText), mTextPositionX, mTextPositionY, mTextPaint);
-    }
-
-    private String createText(boolean animated) {
-        float val = mTargetValue;
-        if (animated)
-            val = (mCurrentValue / (mDirection == Direction.LEFT_RIGHT | mDirection == Direction
-                    .RIGHT_LEFT ? mWidth : mHeight)) * mValueRange + mMinValue;
-        return mTextPrefix + String.format("%.1f", val) + mTextSuffix;
+        drawText(canvas, (mCurrentValue / (mDirection == Direction.LEFT_RIGHT || mDirection ==
+                Direction.RIGHT_LEFT ? mWidth : mHeight)) * mValueRange);
     }
 
     /**

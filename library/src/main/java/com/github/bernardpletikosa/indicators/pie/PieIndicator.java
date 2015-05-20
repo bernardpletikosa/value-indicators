@@ -74,8 +74,7 @@ public class PieIndicator extends IndicatorView {
 
         canvas.drawCircle(mCenter.x, mCenter.y, mInnerRadius, mCenterPaint);
 
-        if (mShowText)
-            canvas.drawText(createText(mAnimateText), mTextPositionX, mTextPositionY, mTextPaint);
+        drawText(canvas, mCurrentValue / Defaults.PIE_MAX_ANGLE * mValueRange);
     }
 
     /**
@@ -247,12 +246,5 @@ public class PieIndicator extends IndicatorView {
             default:
                 return mRadius > NO_VALUE ? diameter : size[0] > 0 ? size[0] : size[1];
         }
-    }
-
-    private String createText(boolean animated) {
-        float val = mTargetValue;
-        if (animated)
-            val = (mCurrentValue / Defaults.PIE_MAX_ANGLE) * mValueRange + mMinValue;
-        return mTextPrefix + String.format("%.1f", val) + mTextSuffix;
     }
 }

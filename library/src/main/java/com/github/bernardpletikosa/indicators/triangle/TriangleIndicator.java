@@ -8,7 +8,6 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
 import android.util.AttributeSet;
-import android.util.Log;
 
 import com.github.bernardpletikosa.indicators.IndicatorView;
 import com.github.bernardpletikosa.indicators.R;
@@ -104,15 +103,7 @@ public class TriangleIndicator extends IndicatorView {
         canvas.drawPath(mBackgroundPath, mBackgroundPaint);
         canvas.drawPath(mMainPath, mMainPaint);
 
-        if (mShowText)
-            canvas.drawText(createText(mAnimateText), mTextPositionX, mTextPositionY, mTextPaint);
-    }
-
-    private String createText(boolean animated) {
-        float val = mTargetValue;
-        if (animated)
-            val = (mCurrentValue / mWidth) * mValueRange + mMinValue;
-        return mTextPrefix + String.format("%.1f", val) + mTextSuffix;
+        drawText(canvas, mCurrentValue / mWidth * mValueRange);
     }
 
     /**

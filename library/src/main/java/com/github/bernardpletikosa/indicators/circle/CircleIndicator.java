@@ -6,7 +6,6 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.PointF;
 import android.util.AttributeSet;
-import android.util.Log;
 
 import com.github.bernardpletikosa.indicators.IndicatorView;
 import com.github.bernardpletikosa.indicators.R;
@@ -60,15 +59,7 @@ public class CircleIndicator extends IndicatorView {
         canvas.drawCircle(mCenter.x, mCenter.y, mRadius, mBackgroundPaint);
         canvas.drawCircle(mCenter.x, mCenter.y, mCurrentValue, mMainPaint);
 
-        if (mShowText)
-            canvas.drawText(createText(mAnimateText), mTextPositionX, mTextPositionY, mTextPaint);
-    }
-
-    private String createText(boolean animated) {
-        float val = mTargetValue;
-        if (animated)
-            val = (mCurrentValue / mRadius) * mValueRange + mMinValue;
-        return mTextPrefix + String.format("%.1f", val) + mTextSuffix;
+        drawText(canvas, mCurrentValue / mRadius * mValueRange);
     }
 
     /**

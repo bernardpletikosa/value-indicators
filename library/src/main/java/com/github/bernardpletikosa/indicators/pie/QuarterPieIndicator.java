@@ -65,8 +65,7 @@ public class QuarterPieIndicator extends HalfPieIndicator {
         canvas.drawArc(mMainRect, mStartPos, value, true, mMainPaint);
         canvas.drawArc(mHelpRect, mStartPos, mEndPos, true, mCenterPaint);
 
-        if (mShowText)
-            canvas.drawText(createText(mAnimateText), mTextPositionX, mTextPositionY, mTextPaint);
+        drawText(canvas, Math.round(mCurrentValue / Defaults.QUARTER_PIE_MAX_ANGLE * mValueRange));
     }
 
     @Override
@@ -164,13 +163,6 @@ public class QuarterPieIndicator extends HalfPieIndicator {
             float y = mCenter.y - DEFAULT_CORRECTION;
             return new PointF(x, y);
         }
-    }
-
-    private String createText(boolean animated) {
-        float val = mTargetValue;
-        if (animated)
-            val = (mCurrentValue / Defaults.QUARTER_PIE_MAX_ANGLE) * mValueRange + mMinValue;
-        return mTextPrefix + String.format("%.1f", val) + mTextSuffix;
     }
 
     private int calculateTextX() {
