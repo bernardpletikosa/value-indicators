@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
 import android.util.AttributeSet;
+import android.util.Log;
 
 import com.github.bernardpletikosa.indicators.IndicatorView;
 import com.github.bernardpletikosa.indicators.R;
@@ -110,7 +111,7 @@ public class TriangleIndicator extends IndicatorView {
     private String createText(boolean animated) {
         float val = mTargetValue;
         if (animated)
-            val = (mCurrentValue / mWidth) * mValueRange - Math.abs(mMinValue);
+            val = (mCurrentValue / mWidth) * mValueRange + mMinValue;
         return mTextPrefix + String.format("%.1f", val) + mTextSuffix;
     }
 
@@ -182,7 +183,7 @@ public class TriangleIndicator extends IndicatorView {
 
     @Override
     protected ValueAnimator.AnimatorUpdateListener getUpdateListener() {
-        final float absoluteTarget = mTargetValue + Math.abs(mMinValue);
+        final float absoluteTarget = mTargetValue - mMinValue;
 
         return new ValueAnimator.AnimatorUpdateListener() {
             @Override

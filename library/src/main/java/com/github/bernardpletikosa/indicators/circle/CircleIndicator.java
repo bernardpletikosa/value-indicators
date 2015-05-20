@@ -6,6 +6,7 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.PointF;
 import android.util.AttributeSet;
+import android.util.Log;
 
 import com.github.bernardpletikosa.indicators.IndicatorView;
 import com.github.bernardpletikosa.indicators.R;
@@ -66,7 +67,7 @@ public class CircleIndicator extends IndicatorView {
     private String createText(boolean animated) {
         float val = mTargetValue;
         if (animated)
-            val = (mCurrentValue / mRadius) * mValueRange - Math.abs(mMinValue);
+            val = (mCurrentValue / mRadius) * mValueRange + mMinValue;
         return mTextPrefix + String.format("%.1f", val) + mTextSuffix;
     }
 
@@ -95,8 +96,7 @@ public class CircleIndicator extends IndicatorView {
 
     @Override
     protected ValueAnimator.AnimatorUpdateListener getUpdateListener() {
-        final float absoluteTarget = mTargetValue + Math.abs(mMinValue);
-        mUpdateText = true;
+        final float absoluteTarget = mTargetValue - mMinValue;
 
         return new ValueAnimator.AnimatorUpdateListener() {
             @Override

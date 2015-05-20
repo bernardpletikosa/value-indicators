@@ -95,7 +95,7 @@ public class LineIndicator extends IndicatorView {
         float val = mTargetValue;
         if (animated)
             val = (mCurrentValue / (mDirection == Direction.LEFT_RIGHT | mDirection == Direction
-                    .RIGHT_LEFT ? mWidth : mHeight)) * mValueRange - Math.abs(mMinValue);
+                    .RIGHT_LEFT ? mWidth : mHeight)) * mValueRange + mMinValue;
         return mTextPrefix + String.format("%.1f", val) + mTextSuffix;
     }
 
@@ -171,7 +171,7 @@ public class LineIndicator extends IndicatorView {
 
     @Override
     protected ValueAnimator.AnimatorUpdateListener getUpdateListener() {
-        final float absoluteTarget = mTargetValue + Math.abs(mMinValue);
+        final float absoluteTarget = mTargetValue - mMinValue;
 
         return new ValueAnimator.AnimatorUpdateListener() {
             @Override

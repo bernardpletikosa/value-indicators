@@ -71,7 +71,7 @@ public class QuarterPieIndicator extends HalfPieIndicator {
 
     @Override
     protected ValueAnimator.AnimatorUpdateListener getUpdateListener() {
-        final float absoluteTarget = mTargetValue + Math.abs(mMinValue);
+        final float absoluteTarget = mTargetValue - mMinValue;
 
         return new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -116,8 +116,7 @@ public class QuarterPieIndicator extends HalfPieIndicator {
         // Parent method, not used.
     }
 
-    @Override
-    float calculateSize(int modeSpec, int... size) {
+    @Override float calculateSize(int modeSpec, int... size) {
         int mode = MeasureSpec.getMode(modeSpec);
 
         switch (mode) {
@@ -170,7 +169,7 @@ public class QuarterPieIndicator extends HalfPieIndicator {
     private String createText(boolean animated) {
         float val = mTargetValue;
         if (animated)
-            val = (mCurrentValue / Defaults.QUARTER_PIE_MAX_ANGLE) * mValueRange - Math.abs(mMinValue);
+            val = (mCurrentValue / Defaults.QUARTER_PIE_MAX_ANGLE) * mValueRange + mMinValue;
         return mTextPrefix + String.format("%.1f", val) + mTextSuffix;
     }
 

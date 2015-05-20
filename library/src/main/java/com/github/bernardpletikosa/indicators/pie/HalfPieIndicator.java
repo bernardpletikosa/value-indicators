@@ -84,7 +84,7 @@ public class HalfPieIndicator extends PieIndicator {
 
     @Override
     protected ValueAnimator.AnimatorUpdateListener getUpdateListener() {
-        final float absoluteTarget = mTargetValue + Math.abs(mMinValue);
+        final float absoluteTarget = mTargetValue - mMinValue;
 
         return new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -198,7 +198,7 @@ public class HalfPieIndicator extends PieIndicator {
     private String createText(boolean animated) {
         float val = mTargetValue;
         if (animated)
-            val = (mCurrentValue / Defaults.HALF_PIE_MAX_ANGLE) * mValueRange - Math.abs(mMinValue);
+            val = (mCurrentValue / Defaults.HALF_PIE_MAX_ANGLE) * mValueRange + mMinValue;
         return mTextPrefix + String.format("%.1f", val) + mTextSuffix;
     }
 

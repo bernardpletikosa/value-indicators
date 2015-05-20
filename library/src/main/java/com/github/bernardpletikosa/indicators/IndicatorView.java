@@ -48,7 +48,6 @@ public abstract class IndicatorView extends View {
     protected int mTextSize = 100;
     protected String mTextPrefix = "";
     protected String mTextSuffix = "";
-    protected boolean mUpdateText = false;
 
     protected int mAnimationDuration;
     protected Interpolator mInterpolator;
@@ -79,11 +78,9 @@ public abstract class IndicatorView extends View {
     }
 
     private void setXmlValues(TypedArray array) {
-        mMinValue = array.getFloat(R.styleable.Indicators_min_value, DEFAULT_MIN_VALUE);
-        mMaxValue = array.getFloat(R.styleable.Indicators_max_value, DEFAULT_MAX_VALUE);
-
-        checkRange(mMinValue, mMaxValue);
-        mValueRange = Math.abs(mMaxValue - mMinValue);
+        float min = array.getFloat(R.styleable.Indicators_min_value, DEFAULT_MIN_VALUE);
+        float max = array.getFloat(R.styleable.Indicators_max_value, DEFAULT_MAX_VALUE);
+        setRange(min, max);
 
         mTargetValue = array.getFloat(R.styleable.Indicators_target_value, NO_VALUE);
         mAnimationDuration = array.getInt(R.styleable.Indicators_animation_duration, DEFAULT_ANIM_DURATION);
@@ -135,7 +132,7 @@ public abstract class IndicatorView extends View {
      * @param minValue minimum value to display
      * @param maxValue maximum value to display
      */
-    public void setRange(int minValue, int maxValue) throws IllegalArgumentException {
+    public void setRange(float minValue, float maxValue) throws IllegalArgumentException {
         checkRange(minValue, maxValue);
 
         mMinValue = mTargetValue = minValue;

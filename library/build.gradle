@@ -7,7 +7,7 @@ android {
     defaultConfig {
         minSdkVersion 12
         targetSdkVersion 22
-        versionName "1.0.3"
+        versionName "1.0.4-SNAPSHOT"
     }
     buildTypes {
         release {
