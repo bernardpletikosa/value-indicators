@@ -26,6 +26,7 @@
             indicators:max_value="20"
             indicators:text_color="@color/text_color"
             indicators:text_size="25sp"
+            indicators:text_value_decimal="true"
             indicators:triangle_direction="left_right"/>
 
         <com.github.bernardpletikosa.indicators.circle.CircleIndicator

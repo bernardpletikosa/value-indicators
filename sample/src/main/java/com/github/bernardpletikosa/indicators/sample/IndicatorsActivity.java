@@ -40,7 +40,7 @@ public class IndicatorsActivity extends Activity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        int step = (int) (30 * new Random().nextFloat()) - 10;
+                        int step = (int) (40 * new Random().nextFloat()) - 10;
 
                         triangle.indicate(step);
                         circle.indicate(step);

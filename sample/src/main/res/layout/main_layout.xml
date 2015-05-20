@@ -26,6 +26,7 @@
             indicators:text_prefix=""
             indicators:text_size="25sp"
             indicators:text_suffix=""
+            indicators:text_value_decimal="true"
             indicators:triangle_direction="left_right"
             indicators:triangle_height="100dp"
             indicators:triangle_width="200dp"/>
@@ -41,7 +42,6 @@
             indicators:main_color="@color/main"
             indicators:max_value="20"
             indicators:min_value="-10"
-            indicators:text_animate="false"
             indicators:text_color="@color/text_color"
             indicators:text_size="25sp"/>
 
