@@ -26,7 +26,7 @@ Add the following to your build.gradle file:
         mavenCentral()
     }
     dependencies {
-        compile 'com.github.bernardpletikosa:value-indicators:1.0.3'
+        compile 'com.github.bernardpletikosa:value-indicators:1.0.4'
     }
 
 Or user [jar file](https://oss.sonatype.org/content/repositories/releases/com/github/bernardpletikosa/value-indicators/1.0.1/value-indicators-1.0.1-sources.jar)
@@ -43,6 +43,17 @@ animation duration and indicator colors.
     <attr name="max_value" format="float"/>
     <attr name="target_value" format="float"/>
     <attr name="animation_duration" format="integer"/>
+
+For textual value indication on top of indicator use attributes below. Text is shown by default
+and can be removed by setting **text_show** to false. All xml attributes have appropriate methods.
+
+    <attr name="text_show" format="boolean"/>
+    <attr name="text_animate" format="boolean"/>
+    <attr name="text_color" format="color"/>
+    <attr name="text_size" format="dimension"/>
+    <attr name="text_prefix" format="string"/>
+    <attr name="text_suffix" format="string"/>
+    <attr name="text_value_decimal" format="boolean"/>
 
 For every indicator type there are special values
 
