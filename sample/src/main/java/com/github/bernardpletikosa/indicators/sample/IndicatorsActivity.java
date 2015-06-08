@@ -41,7 +41,6 @@ public class IndicatorsActivity extends Activity {
                     @Override
                     public void run() {
                         int step = (int) (30 * new Random().nextFloat()) - 10;
-
                         triangle.indicate(step);
                         circle.indicate(step);
                         line.indicate(step);
@@ -51,7 +50,7 @@ public class IndicatorsActivity extends Activity {
                     }
                 });
             }
-        }, 0, 1, TimeUnit.SECONDS);
+        }, 0, 3, TimeUnit.SECONDS);
     }
 
     //How to create an indicator
