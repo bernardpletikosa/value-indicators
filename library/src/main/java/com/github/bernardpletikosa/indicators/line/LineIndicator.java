@@ -87,8 +87,7 @@ public class LineIndicator extends IndicatorView {
         canvas.drawRect(mEmptyWidth, mEmptyHeight, mWidth + mEmptyWidth, mHeight + mEmptyHeight, mBackgroundPaint);
         canvas.drawRect(positions[0], positions[1], positions[2], positions[3], mMainPaint);
 
-        drawText(canvas, (mCurrentValue / (mDirection == Direction.LEFT_RIGHT || mDirection ==
-                Direction.RIGHT_LEFT ? mWidth : mHeight)) * mValueRange);
+        drawText(canvas, calculateText());
     }
 
     /**
@@ -212,6 +211,20 @@ public class LineIndicator extends IndicatorView {
             default:
                 return new float[]{emptyWidth, mCurrentValue + emptyHeight, mWidth + emptyWidth,
                         mHeight + emptyHeight};
+        }
+    }
+
+    private float calculateText() {
+        switch (mDirection) {
+            case LEFT_RIGHT:
+                return mCurrentValue / mWidth * mValueRange;
+            case RIGHT_LEFT:
+                return (1 - mCurrentValue / mWidth) * mValueRange;
+            case TOP_BOTTOM:
+                return mCurrentValue / mHeight * mValueRange;
+            case BOTTOM_TOP:
+            default:
+                return (1 - mCurrentValue / mHeight) * mValueRange;
         }
     }
 }

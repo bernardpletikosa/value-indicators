@@ -103,7 +103,8 @@ public class TriangleIndicator extends IndicatorView {
         canvas.drawPath(mBackgroundPath, mBackgroundPaint);
         canvas.drawPath(mMainPath, mMainPaint);
 
-        drawText(canvas, mCurrentValue / mWidth * mValueRange);
+        drawText(canvas, (mDirection == Direction.LEFT_RIGHT ? mCurrentValue / mWidth :
+                1 - mCurrentValue / mWidth) * mValueRange);
     }
 
     /**
