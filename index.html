@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Value-indicators by bernardpletikosa</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Value-indicators</h1>
+        <h2>Android value indicator library</h2>
+        <a href="https://github.com/bernardpletikosa/value-indicators" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a id="value-indicators" class="anchor" href="#value-indicators" aria-hidden="true"><span class="octicon octicon-link"></span></a>Value Indicators</h1>
+
+<p>Android Library for graphic value representation.</p>
+
+<p><img src="gif/all.gif"></p>
+
+<h2>
+<a id="modules" class="anchor" href="#modules" aria-hidden="true"><span class="octicon octicon-link"></span></a>Modules</h2>
+
+<ul>
+<li>
+<strong>library</strong> - library code.</li>
+<li>
+<strong>sample</strong> - simple app to show how to use different indicators via xml or code.</li>
+<li>
+<strong>showcase</strong> - simple app to show how different parameters affect indicators display.</li>
+</ul>
+
+<h2>
+<a id="types" class="anchor" href="#types" aria-hidden="true"><span class="octicon octicon-link"></span></a>Types</h2>
+
+<ul>
+<li><strong>Circle</strong></li>
+<li><strong>Line</strong></li>
+<li><strong>Pie</strong></li>
+<li><strong>Half Pie</strong></li>
+<li><strong>Quarter Pie</strong></li>
+<li><strong>Triangle</strong></li>
+</ul>
+
+<p><img src="gif/circle.gif" height="250" width="140">.<img src="gif/line.gif" height="250" width="140">.<img src="gif/triangle.gif" height="250" width="140">
+<img src="gif/pie.gif" height="250" width="140">.<img src="gif/half_pie.gif" height="250" width="140">.<img src="gif/quarter_pie.gif" height="250" width="140"></p>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>Add the following to your build.gradle file:</p>
+
+<pre><code>repositories {
+    mavenCentral()
+}
+dependencies {
+    compile 'com.github.bernardpletikosa:value-indicators:1.0.4'
+}
+</code></pre>
+
+<p>Or user <a href="https://oss.sonatype.org/content/repositories/releases/com/github/bernardpletikosa/value-indicators/1.0.1/value-indicators-1.0.1-sources.jar">jar file</a></p>
+
+<h3>
+<a id="usage-overview" class="anchor" href="#usage-overview" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage overview</h3>
+
+<p>Indicator can be set up in code or in xml.
+For all indicator types there are some common attributes: minimal and maximal value to indicate, 
+animation duration and indicator colors.</p>
+
+<pre><code>&lt;attr name="main_color" format="color"/&gt;
+&lt;attr name="background_color" format="color"/&gt;
+&lt;attr name="min_value" format="float"/&gt;
+&lt;attr name="max_value" format="float"/&gt;
+&lt;attr name="target_value" format="float"/&gt;
+&lt;attr name="animation_duration" format="integer"/&gt;
+</code></pre>
+
+<p>For textual value indication on top of indicator use attributes below. Text is shown by default
+and can be removed by setting <strong>text_show</strong> to false. All xml attributes have appropriate methods.</p>
+
+<pre><code>&lt;attr name="text_show" format="boolean"/&gt;
+&lt;attr name="text_animate" format="boolean"/&gt;
+&lt;attr name="text_color" format="color"/&gt;
+&lt;attr name="text_size" format="dimension"/&gt;
+&lt;attr name="text_prefix" format="string"/&gt;
+&lt;attr name="text_suffix" format="string"/&gt;
+&lt;attr name="text_value_decimal" format="boolean"/&gt;
+</code></pre>
+
+<p>However, there are special values for every indicator type.</p>
+
+<h5>
+<a id="circle-indicator" class="anchor" href="#circle-indicator" aria-hidden="true"><span class="octicon octicon-link"></span></a>Circle indicator</h5>
+
+<pre><code>&lt;attr name="circle_radius" format="dimension"/&gt;
+</code></pre>
+
+<h5>
+<a id="line-indicator" class="anchor" href="#line-indicator" aria-hidden="true"><span class="octicon octicon-link"></span></a>Line indicator</h5>
+
+<pre><code>&lt;attr name="line_width" format="dimension"/&gt;
+&lt;attr name="line_height" format="dimension"/&gt;
+&lt;attr name="line_direction" format="enum"&gt;
+    &lt;enum name="left_right" value="2"/&gt;
+    &lt;enum name="right_left" value="3"/&gt;
+    &lt;enum name="top_bottom" value="4"/&gt;
+    &lt;enum name="bottom_top" value="5"/&gt;
+&lt;/attr&gt;
+</code></pre>
+
+<h5>
+<a id="pie-indicator" class="anchor" href="#pie-indicator" aria-hidden="true"><span class="octicon octicon-link"></span></a>Pie indicator</h5>
+
+<pre><code>&lt;attr name="pie_radius" format="dimension"/&gt;
+&lt;attr name="pie_center_paint" format="color"/&gt;
+&lt;attr name="pie_inner_radius" format="integer"/&gt;
+&lt;attr name="pie_start_angle" format="integer"/&gt;
+&lt;attr name="pie_direction" format="enum"&gt;
+    &lt;enum name="clockwise" value="0"/&gt;
+    &lt;enum name="counter_clockwise" value="1"/&gt;
+&lt;/attr&gt;
+</code></pre>
+
+<h5>
+<a id="halfpie-indicator" class="anchor" href="#halfpie-indicator" aria-hidden="true"><span class="octicon octicon-link"></span></a>HalfPie indicator</h5>
+
+<pre><code>&lt;attr name="half_pie_orientation" format="enum"&gt;
+    &lt;enum name="east" value="0"/&gt;
+    &lt;enum name="west" value="1"/&gt;
+    &lt;enum name="north" value="2"/&gt;
+    &lt;enum name="south" value="3"/&gt;
+&lt;/attr&gt;
+</code></pre>
+
+<h5>
+<a id="quarterpie-indicator" class="anchor" href="#quarterpie-indicator" aria-hidden="true"><span class="octicon octicon-link"></span></a>QuarterPie indicator</h5>
+
+<pre><code>&lt;attr name="quarter_pie_orientation" format="enum"&gt;
+    &lt;enum name="north_east" value="4"/&gt;
+    &lt;enum name="south_east" value="5"/&gt;
+    &lt;enum name="north_west" value="6"/&gt;
+    &lt;enum name="south_west" value="7"/&gt;
+&lt;/attr&gt;
+</code></pre>
+
+<h3>
+<a id="usage-examples" class="anchor" href="#usage-examples" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage Examples</h3>
+
+<p>For example, Pie indicator can be set like this</p>
+
+<pre><code>&lt;com.github.bernardpletikosa.indicators.pie.PieIndicator
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    indicators:main_color="@color/main"
+    indicators:background_color="@color/background"
+    indicators:animation_duration="500"
+    indicators:min_value="0"
+    indicators:max_value="20"
+    indicators:pie_center_paint="@color/app_background"
+    indicators:pie_radius="100dp"
+    indicators:pie_inner_radius="70"
+    indicators:pie_start_angle="0"
+    indicators:pie_direction="clockwise"/&gt;
+</code></pre>
+
+<p>or like this</p>
+
+<pre><code>final PieIndicator pie = (PieIndicator) findViewById(R.id.pie);
+pie.setRange(0, 20); //min and max value, can be negative
+pie.setAnimationDuration(500); //default  value is 500
+pie.setMainColor(getResources().getColor(R.color.main));
+pie.setBackGroundColor(getResources().getColor(R.color.background));
+pie.setAnimationListener(null);
+pie.setInterpolator(new AccelerateDecelerateInterpolator());
+pie.setCenterPaint(getResources().getColor(R.color.center));
+pie.setDirection(Direction.CLOCKWISE); //indication direction CLOCKWISE | COUNTER_CLOCKWISE
+pie.setRadius(SizeUnit.DP, 100);
+pie.setInnerRadius(70); //percentage of total radius
+pie.setStartingAngle(0); //indication start
+</code></pre>
+
+<p>For every indicator type there are special values that can change indicator looks.</p>
+
+<h4>
+<a id="circle-indicator-1" class="anchor" href="#circle-indicator-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Circle indicator</h4>
+
+<p>Circle indicator is pretty straightforward.</p>
+
+<p><img src="gif/circle.gif" height="300" width="170"></p>
+
+<h4>
+<a id="line-indicator-1" class="anchor" href="#line-indicator-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Line indicator</h4>
+
+<p>For line indicator <em>line_direction</em> attribute is very important. 
+Image below shows all directions <em>left_right, right_left, top_bottom, bottom_top</em>, respectively.</p>
+
+<p><img src="gif/line.gif" height="300" width="170"></p>
+
+<h4>
+<a id="pie-indicator-1" class="anchor" href="#pie-indicator-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Pie indicator</h4>
+
+<p>Pie indicators can be full or empty. 
+Radius of empty space <em>pie_inner_radius</em> is given as a percentage of total radius <em>pie_radius</em>.
+Color of empty space can be set via <em>pie_center_paint</em> attribute.
+All pie indicators have <em>pie_direction</em> attribute that shows direction of animation which can be 
+CLOCKWISE or COUNTER_CLOCKWISE.
+Pie indicator specific attribute <em>pie_start_angle</em> is used to shift indication start to any angle.</p>
+
+<p><img src="gif/pie.gif" height="300" width="170"></p>
+
+<h4>
+<a id="halfpie-indicator-1" class="anchor" href="#halfpie-indicator-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>HalfPie indicator</h4>
+
+<p>The only difference in attributes between Pie and HalfPie is <em>half_pie_orientation</em>. 
+Depending on orientation <em>north, south, east, west</em> this indicator will have different 
+appearances as shown below.
+ Just for example second indicator's <em>pie_inner_radius</em> attribute is set to 0.</p>
+
+<p><img src="gif/half_pie.gif" height="300" width="170"></p>
+
+<h4>
+<a id="quarterpie-indicator-1" class="anchor" href="#quarterpie-indicator-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>QuarterPie indicator</h4>
+
+<p>QuarterPie also has a special <em>quarter_pie_orientation</em> attribute that can be <em>north_west,
+south_west, north_east, south_east</em> like on image below. HalfPie also can be full or empty.</p>
+
+<p><img src="gif/quarter_pie.gif" height="300" width="170"></p>
+
+<h4>
+<a id="triangle-indicator" class="anchor" href="#triangle-indicator" aria-hidden="true"><span class="octicon octicon-link"></span></a>Triangle indicator</h4>
+
+<p>Triangle orientation can be <em>left_right, right_left</em> like on image below. </p>
+
+<p><img src="gif/triangle.gif" height="300" width="170"></p>
+
+<h2>
+<a id="special-thanks" class="anchor" href="#special-thanks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Special thanks</h2>
+
+<p><a href="https://bitbucket.org/danielnadeau/holographlibrary/overview">Daniel Nadeau</a> for inspiration</p>
+
+<p><a href="https://github.com/chrisbanes/gradle-mvn-push">Chris Banes</a> for gradle-mvn-push</p>
+
+<p><a href="https://github.com/hudomju">Hugo Doménech Juárez</a> for word of advice</p>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/bernardpletikosa/value-indicators/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/bernardpletikosa/value-indicators/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/bernardpletikosa/value-indicators"></a> is maintained by <a href="https://github.com/bernardpletikosa">bernardpletikosa</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
