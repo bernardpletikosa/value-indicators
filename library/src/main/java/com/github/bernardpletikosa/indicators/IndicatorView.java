@@ -19,6 +19,9 @@ import android.view.animation.Interpolator;
 
 import com.github.bernardpletikosa.indicators.consts.SizeUnit;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 import static android.animation.ValueAnimator.AnimatorUpdateListener;
 import static com.github.bernardpletikosa.indicators.consts.Defaults.DEFAULT_ANIM_DURATION;
 import static com.github.bernardpletikosa.indicators.consts.Defaults.DEFAULT_MAX_VALUE;
@@ -138,7 +141,7 @@ public abstract class IndicatorView extends View {
     public void setRange(float minValue, float maxValue) throws IllegalArgumentException {
         checkRange(minValue, maxValue);
 
-        mMinValue = mTargetValue = minValue;
+        mMinValue = minValue;
         mMaxValue = maxValue;
         mValueRange = Math.abs(mMaxValue - mMinValue);
     }
@@ -240,7 +243,7 @@ public abstract class IndicatorView extends View {
 
         float val = mTextAnimate ? currentValue + mMinValue : mTargetValue;
         if (mTextValueDecimal) {
-            canvas.drawText(mTextPrefix + String.format("%.1f", val) + mTextSuffix,
+            canvas.drawText(mTextPrefix + String.format("%.1f", new BigDecimal(val).setScale(1, RoundingMode.HALF_EVEN)) + mTextSuffix,
                     mTextPositionX, mTextPositionY, mTextPaint);
         } else
             canvas.drawText(mTextPrefix + (int) val + mTextSuffix,

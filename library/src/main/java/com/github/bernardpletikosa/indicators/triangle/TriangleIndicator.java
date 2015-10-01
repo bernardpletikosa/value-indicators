@@ -175,7 +175,7 @@ public class TriangleIndicator extends IndicatorView {
 
     @Override
     protected ValueAnimator.AnimatorUpdateListener getUpdateListener() {
-        final float absoluteTarget = mTargetValue - mMinValue;
+        final float absoluteTarget = mTargetValue + Math.abs(mMinValue);
 
         return new ValueAnimator.AnimatorUpdateListener() {
             @Override

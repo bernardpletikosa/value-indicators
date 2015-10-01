@@ -78,12 +78,12 @@ public class HalfPieIndicator extends PieIndicator {
         canvas.drawArc(mMainRect, mStartPos, value, true, mMainPaint);
         canvas.drawArc(mHelpRect, mStartPos, mEndPos, true, mCenterPaint);
 
-        drawText(canvas, Math.round(mCurrentValue / Defaults.HALF_PIE_MAX_ANGLE * mValueRange));
+        drawText(canvas,mCurrentValue / Defaults.HALF_PIE_MAX_ANGLE * mValueRange);
     }
 
     @Override
     protected ValueAnimator.AnimatorUpdateListener getUpdateListener() {
-        final float absoluteTarget = mTargetValue - mMinValue;
+        final float absoluteTarget = mTargetValue + Math.abs(mMinValue);
 
         return new ValueAnimator.AnimatorUpdateListener() {
             @Override

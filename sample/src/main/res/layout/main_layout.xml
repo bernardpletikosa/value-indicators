@@ -21,11 +21,12 @@
             indicators:background_color="@color/background"
             indicators:main_color="@color/main"
             indicators:max_value="20"
-            indicators:min_value="-10"
+            indicators:min_value="0"
             indicators:text_color="@color/text_color"
             indicators:text_prefix=""
             indicators:text_size="25sp"
             indicators:text_suffix=""
+            indicators:text_value_decimal="true"
             indicators:triangle_direction="left_right"
             indicators:triangle_height="100dp"
             indicators:triangle_width="200dp"/>
@@ -40,9 +41,10 @@
             indicators:circle_radius="100dp"
             indicators:main_color="@color/main"
             indicators:max_value="20"
-            indicators:min_value="-10"
+            indicators:min_value="0"
             indicators:text_color="@color/text_color"
-            indicators:text_size="25sp"/>
+            indicators:text_size="25sp"
+            indicators:text_value_decimal="true"/>
 
         <com.github.bernardpletikosa.indicators.line.LineIndicator
             android:id="@+id/line"
@@ -53,12 +55,13 @@
             indicators:background_color="@color/background"
             indicators:line_direction="left_right"
             indicators:line_height="50dp"
-            indicators:line_width="200dp"
+            indicators:line_width="300dp"
             indicators:main_color="@color/main"
             indicators:max_value="20"
-            indicators:min_value="-10"
+            indicators:min_value="0"
             indicators:text_color="@color/text_color"
-            indicators:text_size="30sp"/>
+            indicators:text_size="30sp"
+            indicators:text_value_decimal="true"/>
 
         <com.github.bernardpletikosa.indicators.pie.PieIndicator
             android:id="@+id/pie"
@@ -69,13 +72,14 @@
             indicators:background_color="@color/background"
             indicators:main_color="@color/main"
             indicators:max_value="20"
-            indicators:min_value="-10"
+            indicators:min_value="0"
             indicators:pie_center_paint="@color/app_background"
             indicators:pie_direction="clockwise"
             indicators:pie_inner_radius="70"
             indicators:pie_radius="100dp"
             indicators:text_color="@color/background"
-            indicators:text_size="35sp"/>
+            indicators:text_size="35sp"
+            indicators:text_value_decimal="true"/>
 
         <com.github.bernardpletikosa.indicators.pie.HalfPieIndicator
             android:id="@+id/pie_half"
@@ -87,13 +91,14 @@
             indicators:half_pie_orientation="north"
             indicators:main_color="@color/main"
             indicators:max_value="20"
-            indicators:min_value="-10"
+            indicators:min_value="0"
             indicators:pie_center_paint="@color/app_background"
             indicators:pie_direction="counter_clockwise"
             indicators:pie_inner_radius="70"
             indicators:pie_radius="100dp"
             indicators:text_color="@color/background"
-            indicators:text_size="35sp"/>
+            indicators:text_size="35sp"
+            indicators:text_value_decimal="true"/>
 
         <com.github.bernardpletikosa.indicators.pie.QuarterPieIndicator
             android:id="@+id/pie_quarter"
@@ -104,13 +109,14 @@
             indicators:background_color="@color/background"
             indicators:main_color="@color/main"
             indicators:max_value="20"
-            indicators:min_value="-10"
+            indicators:min_value="0"
             indicators:pie_center_paint="@color/app_background"
             indicators:pie_direction="counter_clockwise"
             indicators:pie_inner_radius="70"
             indicators:pie_radius="100dp"
             indicators:quarter_pie_orientation="north_west"
             indicators:text_color="@color/background"
-            indicators:text_size="35sp"/>
+            indicators:text_size="35sp"
+            indicators:text_value_decimal="true"/>
     </LinearLayout>
 </ScrollView>

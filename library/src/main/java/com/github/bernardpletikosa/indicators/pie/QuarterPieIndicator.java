@@ -65,12 +65,12 @@ public class QuarterPieIndicator extends HalfPieIndicator {
         canvas.drawArc(mMainRect, mStartPos, value, true, mMainPaint);
         canvas.drawArc(mHelpRect, mStartPos, mEndPos, true, mCenterPaint);
 
-        drawText(canvas, Math.round(mCurrentValue / Defaults.QUARTER_PIE_MAX_ANGLE * mValueRange));
+        drawText(canvas, mCurrentValue / Defaults.QUARTER_PIE_MAX_ANGLE * mValueRange);
     }
 
     @Override
     protected ValueAnimator.AnimatorUpdateListener getUpdateListener() {
-        final float absoluteTarget = mTargetValue - mMinValue;
+        final float absoluteTarget = mTargetValue + Math.abs(mMinValue);
 
         return new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -175,7 +175,8 @@ public class QuarterPieIndicator extends HalfPieIndicator {
             case SOUTH_WEST:
                 mTextPaint.setTextAlign(Paint.Align.RIGHT);
                 return (int) mCenter.x;
-            default: return (int) mCenter.x;
+            default:
+                return (int) mCenter.x;
         }
     }
 
@@ -187,7 +188,8 @@ public class QuarterPieIndicator extends HalfPieIndicator {
             case SOUTH_EAST:
             case SOUTH_WEST:
                 return (int) ((int) mCenter.y + mTextPaint.getTextSize());
-            default: return (int) mCenter.y;
+            default:
+                return (int) mCenter.y;
         }
     }
 }
