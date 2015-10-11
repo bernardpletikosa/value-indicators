@@ -31,10 +31,10 @@ Add the following to your build.gradle file:
         mavenCentral()
     }
     dependencies {
-        compile 'com.github.bernardpletikosa:value-indicators:1.0.4'
+        compile 'com.github.bernardpletikosa:value-indicators:1.0.5'
     }
 
-Or user [jar file](https://oss.sonatype.org/content/repositories/releases/com/github/bernardpletikosa/value-indicators/1.0.1/value-indicators-1.0.1-sources.jar)
+Or user [jar file](https://oss.sonatype.org/content/repositories/releases/com/github/bernardpletikosa/value-indicators/1.0.5/value-indicators-1.0.5-sources.jar)
 
 ###Usage overview
 

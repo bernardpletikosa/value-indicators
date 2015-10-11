@@ -26,7 +26,7 @@ android.libraryVariants.all { variant ->
     task("javadoc${variant.name.capitalize()}", type: Javadoc) {
         description "Generates Javadoc for $variant.name."
         source = variant.javaCompile.source
-        ext.androidJar = files(plugins.findPlugin("com.android.library").getBootClasspath())
+        ext.androidJar = files("${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar")
         classpath = files(variant.javaCompile.classpath.files) + ext.androidJar
         options.memberLevel = JavadocMemberLevel.PUBLIC
         options.links("http://docs.oracle.com/javase/7/docs/api/");
