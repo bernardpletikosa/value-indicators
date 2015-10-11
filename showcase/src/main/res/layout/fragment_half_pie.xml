@@ -134,5 +134,4 @@
         app:pie_center_paint="@color/app_background"
         app:animation_duration="300"/>
 
-
 </LinearLayout>

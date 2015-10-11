@@ -15,6 +15,7 @@ import com.github.bernardpletikosa.indicators.consts.Direction;
 import com.github.bernardpletikosa.indicators.consts.SizeUnit;
 
 import static com.github.bernardpletikosa.indicators.consts.Defaults.NO_VALUE;
+import static com.github.bernardpletikosa.indicators.consts.Direction.LEFT_RIGHT;
 
 public class TriangleIndicator extends IndicatorView {
 
@@ -100,10 +101,10 @@ public class TriangleIndicator extends IndicatorView {
         mMainPath.lineTo(positions[2].x, positions[2].y);
         mMainPath.close();
 
-        canvas.drawPath(mBackgroundPath, mBackgroundPaint);
-        canvas.drawPath(mMainPath, mMainPaint);
+        canvas.drawPath(mBackgroundPath, mDirection == LEFT_RIGHT ? mBackgroundPaint : mMainPaint);
+        canvas.drawPath(mMainPath, mDirection == LEFT_RIGHT ? mMainPaint : mBackgroundPaint);
 
-        drawText(canvas, (mDirection == Direction.LEFT_RIGHT ? mCurrentValue / mWidth :
+        drawText(canvas, (mDirection == LEFT_RIGHT ? mCurrentValue / mWidth :
                 1 - mCurrentValue / mWidth) * mValueRange);
     }
 
@@ -120,7 +121,7 @@ public class TriangleIndicator extends IndicatorView {
      */
     public void setDirection(Direction direction) throws IllegalArgumentException {
         checkArgument(direction, "direction");
-        if (direction != Direction.LEFT_RIGHT && direction != Direction.RIGHT_LEFT)
+        if (direction != LEFT_RIGHT && direction != Direction.RIGHT_LEFT)
             throw new IllegalArgumentException("Direction " + direction.name() + " not supported.");
 
         mDirection = direction;
@@ -231,8 +232,7 @@ public class TriangleIndicator extends IndicatorView {
         switch (mDirection) {
             case RIGHT_LEFT:
                 return new PointF[]{new PointF(mEmptyWidth + mWidth, mEmptyHeight + mHeight),
-                        new PointF(mEmptyWidth + mWidth - mCurrentValue,
-                                mEmptyHeight + mHeight * (1 - mCurrentValue / mWidth)),
+                        new PointF(mEmptyWidth + mWidth - mCurrentValue, mEmptyHeight + mHeight * (1 - mCurrentValue / mWidth)),
                         new PointF(mEmptyWidth + mWidth - mCurrentValue, mEmptyHeight + mHeight)};
             case LEFT_RIGHT:
                 return new PointF[]{new PointF(mEmptyWidth, mEmptyHeight + mHeight),

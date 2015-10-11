@@ -59,6 +59,13 @@ public class HalfPieIndicator extends PieIndicator {
 
         mWidth = calculateSize(widthMeasureSpec, width, height);
         mHeight = calculateSize(heightMeasureSpec, height, width);
+        if (mOrientation == NORTH || mOrientation == SOUTH) {
+            mWidth = mWidth == 0 ? 2 * mHeight : mWidth;
+            mHeight = mHeight == 0 || mHeight == mWidth ? mWidth / 2 : mHeight;
+        } else {
+            mWidth = mWidth == 0 ? mHeight / 2 : mWidth;
+            mHeight = mHeight == 0 || mHeight == mWidth ? 2 * mWidth : mHeight;
+        }
 
         calculateCenter();
         calculateRadius();
@@ -78,7 +85,7 @@ public class HalfPieIndicator extends PieIndicator {
         canvas.drawArc(mMainRect, mStartPos, value, true, mMainPaint);
         canvas.drawArc(mHelpRect, mStartPos, mEndPos, true, mCenterPaint);
 
-        drawText(canvas,mCurrentValue / Defaults.HALF_PIE_MAX_ANGLE * mValueRange);
+        drawText(canvas, mCurrentValue / Defaults.HALF_PIE_MAX_ANGLE * mValueRange);
     }
 
     @Override
@@ -153,17 +160,16 @@ public class HalfPieIndicator extends PieIndicator {
             case EXACTLY:
                 return size[0];
             case AT_MOST:
-                return mRadius > NO_VALUE ? Math.min(diameter,
-                        size[0]) : size[0] > 0 ? size[0] : size[1];
+                return mRadius <= 0 ? (size[0] > 0 ? size[0] : size[1]) : Math.min(diameter, size[0]);
             default:
-                return mRadius > NO_VALUE ? diameter : size[0] > 0 ? size[0] : size[1];
+                return mRadius <= 0 ? (size[0] > 0 ? size[0] : size[1]) : diameter;
         }
     }
 
     private void calculateCenter() {
-        final float halfW = mWidth / 2;
-        final float halfR = mRadius / 2;
-        final float halfH = mHeight / 2;
+        final float halfW = mWidth == 0 ? (mOrientation == NORTH || mOrientation == SOUTH) ? mHeight : mHeight / 2 : mWidth / 2;
+        final float halfH = mHeight == 0 ? (mOrientation == NORTH || mOrientation == SOUTH) ? mWidth / 4 : mWidth : mHeight / 2;
+        final float halfR = Math.min(halfH, halfW);
 
         if (mOrientation == NORTH || mOrientation == SOUTH) {
             mCenter.x = halfW;
@@ -205,15 +211,19 @@ public class HalfPieIndicator extends PieIndicator {
             case NORTH:
             case SOUTH:
                 mTextPaint.setTextAlign(Paint.Align.CENTER);
-            default: return (int) mCenter.x;
+            default:
+                return (int) mCenter.x;
         }
     }
 
     private int calculateTextY() {
         switch (mOrientation) {
-            case NORTH: return (int) mCenter.y;
-            case SOUTH: return (int) (mCenter.y + mTextPaint.getTextSize());
-            default: return (int) mCenter.y;
+            case NORTH:
+                return (int) mCenter.y;
+            case SOUTH:
+                return (int) (mCenter.y + mTextPaint.getTextSize());
+            default:
+                return (int) mCenter.y;
         }
     }
 }

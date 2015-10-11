@@ -39,12 +39,12 @@ public class LineIndicator extends IndicatorView {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int w, h;
         mTotalWidth = MeasureSpec.getSize(widthMeasureSpec);
         mTotalHeight = MeasureSpec.getSize(heightMeasureSpec);
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
 
+        int w, h;
         if (widthMode == MeasureSpec.EXACTLY)
             w = mTotalWidth;
         else if (widthMode == MeasureSpec.AT_MOST) {
@@ -65,8 +65,8 @@ public class LineIndicator extends IndicatorView {
             mTotalHeight = mHeight;
         }
 
-        if (mWidth <= NO_VALUE) mWidth = w;
-        if (mHeight <= NO_VALUE) mHeight = h;
+        if (mWidth <= 0) mWidth = w;
+        if (mHeight <= 0) mHeight = h;
 
         setMeasuredDimension(w, h);
         setEmptyMeasures();
@@ -100,7 +100,6 @@ public class LineIndicator extends IndicatorView {
      * <li>{@link Direction#BOTTOM_TOP}</li>
      * <li>{@link Direction#TOP_BOTTOM}</li>
      * </ul>
-     * XML parameter {@link}
      * @param direction see possible values
      */
     public void setDirection(Direction direction) throws IllegalArgumentException {
@@ -203,14 +202,12 @@ public class LineIndicator extends IndicatorView {
             case LEFT_RIGHT:
                 return new float[]{emptyWidth, emptyHeight, mCurrentValue + emptyWidth, mHeight + emptyHeight};
             case RIGHT_LEFT:
-                return new float[]{mCurrentValue + emptyWidth, emptyHeight, mWidth + emptyWidth,
-                        mHeight + emptyHeight};
+                return new float[]{mCurrentValue + emptyWidth, emptyHeight, mWidth + emptyWidth, mHeight + emptyHeight};
             case TOP_BOTTOM:
                 return new float[]{emptyWidth, emptyHeight, mWidth + emptyWidth, mCurrentValue + emptyHeight};
             case BOTTOM_TOP:
             default:
-                return new float[]{emptyWidth, mCurrentValue + emptyHeight, mWidth + emptyWidth,
-                        mHeight + emptyHeight};
+                return new float[]{emptyWidth, mCurrentValue + emptyHeight, mWidth + emptyWidth, mHeight + emptyHeight};
         }
     }
 

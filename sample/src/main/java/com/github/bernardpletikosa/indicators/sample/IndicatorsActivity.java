@@ -3,8 +3,11 @@ package com.github.bernardpletikosa.indicators.sample;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
+import com.github.bernardpletikosa.indicators.IndicatorView;
 import com.github.bernardpletikosa.indicators.circle.CircleIndicator;
 import com.github.bernardpletikosa.indicators.consts.Direction;
 import com.github.bernardpletikosa.indicators.consts.Orientation;
@@ -15,6 +18,9 @@ import com.github.bernardpletikosa.indicators.pie.PieIndicator;
 import com.github.bernardpletikosa.indicators.pie.QuarterPieIndicator;
 import com.github.bernardpletikosa.indicators.triangle.TriangleIndicator;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -27,32 +33,46 @@ public class IndicatorsActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout);
 
-        final TriangleIndicator triangle = (TriangleIndicator) findViewById(R.id.triangle);
-        final CircleIndicator circle = (CircleIndicator) findViewById(R.id.circle);
-        final LineIndicator line = (LineIndicator) findViewById(R.id.line);
-        final PieIndicator pie = (PieIndicator) findViewById(R.id.pie);
-        final PieIndicator pieHalf = (PieIndicator) findViewById(R.id.pie_half);
-        final PieIndicator pieQuarter = (PieIndicator) findViewById(R.id.pie_quarter);
+        final List<IndicatorView> indicators = getAllIndicators(findViewById(R.id.indicators));
 
-        ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
-        service.scheduleAtFixedRate(new Runnable() {
+        Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        float step = (20f * new Random().nextFloat());
-                        Log.e("STEP", "" + step);
-                        triangle.indicate(step);
-                        circle.indicate(step);
-                        line.indicate(step);
-                        pie.indicate(step);
-                        pieHalf.indicate(step);
-                        pieQuarter.indicate(step);
+                        float step = (20f * new Random().nextFloat()) - 10f;
+                        for (IndicatorView in : indicators) in.indicate(step);
                     }
                 });
             }
-        }, 0, 3, TimeUnit.SECONDS);
+        }, 0, 5, TimeUnit.SECONDS);
+    }
+
+    private List<IndicatorView> getAllIndicators(View viewById) {
+        List<View> all = getAllChildren(viewById);
+
+        List<IndicatorView> indicators = new ArrayList<>();
+        for (View v : all) if (v instanceof IndicatorView) indicators.add((IndicatorView) v);
+
+        return indicators;
+    }
+
+    private List<View> getAllChildren(View v) {
+        if (!(v instanceof ViewGroup))
+            return Arrays.asList(v);
+
+        List<View> result = new ArrayList<>();
+        ViewGroup viewGroup = (ViewGroup) v;
+        for (int i = 0; i < viewGroup.getChildCount(); i++) {
+            List<View> views = new ArrayList<>();
+            views.add(v);
+            views.addAll(getAllChildren(viewGroup.getChildAt(i)));
+
+            result.addAll(views);
+        }
+
+        return result;
     }
 
     //How to create an indicator

@@ -243,7 +243,7 @@ public abstract class IndicatorView extends View {
 
         float val = mTextAnimate ? currentValue + mMinValue : mTargetValue;
         if (mTextValueDecimal) {
-            canvas.drawText(mTextPrefix + String.format("%.1f", new BigDecimal(val).setScale(1, RoundingMode.HALF_EVEN)) + mTextSuffix,
+            canvas.drawText(mTextPrefix + String.format("%.2f", new BigDecimal(val).setScale(2, RoundingMode.HALF_EVEN)) + mTextSuffix,
                     mTextPositionX, mTextPositionY, mTextPaint);
         } else
             canvas.drawText(mTextPrefix + (int) val + mTextSuffix,

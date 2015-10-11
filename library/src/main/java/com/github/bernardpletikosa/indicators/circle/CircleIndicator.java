@@ -42,13 +42,13 @@ public class CircleIndicator extends IndicatorView {
         float w = calculateSize(widthMeasureSpec, width, height);
         float h = calculateSize(heightMeasureSpec, height, width);
 
-        mCenter.x = w / 2;
-        mCenter.y = h / 2;
+        mCenter.x = w == 0 ? h / 2 : w / 2;
+        mCenter.y = h == 0 ? w / 2 : h / 2;
 
-        if (mRadius <= NO_VALUE)
+        if (mRadius <= 0)
             mRadius = mCenter.x < mCenter.y ? mCenter.x : mCenter.y;
 
-        setMeasuredDimension((int) w, (int) h);
+        setMeasuredDimension((int) (w == 0 ? h : w), (int) (h == 0 ? w : h));
 
         mTextPositionX = (int) mCenter.x;
         mTextPositionY = (int) (mCenter.y - ((mTextPaint.descent() + mTextPaint.ascent()) / 2));
@@ -113,10 +113,9 @@ public class CircleIndicator extends IndicatorView {
             case EXACTLY:
                 return size[0];
             case AT_MOST:
-                return mRadius > NO_VALUE ? Math.min(mRadius * 2,
-                        size[0]) : size[0] > 0 ? size[0] : size[1];
+                return mRadius <= 0 ? (size[0] > 0 ? size[0] : size[1]) : Math.min(mRadius * 2, size[0]);
             default:
-                return mRadius > NO_VALUE ? mRadius * 2 : size[0] > 0 ? size[0] : size[1];
+                return mRadius <= 0 ? (size[0] > 0 ? size[0] : size[1]) : 2 * mRadius;
         }
     }
 }

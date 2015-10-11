@@ -23,7 +23,7 @@ public class PieIndicator extends IndicatorView {
 
     protected float mRadius;
     protected float mInnerRadius;
-    protected int mInnerRadiusPercent = NO_VALUE;
+    protected int mInnerRadiusPercent;
     protected int mStartAngle;
 
     protected Direction mDirection;
@@ -53,12 +53,12 @@ public class PieIndicator extends IndicatorView {
         float w = calculateSize(widthMeasureSpec, width, height);
         float h = calculateSize(heightMeasureSpec, height, width);
 
-        mCenter.x = w / 2;
-        mCenter.y = h / 2;
+        mCenter.x = w == 0 ? h / 2 : w / 2;
+        mCenter.y = h == 0 ? w / 2 : h / 2;
 
         calculateRadius();
 
-        setMeasuredDimension((int) w, (int) h);
+        setMeasuredDimension((int) (w == 0 ? h : w), (int) (h == 0 ? w : h));
 
         mTextPositionX = (int) mCenter.x;
         mTextPositionY = (int) (mCenter.y - ((mTextPaint.descent() + mTextPaint.ascent()) / 2));
@@ -224,8 +224,8 @@ public class PieIndicator extends IndicatorView {
     }
 
     void calculateRadius() {
-        if (mRadius <= NO_VALUE)
-            mRadius = mCenter.x < mCenter.y ? mCenter.x : mCenter.y;
+        if (mRadius <= 0)
+            mRadius = mCenter.x == 0 || mCenter.y == 0 ? Math.max(mCenter.x, mCenter.y) : Math.min(mCenter.x, mCenter.y);
 
         if (mInnerRadiusPercent <= NO_VALUE)
             mInnerRadius = mRadius / 2;

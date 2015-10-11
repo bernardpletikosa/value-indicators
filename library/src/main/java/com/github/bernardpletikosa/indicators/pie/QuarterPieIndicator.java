@@ -46,6 +46,8 @@ public class QuarterPieIndicator extends HalfPieIndicator {
 
         mWidth = calculateSize(widthMeasureSpec, width, height);
         mHeight = calculateSize(heightMeasureSpec, height, width);
+        mWidth = mWidth == 0 ? mHeight : mWidth;
+        mHeight = mHeight == 0 ? mWidth : mHeight;
 
         calculateCenter();
         calculateRadius();
@@ -128,10 +130,24 @@ public class QuarterPieIndicator extends HalfPieIndicator {
         }
     }
 
+    @Override void calculateRadius() {
+        if (mRadius <= 0) {
+            if (mCenter.x == 0 && mCenter.y == 0)
+                mRadius = Math.max(mWidth, mHeight);
+            else
+                mRadius = mCenter.x == 0 || mCenter.y == 0 ? Math.max(mCenter.x, mCenter.y) : Math.min(mCenter.x, mCenter.y);
+        }
+
+        if (mInnerRadiusPercent <= NO_VALUE)
+            mInnerRadius = mRadius / 2;
+        else
+            mInnerRadius = (int) (mInnerRadiusPercent / 100f * mRadius);
+    }
+
     private void calculateCenter() {
         final float halfW = mWidth / 2;
-        final float halfR = mRadius / 2;
         final float halfH = mHeight / 2;
+        final float halfR = Math.min(halfH, halfW);
 
         if (mOrientation == NORTH_WEST || mOrientation == NORTH_EAST) {
             mCenter.x = mOrientation == Orientation.NORTH_WEST ? halfW + halfR : halfW - halfR;
